@@ -101,6 +101,7 @@ describe("Growth world internal-state migration", () => {
           if (crashPhase === "write" && writes === 5) throw new Error("simulated target-write crash")
           return value.files.internal.writeFile(request)
         },
+        deleteFile: value.files.internal.deleteFile,
         moveContentFileToBackup: async (...args) => {
           moves += 1
           if (crashPhase === "move" && moves === 4) throw new Error("simulated source-move crash")

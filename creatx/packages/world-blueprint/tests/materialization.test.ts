@@ -114,6 +114,7 @@ async function setup(route: "original" | "canon" | "fanwork" = "original") {
       },
       readFile: files.internal.readFile,
       listDirectory: files.internal.listDirectory,
+      deleteFile: files.internal.deleteFile,
       moveContentFileToBackup: files.internal.moveContentFileToBackup,
     },
     async (_projectId, imageTaskId) => images.get(imageTaskId),
