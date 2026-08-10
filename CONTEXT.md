@@ -4,7 +4,7 @@
 
 2026-08-11 已将源代码头 `9b2e2ee` 打包为 Windows `0.1.22`，包含艺术库 `0.1.19` 视觉与 63 件正式藏品恢复、生产十步新手教程以及既有工作台注销。Setup 为 121,561,653 字节，SHA-256 `A457F3990C8A959043A08ECC5C6F04398BFADA51A5A4C89E973E5F85F8DD19D9`；Portable 为 121,337,832 字节，SHA-256 `C013D977E2FC47E7309FCA6A733B0337DE1C18E970CE82F18B6EF5F7F06DD938`。PE 版本与 ProductName（产品名）为 `0.1.22 / 诺文`，产物未签名。
 
-隔离发布树先发现并补齐两个既有 `ProjectInternalStatePort.deleteFile` 测试装配字段，随后冻结安装、Typecheck（类型检查）、两项 Import Boundary（导入边界）、604/604 全量测试（4,526 次断言，83 个文件）、Production Build（生产构建）、Windows NSIS/Portable、7-Zip 完整性、`app.asar` 内容检查和解包 EXE 十步教程烟测通过；Provider 请求 0、项目写入 0、残留进程 0。没有安装 Setup、直接启动 Portable、调用外部 Provider、使用正式 Profile 或以打包 EXE 重跑完整艺术库纵向验收；另一工作树尚未提交的抖音读取及实验内容未进入本发布。完整边界见 `docs/baseline/creatx-windows-0.1.22-2026-08-11.md`。
+隔离发布树先发现并补齐两个既有 `ProjectInternalStatePort.deleteFile` 测试装配字段，随后冻结安装、Typecheck（类型检查）、两项 Import Boundary（导入边界）、604/604 全量测试（4,526 次断言，83 个文件）、Production Build（生产构建）、Windows NSIS/Portable、7-Zip 完整性、`app.asar` 内容检查和解包 EXE 十步教程烟测通过；Provider 请求 0、项目写入 0、残留进程 0。发布提交为活动历史 `29324b2`、GitHub 发布镜像 `c22472f`，文件 Tree 哈希一致。没有安装 Setup、直接启动 Portable、调用外部 Provider、使用正式 Profile 或以打包 EXE 重跑完整艺术库纵向验收；另一工作树尚未提交的抖音读取及实验内容未进入本发布。完整边界见 `docs/baseline/creatx-windows-0.1.22-2026-08-11.md`。
 
 ## 当前生产新手引导前沿
 

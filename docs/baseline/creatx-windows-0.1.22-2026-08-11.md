@@ -54,6 +54,8 @@ Windows `0.1.22` 在 `0.1.21` 基础上增加两项已验收能力：
 ## 恢复入口
 
 - 源代码头：`9b2e2ee`。
+- 测试合同补齐：活动历史 `4d0bd9f`、GitHub 发布镜像 `f1b9bdd`。
+- `0.1.22` 发布提交：活动历史 `29324b2`、GitHub 发布镜像 `c22472f`；两者文件 Tree 哈希均为 `e4e838a83b6c59a3ef868f3c8453db4db2c9c6ba`。
 - 艺术库证据：`docs/baseline/creatx-art-library-019-restoration-2026-08-11.md`。
 - 新手教程证据：`docs/baseline/creatx-production-onboarding-2026-08-11.md`。
 - 工作台注销证据：`docs/baseline/creatx-workbench-unregister-2026-08-11.md`。
