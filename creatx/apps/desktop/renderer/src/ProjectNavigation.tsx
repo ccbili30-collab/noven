@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { Dispatch, MouseEvent, SetStateAction } from "react"
-import { BookOpenText, ChevronDown, ChevronRight, Folder, FolderOpen, Lightbulb, MoreHorizontal, Palette, PanelLeftClose, PanelLeftOpen, Pin, Plus, RefreshCw, Settings, SquarePen, Trash2, X } from "lucide-react"
+import { BookOpenText, ChevronDown, ChevronRight, CircleHelp, Folder, FolderOpen, Lightbulb, MoreHorizontal, Palette, PanelLeftClose, PanelLeftOpen, Pin, Plus, RefreshCw, Settings, SquarePen, Trash2, X } from "lucide-react"
 import type { ProjectFile, ProjectSnapshot, SessionSummary, WorkbenchProjection } from "@creatx/contracts"
 import birdWingLogo from "./assets/bird-wing-logo-clean.svg"
 import { DesktopDialog } from "./DesktopDialog"
@@ -40,6 +40,7 @@ interface ProjectNavigationProps {
   onDeleteProjectSessions: (projectId: string) => Promise<boolean>
   onRemoveProject: (projectId: string) => void
   onRefresh: () => void
+  onOpenOnboarding: () => void
   onOpenSettings: () => void
   onOpenArtLibrary?: () => void
   artLibraryActive: boolean
@@ -124,6 +125,7 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
         <button className={props.artLibraryActive ? "is-active" : ""} title={props.onOpenArtLibrary ? "打开艺术库" : "艺术库未配置"} disabled={!props.onOpenArtLibrary} onClick={props.onOpenArtLibrary}><Palette size={16} /></button>
         <button className={props.ideaLibraryActive ? "is-active" : ""} title="打开灵感库" onClick={props.onOpenIdeaLibrary}><Lightbulb size={16} /></button>
         {props.onOpenHeritageLibrary && <button className={props.heritageLibraryActive ? "is-active" : ""} title="打开传承库" onClick={props.onOpenHeritageLibrary}><BookOpenText size={16} /></button>}
+        <button className="wb-rail-onboarding" title="新手教程" onClick={props.onOpenOnboarding}><CircleHelp size={16} /></button>
         <button className="wb-rail-settings" title="设置" onClick={props.onOpenSettings}><Settings size={16} /></button>
       </div>
     </aside>
@@ -228,7 +230,7 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
           <button className="wb-project-group-toggle" aria-expanded={projectsOpen} onClick={() => setProjectsOpen((open) => !open)}><span>项目</span>{projectsOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</button>
           <div className="wb-project-heading-actions">
             {showSessions && <button aria-label="新会话" title="新会话" disabled={!props.project} onClick={props.onCreateSession}><SquarePen size={15} /></button>}
-            <button aria-label="打开项目" title="打开项目" onClick={props.onOpenProject}><FolderOpen size={15} /></button>
+            <button data-onboarding="open-project" aria-label="打开项目" title="打开项目" onClick={props.onOpenProject}><FolderOpen size={15} /></button>
           </div>
         </div>
         {projectsOpen && <div className="wb-project-list">
@@ -322,7 +324,7 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
         </div>}
       </section>
     </nav>
-    <div className="wb-secondary-nav"><button onClick={props.onRefresh} disabled={!props.project}><RefreshCw size={15} /><span>刷新项目</span></button><button title="设置" onClick={props.onOpenSettings}><Settings size={15} /><span>设置</span></button></div>
+    <div className="wb-secondary-nav"><button onClick={props.onRefresh} disabled={!props.project}><RefreshCw size={15} /><span>刷新项目</span></button><button title="新手教程" onClick={props.onOpenOnboarding}><CircleHelp size={15} /><span>新手教程</span></button><button title="设置" onClick={props.onOpenSettings}><Settings size={15} /><span>设置</span></button></div>
     {previewedSession && !projectMenu && <div className="wb-session-preview" style={{ top: previewedSession.top }} role="tooltip">
       <div><strong>{previewedSession.session.title}</strong><time>{relativeSessionAge(previewedSession.session.updatedAt)}</time></div>
       <span><Folder size={16} />{projects.find((project) => project.id === previewedSession.session.projectId)?.name ?? "当前项目"}</span>

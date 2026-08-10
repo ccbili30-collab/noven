@@ -3,7 +3,7 @@ title: Workspace UI 产品规格
 doc_type: capability-product-spec
 owner: workspace-ui
 status: heritage-and-project-reference-bounded-electron-verified
-last_verified: 2026-08-09
+last_verified: 2026-08-11
 source_of_truth: docs/capabilities/workspace-ui/product-spec.md
 ---
 
@@ -325,3 +325,11 @@ Workbench 完全展开时，中央画布与最右工作台导航之间的 `workb
 ## WUI-054 案例标记与继续
 
 项目会话 Hover 与键盘操作区提供“作为项目案例”开关，已标记者显示“案例”标签；导出窗口操作同一事实。案例详情只读，包内文件引用复用现有工作台打开链。“以这个案例继续创作”先显示可编辑说明，只有确认后才创建新本地会话；取消或起草失败保持首页和案例不变。
+
+## WUI-055 首次 Spotlight 新手引导与永久重播入口
+
+每个本机 Profile 第一次成功进入生产 `WorkspaceShell` 时自动播放一次十步 Spotlight（聚光灯）引导，内容覆盖产品介绍、API 配置、项目文件夹、视频种子、工作台、艺术库、灵感库、传承库和当前正式 AI Skill（技能）与工具。引导必须覆盖并指向真实生产界面，不得加载 Preview Fixture（预览测试夹具）、伪造模型、项目、会话、作品或工具结果。
+
+只有用户点击跳过、按 Escape 或在最后一步完成时写入 Renderer 本机已看标记；异常退出不写标记。标记属于 Profile UI 偏好，不进入项目文件、Cline 会话、Main Process（主进程）或跨设备同步。展开导航左下角显示“新手教程”，折叠 Rail（图标栏）提供同一键盘可达入口；手动重播始终从第一步开始且不清除已看标记。
+
+步骤可以打开真实设置或资料库页面以建立锚点，但不得自动填写 API、选择项目目录、发送消息、调用 Provider（模型服务）或修改真实文件。锚点缺失时说明卡居中显示并允许继续或退出。输入、选择和可编辑控件聚焦时不得劫持 Enter、空格或方向键；减弱动效偏好下关闭呼吸动画并保持全部操作可达。

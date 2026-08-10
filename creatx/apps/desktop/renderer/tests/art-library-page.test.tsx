@@ -60,7 +60,7 @@ const handlers = {
   onRetry: () => undefined,
 }
 
-test("renders honest loading, empty, and exact Runtime error states without an iframe", () => {
+test("renders honest approval loading, empty, and exact Runtime error states without static page facts", () => {
   const loading = renderToStaticMarkup(<ArtLibraryPageContent state={{ status: "loading" }} route="approval" {...handlers} />)
   const empty = renderToStaticMarkup(<ArtLibraryPageContent state={{ status: "ready", snapshot: { ...snapshot, approvalItems: [], libraries: [] } }} route="approval" {...handlers} />)
   const error = renderToStaticMarkup(<ArtLibraryPageContent state={{ status: "error", error: { code: "library_invalid", message: "审批作品不存在。", detail: "candidate art-404 does not exist" } }} route="approval" {...handlers} />)
@@ -72,17 +72,33 @@ test("renders honest loading, empty, and exact Runtime error states without an i
   expect(`${loading}${empty}${error}`).not.toContain("iframe")
 })
 
-test("renders approval and category lists from the Runtime snapshot", () => {
+test("renders the restored atlas as the primary Runtime-backed experience", () => {
   const approvals = renderToStaticMarkup(<ArtLibraryPageContent state={{ status: "ready", snapshot }} route="approval" {...handlers} />)
-  const libraries = renderToStaticMarkup(<ArtLibraryPageContent state={{ status: "ready", snapshot }} route="atlas" {...handlers} />)
+  const atlas = renderToStaticMarkup(<ArtLibraryPageContent state={{ status: "ready", snapshot }} route="atlas" {...handlers} />)
+  const exhibition = renderToStaticMarkup(<ArtLibraryPageContent state={{ status: "ready", snapshot }} route="exhibition" {...handlers} />)
 
   expect(approvals).toContain("冷蓝水下对峙")
   expect(approvals).toContain("旧整理作品")
   expect(approvals).toContain("待审批 2")
-  expect(libraries).toContain("叙事插画")
-  expect(libraries).toContain("导出关键词")
-  expect(libraries).toContain("提取风格")
-  expect(libraries).toContain("候选区 2")
+  expect(atlas).toContain('title="诺文艺术图鉴"')
+  expect(atlas).toContain('src="./art-library/art-atlas-runtime.html?intro=0"')
+  expect(atlas).not.toContain("art-atlas-live")
+  expect(atlas).not.toContain("wb-art-library-categories")
+  expect(exhibition).toContain('title="诺文艺术展览"')
+  expect(exhibition).toContain('src="./art-library/art-library-runtime.html"')
+  expect(exhibition).toContain("导出关键词")
+  expect(exhibition).toContain("提取风格")
+})
+
+test("keeps the copied 0.1.19 atlas waiting for a Runtime projection instead of bundled static facts", async () => {
+  const html = await Bun.file("apps/art-library/public/art-library/art-atlas-runtime.html").text()
+
+  expect(html).toContain("creatx-art-atlas-data")
+  expect(html).toContain("./art-atlas-orbit.js?v=20260805-orbit-intro-8")
+  expect(html).toContain('document.getElementById("orbitTotal").textContent = String(payload.items.length)')
+  expect(html).not.toContain("window.ART_ATLAS_ORBIT_ITEMS = [")
+  expect(await Bun.file("apps/art-library/public/art-library/art-library-runtime.html").text()).toContain("creatx-art-library-data")
+  expect(await Bun.file("apps/art-library/public/art-library/artwork-detail-runtime.html").text()).toContain("creatx-art-detail-data")
 })
 
 test("renders every editable v2 approval field and disables repeated submission", () => {
@@ -127,7 +143,7 @@ test("shows bounded reject confirmation and deterministic keyword export result"
   />)
   const exported = renderToStaticMarkup(<ArtLibraryPageContent
     state={{ status: "ready", snapshot }}
-    route="atlas"
+    route="exhibition"
     exportResult={{ library: "叙事插画", itemCount: 1, keywords: ["粗重墨线", "横向分格"], text: "粗重墨线, 横向分格" }}
     {...handlers}
   />)

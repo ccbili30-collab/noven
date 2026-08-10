@@ -70,7 +70,7 @@ export function HeritageLibraryPage(props: {
     return () => window.removeEventListener("keydown", close)
   }, [selected])
 
-  return <section className="wb-heritage-library" aria-labelledby="heritage-library-title">
+  return <section className="wb-heritage-library" data-onboarding="heritage-library" aria-labelledby="heritage-library-title">
     <header className="wb-heritage-header">
       <div className="wb-heritage-heading">
         <button type="button" title={selected ? "返回传承库" : "返回创作"} aria-label={selected ? "返回传承库" : "返回创作"} onClick={selected ? closeDetail : props.onClose}><ArrowLeft size={17} /></button>

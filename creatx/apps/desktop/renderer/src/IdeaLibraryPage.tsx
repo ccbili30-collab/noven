@@ -41,7 +41,7 @@ export function IdeaLibraryPage(props: {
     setBusy(undefined)
   }
 
-  return <section className="wb-idea-library" aria-labelledby="idea-library-title">
+  return <section className="wb-idea-library" data-onboarding="idea-library" aria-labelledby="idea-library-title">
     <header className="wb-idea-library-header">
       <div className="wb-idea-library-title">
         <button type="button" title="返回创作" aria-label="返回创作" onClick={props.onClose}><ArrowLeft size={17} /></button>

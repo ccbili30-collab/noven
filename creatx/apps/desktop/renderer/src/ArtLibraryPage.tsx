@@ -196,27 +196,29 @@ export function ArtLibraryPageContent(props: {
 }) {
   const snapshot = props.state.status === "ready" ? props.state.snapshot : undefined
   const selected = snapshot && props.selectedItemId ? findArtItem(snapshot, props.selectedItemId) : undefined
-  const route = props.route === "exhibition" ? "atlas" : props.route
 
-  return <section className="wb-art-library" aria-label="艺术库">
-    <header className="wb-art-library-header">
+  return <section className="wb-art-library" data-onboarding="art-library" aria-label="艺术库">
+    {props.route === "approval" && <header className="wb-art-library-header">
       <div className="wb-art-library-heading"><Palette size={18} /><span><strong>艺术库</strong><small>{snapshot ? `候选区 ${snapshot.incomingCount} · 待审批 ${snapshot.approvalItems.length}` : "真实文件库"}</small></span></div>
       <nav aria-label="艺术库区域">
-        <button className={route === "atlas" ? "is-active" : ""} type="button" onClick={() => props.onRoute("atlas")}><Eye size={15} />分类</button>
-        <button className={route === "approval" ? "is-active" : ""} type="button" onClick={() => props.onRoute("approval")}><Check size={15} />审批{snapshot ? ` ${snapshot.approvalItems.length}` : ""}</button>
+        <button type="button" onClick={() => props.onRoute("atlas")}><Eye size={15} />图鉴</button>
+        <button type="button" onClick={() => props.onRoute("exhibition")}><Palette size={15} />展览</button>
+        <button className={props.route === "approval" ? "is-active" : ""} type="button" onClick={() => props.onRoute("approval")}><Check size={15} />审批{snapshot ? ` ${snapshot.approvalItems.length}` : ""}</button>
         <button type="button" onClick={props.onOpenChat}><MessageSquare size={15} />对话</button>
       </nav>
-    </header>
+    </header>}
 
     {props.state.status === "loading" && <div className="wb-art-library-state" role="status"><LoaderCircle className="spin" size={22} /><strong>正在读取真实艺术库</strong><span>从本机艺术库状态读取候选、审批和正式分类。</span></div>}
     {props.state.status === "error" && <div className="wb-art-library-state is-error" role="alert"><ShieldAlert size={22} /><strong>{props.state.error.message}</strong>{props.state.error.detail && <code>{props.state.error.detail}</code>}<span>没有修改任何艺术库文件，当前页面可安全重试。</span><button type="button" onClick={props.onRetry}><RotateCw size={15} />重新读取</button></div>}
 
-    {snapshot && <div className={`wb-art-library-body ${selected ? "has-detail" : ""}`}>
-      <main className="wb-art-library-list" aria-label={route === "approval" ? "待审批作品" : "正式艺术分类"}>
-        {selected && <button className="wb-art-library-back" type="button" onClick={() => props.onSelect(undefined)}><ArrowLeft size={15} />返回列表</button>}
-        {!selected && route === "approval" && <ApprovalList items={snapshot.approvalItems} onSelect={props.onSelect} />}
-        {!selected && route === "atlas" && <LibraryList snapshot={snapshot} {...(props.busyAction ? { busyAction: props.busyAction } : {})} onSelect={props.onSelect} onExport={props.onExport} onOpenChat={props.onOpenChat} />}
-        {selected && props.draft && <ArtItemDetail item={selected} draft={props.draft} {...(props.busyAction ? { busyAction: props.busyAction } : {})} onDraftChange={props.onDraftChange} onReview={props.onReview} onRequestReject={props.onRequestReject} />}
+    {snapshot && <div className={`wb-art-library-body is-${props.route} ${selected ? "has-detail" : ""}`}>
+      <main className="wb-art-library-list" aria-label={props.route === "approval" ? "待审批作品" : props.route === "exhibition" ? "艺术分类展览" : "艺术图鉴"}>
+        {selected && props.route === "approval" && <button className="wb-art-library-back" type="button" onClick={() => props.onSelect(undefined)}><ArrowLeft size={15} />返回列表</button>}
+        {!selected && props.route === "approval" && <ApprovalList items={snapshot.approvalItems} onSelect={props.onSelect} />}
+        {!selected && props.route === "atlas" && <ArtAtlasSurface snapshot={snapshot} onSelect={props.onSelect} onRoute={props.onRoute} onOpenChat={props.onOpenChat} />}
+        {!selected && props.route === "exhibition" && <ArtExhibitionSurface snapshot={snapshot} {...(props.busyAction ? { busyAction: props.busyAction } : {})} onSelect={props.onSelect} onExport={props.onExport} onOpenChat={props.onOpenChat} onBack={() => props.onRoute("atlas")} />}
+        {selected && props.route === "approval" && props.draft && <ArtItemDetail item={selected} draft={props.draft} {...(props.busyAction ? { busyAction: props.busyAction } : {})} onDraftChange={props.onDraftChange} onReview={props.onReview} onRequestReject={props.onRequestReject} />}
+        {selected && props.route !== "approval" && <ArtAtlasDetail item={selected} onOpenChat={props.onOpenChat} onBack={() => props.onSelect(undefined)} />}
       </main>
 
       {(props.actionError || props.actionStatus || props.exportResult) && <aside className={`wb-art-library-result ${props.actionError ? "is-error" : ""}`} aria-live="polite">
@@ -246,13 +248,107 @@ function ApprovalList({ items, onSelect }: { items: ArtLibraryItemProjection[]; 
   </button>)}</div>
 }
 
-function LibraryList({ snapshot, busyAction, onSelect, onExport, onOpenChat }: { snapshot: ArtLibrarySnapshot; busyAction?: string; onSelect: (itemId: string) => void; onExport: (library: string) => void; onOpenChat: () => void }) {
-  if (!snapshot.libraries.length) return <div className="wb-art-library-empty"><Palette size={22} /><strong>还没有正式艺术分类</strong><span>批准第一张作品时可以创建新分类。</span></div>
-  return <div className="wb-art-library-categories">{snapshot.libraries.map((library) => <article key={library.title}>
-    <header><span><strong>{library.title}</strong><small>{library.itemCount} 张作品</small></span><div><button type="button" disabled={Boolean(busyAction)} onClick={() => onExport(library.title)}><Download size={14} />{busyAction === `export:${library.title}` ? "正在导出" : "导出关键词"}</button><button type="button" onClick={onOpenChat}><MessageSquare size={14} />提取风格</button></div></header>
-    <p>“导出关键词”只汇总当前标签并去重；“提取风格”会进入普通对话，由 AI 解读整个分类。</p>
-    <div>{library.items.map((item) => <button type="button" key={item.id} onClick={() => onSelect(item.id)}><img src={item.imageUrl} alt="" /><span>{item.title}</span></button>)}</div>
-  </article>)}</div>
+function ArtAtlasSurface({ snapshot, onSelect, onRoute, onOpenChat }: { snapshot: ArtLibrarySnapshot; onSelect: (itemId: string) => void; onRoute: (route: ArtLibraryRoute) => void; onOpenChat: () => void }) {
+  const frame = useRef<HTMLIFrameElement>(null)
+  const libraries = [...snapshot.libraries].sort((left, right) => artAtlasLibraryOrder(left.title) - artAtlasLibraryOrder(right.title) || left.title.localeCompare(right.title, "zh-CN"))
+  const items = libraries.flatMap((library) => library.items)
+
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      if (event.source !== frame.current?.contentWindow || !event.data || typeof event.data !== "object") return
+      const message = event.data as { type?: string; route?: ArtLibraryRoute; itemId?: string }
+      if (message.type === "creatx-art-atlas-ready") sendArtAtlasSnapshot(frame.current, libraries)
+      if (message.type === "creatx-art-atlas-route" && (message.route === "approval" || message.route === "exhibition")) onRoute(message.route)
+      if (message.type === "creatx-art-atlas-chat") onOpenChat()
+      if (message.type === "creatx-art-atlas-select" && message.itemId && items.some((item) => item.id === message.itemId)) onSelect(message.itemId)
+    }
+    window.addEventListener("message", receive)
+    return () => window.removeEventListener("message", receive)
+  }, [items, libraries, onOpenChat, onRoute, onSelect])
+
+  if (!items.length) return <div className="wb-art-library-empty"><Palette size={22} /><strong>艺术图鉴等待第一件作品</strong><span>批准作品后，它会成为图鉴圆环的一部分。</span></div>
+  return <iframe ref={frame} className="art-atlas-019-frame" title="诺文艺术图鉴" src="./art-library/art-atlas-runtime.html?intro=0" onLoad={() => sendArtAtlasSnapshot(frame.current, libraries)} />
+}
+
+function sendArtAtlasSnapshot(frame: HTMLIFrameElement | null, libraries: ArtLibrarySnapshot["libraries"]) {
+  frame?.contentWindow?.postMessage({
+    type: "creatx-art-atlas-data",
+    libraries: libraries.map((library) => library.title),
+    items: libraries.flatMap((library) => library.items.map((item) => ({ item, library: library.title }))).map((entry, index) => ({
+      id: entry.item.id,
+      index,
+      title: entry.item.title,
+      image: entry.item.imageUrl,
+      library: entry.library,
+      href: `#${entry.item.id}`,
+      meta: [entry.item.artist, entry.item.sourceLabel].filter(Boolean).join(" / "),
+      tags: entry.item.patternTags.slice(0, 3).join(" · "),
+      size: entry.item.image.height > entry.item.image.width * 1.2 ? "portrait" : entry.item.image.width > entry.item.image.height * 1.35 ? "wide" : "medium",
+    })),
+  }, "*")
+}
+
+function ArtExhibitionSurface({ snapshot, busyAction, onSelect, onExport, onOpenChat, onBack }: { snapshot: ArtLibrarySnapshot; busyAction?: string; onSelect: (itemId: string) => void; onExport: (library: string) => void; onOpenChat: () => void; onBack: () => void }) {
+  const frame = useRef<HTMLIFrameElement>(null)
+  const libraries = [...snapshot.libraries].sort((left, right) => artAtlasLibraryOrder(left.title) - artAtlasLibraryOrder(right.title) || left.title.localeCompare(right.title, "zh-CN"))
+  const [activeTitle, setActiveTitle] = useState(libraries[0]?.title ?? "")
+
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      if (event.source !== frame.current?.contentWindow || !event.data || typeof event.data !== "object") return
+      const message = event.data as { type?: string; route?: ArtLibraryRoute; itemId?: string; library?: string }
+      if (message.type === "creatx-art-library-ready") sendArtLibrarySnapshot(frame.current, libraries)
+      if (message.type === "creatx-art-library-route" && message.route === "atlas") onBack()
+      if (message.type === "creatx-art-library-select" && message.itemId && libraries.some((library) => library.items.some((item) => item.id === message.itemId))) onSelect(message.itemId)
+      if (message.type === "creatx-art-library-library" && message.library && libraries.some((library) => library.title === message.library)) setActiveTitle(message.library)
+    }
+    window.addEventListener("message", receive)
+    return () => window.removeEventListener("message", receive)
+  }, [libraries, onBack, onSelect])
+
+  if (!libraries.length) return <div className="wb-art-library-empty"><Palette size={22} /><strong>还没有正式艺术分类</strong><span>批准第一张作品时可以创建新分类。</span></div>
+  return <div className="art-library-019-frame-wrap">
+    <iframe ref={frame} className="art-library-019-frame" title="诺文艺术展览" src="./art-library/art-library-runtime.html" onLoad={() => sendArtLibrarySnapshot(frame.current, libraries)} />
+    <nav aria-label="艺术展览扩展能力"><button type="button" disabled={Boolean(busyAction)} onClick={() => onExport(activeTitle)}><Download size={14} />{busyAction === `export:${activeTitle}` ? "正在导出" : "导出关键词"}</button><button type="button" onClick={onOpenChat}><MessageSquare size={14} />提取风格</button></nav>
+  </div>
+}
+
+function sendArtLibrarySnapshot(frame: HTMLIFrameElement | null, libraries: ArtLibrarySnapshot["libraries"]) {
+  const entries = libraries.flatMap((library) => library.items.map((item) => ({ item, library: library.title })))
+  frame?.contentWindow?.postMessage({
+    type: "creatx-art-library-data",
+    data: artConceptData(entries),
+  }, "*")
+}
+
+function ArtAtlasDetail({ item, onOpenChat, onBack }: { item: ArtLibraryItemProjection; onOpenChat: () => void; onBack: () => void }) {
+  const frame = useRef<HTMLIFrameElement>(null)
+  const library = item.library ?? item.suggestedLibrary.title
+  const send = () => frame.current?.contentWindow?.postMessage({ type: "creatx-art-detail-data", data: artConceptData([{ item, library }]) }, "*")
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      if (event.source !== frame.current?.contentWindow || !event.data || typeof event.data !== "object") return
+      const message = event.data as { type?: string }
+      if (message.type === "creatx-art-detail-ready") send()
+      if (message.type === "creatx-art-detail-back") onBack()
+    }
+    window.addEventListener("message", receive)
+    return () => window.removeEventListener("message", receive)
+  }, [item, library, onBack])
+  return <div className="art-detail-019-frame-wrap"><iframe ref={frame} className="art-detail-019-frame" title={`作品详情：${item.title}`} src={`./art-library/artwork-detail-runtime.html?id=${encodeURIComponent(item.id)}`} onLoad={send} /><button type="button" onClick={onOpenChat}><MessageSquare size={14} />以此作品继续创作</button></div>
+}
+
+function artConceptData(entries: Array<{ item: ArtLibraryItemProjection; library: string }>) {
+  return {
+    generated_at: new Date().toISOString(),
+    approvalItems: [],
+    orbitItems: entries.map((entry, index) => ({ id: entry.item.id, index, title: entry.item.title, image: entry.item.imageUrl, library: entry.library, meta: [entry.item.collectedAt.slice(0, 10), entry.item.artist, entry.item.sourceLabel].join(" / "), tags: entry.item.patternTags.slice(0, 3).join(" · "), size: entry.item.image.height > entry.item.image.width * 1.2 ? "portrait" : entry.item.image.width > entry.item.image.height * 1.35 ? "wide" : "medium" })),
+    detailItems: entries.map((entry) => ({ id: entry.item.id, title: entry.item.title, artist: entry.item.artist, date: entry.item.collectedAt.slice(0, 10), image: entry.item.imageUrl, groups: [entry.library], analysis: entry.item.styleAnalysis, palette: entry.item.palette, moodTags: entry.item.moodTags, patternTags: entry.item.patternTags, promptDraft: entry.item.curation.status === "legacy-unverified" ? entry.item.curation.promptDraft : [entry.item.curation.reversePrompt.style, entry.item.curation.reversePrompt.composition, entry.item.curation.reversePrompt.scene].join(", "), negativeTags: entry.item.curation.status === "legacy-unverified" ? entry.item.curation.negativeTags : entry.item.curation.reversePrompt.negative, sourceUrl: entry.item.imageUrl })),
+  }
+}
+
+function artAtlasLibraryOrder(title: string) {
+  return title === "巨构艺术" ? 0 : title === "暖色风格" ? 1 : title === "纪念碑谷" ? 2 : 3
 }
 
 function ArtItemDetail({ item, draft, busyAction, onDraftChange, onReview, onRequestReject }: { item: ArtLibraryItemProjection; draft: ArtApprovalDraft; busyAction?: string; onDraftChange: (draft: ArtApprovalDraft) => void; onReview: (action: "approve" | "hold") => void; onRequestReject: () => void }) {

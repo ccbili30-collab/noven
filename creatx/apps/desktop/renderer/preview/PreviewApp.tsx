@@ -252,18 +252,18 @@ if (typeof window !== "undefined" && ["reference-studio", "workbench-core", "wor
   window.localStorage.setItem("creatx.workspace.inspector-position.v1", JSON.stringify({ x: Math.max(8, window.innerWidth / 2 - 143), y: 70 }))
 }
 
-export function PreviewApp() {
-  const [previewVariant, setPreviewVariant] = useState<PreviewVariant>(readPreviewVariant)
+export function PreviewApp({ onboarding = false }: { onboarding?: boolean } = {}) {
+  const [previewVariant, setPreviewVariant] = useState<PreviewVariant>(() => onboarding ? "chat-focus" : readPreviewVariant())
   const [sessionMenuOpen, setSessionMenuOpen] = useState(false)
   const [sessions, setSessions] = useState(initialSessions)
   const [activeSessionId, setActiveSessionId] = useState(initialSessions[0]!.id)
-  const [timeline, setTimeline] = useState(initialTimeline)
+  const [timeline, setTimeline] = useState<TimelineItem[]>(() => onboarding ? [] : initialTimeline)
   const [draft, setDraft] = useState("")
   const [attachments, setAttachments] = useState<AttachmentReference[]>([])
   const [leftOpen, setLeftOpen] = useState(true)
   const [rightSurface, setRightSurface] = useState<RightSurface>({ workbenchId: "workbench-world" })
   const [selectedFileId, setSelectedFileId] = useState<string | undefined>()
-  const [growth, setGrowth] = useState(initialGrowth)
+  const [growth, setGrowth] = useState<GrowthGoalProjection | undefined>(() => onboarding ? undefined : initialGrowth)
   const [settings, setSettings] = useState(initialSettings)
   const [previewByFile, setPreviewByFile] = useState(previews)
   const [creativeLibrary, setCreativeLibrary] = useState<CreativeLibrarySnapshot>({ ideaItems: [], heritageItems: [], reactions: [], artChatSessions: {}, refreshedAt: now })
@@ -273,13 +273,15 @@ export function PreviewApp() {
 
   useEffect(() => {
     document.documentElement.dataset.previewVariant = previewVariant
-    const url = new URL(window.location.href)
-    url.searchParams.set("variant", previewVariant)
-    window.history.replaceState({}, "", url)
+    if (!onboarding) {
+      const url = new URL(window.location.href)
+      url.searchParams.set("variant", previewVariant)
+      window.history.replaceState({}, "", url)
+    }
     return () => {
       delete document.documentElement.dataset.previewVariant
     }
-  }, [previewVariant])
+  }, [onboarding, previewVariant])
 
   useEffect(() => {
     if (previewVariant === "chat-studio") {
@@ -299,6 +301,7 @@ export function PreviewApp() {
   }, [previewVariant])
 
   useEffect(() => {
+    if (onboarding) return
     const onKeyDown = (event: KeyboardEvent) => {
       if (!event.altKey || !["ArrowLeft", "ArrowRight"].includes(event.key)) return
       event.preventDefault()
@@ -308,7 +311,7 @@ export function PreviewApp() {
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [previewVariant])
+  }, [onboarding, previewVariant])
 
   const send = () => {
     const prompt = draft.trim()
@@ -436,13 +439,13 @@ export function PreviewApp() {
       onResendUserMessage={() => undefined}
       onCancelRun={() => undefined}
       onSetPermission={(mode) => setSessions((current) => current.map((session) => session.id === activeSessionId ? { ...session, permission: { ...session.permission, mode } } : session))}
-      onGrowthAction={(action) => setGrowth((current) => ({
+      onGrowthAction={(action) => setGrowth((current) => current ? ({
         ...current,
         status: action === "pause" ? "paused" : action === "resume" ? "active" : "cancelled",
         statusReason: action === "pause" ? "已在 Web Preview 中暂停。" : action === "resume" ? "正在按世界蓝图逐层填充内容。" : "已在 Web Preview 中结束。",
         updatedAt: new Date().toISOString(),
         version: current.version + 1,
-      }))}
+      }) : current)}
       onImageTaskAction={async () => true}
       onOpenMessageAttachment={() => undefined}
       onOpenFile={(file) => setSelectedFileId(file.id)}
@@ -455,7 +458,7 @@ export function PreviewApp() {
       navigationContent={["chat-studio", "reference-studio"].includes(previewVariant) ? "workbenches" : "sessions"}
       preserveWorkspaceOnSessionChange={previewVariant === "reference-studio"}
     />
-    {["chat-studio", "reference-studio"].includes(previewVariant) && <div className="preview-session-switcher">
+    {!onboarding && ["chat-studio", "reference-studio"].includes(previewVariant) && <div className="preview-session-switcher">
       <button className="preview-session-current" type="button" aria-expanded={sessionMenuOpen} onClick={() => setSessionMenuOpen((open) => !open)}>
         <MessageSquare size={15} />
         <span>{activeSession?.title ?? "选择对话"}</span>
@@ -470,7 +473,7 @@ export function PreviewApp() {
         {sessions.map((session) => <button className={session.id === activeSessionId ? "is-active" : ""} type="button" role="menuitem" key={session.id} onClick={() => { setActiveSessionId(session.id); setSessionMenuOpen(false) }}>{session.title}</button>)}
       </div>}
     </div>}
-    <aside className="web-preview-controls" aria-label="Workbench 原型布局切换">
+    {!onboarding && <aside className="web-preview-controls" aria-label="Workbench 原型布局切换">
       <div className="web-preview-controls-heading">
         <span className="web-preview-kicker">Workbench prototype</span>
         <strong>选择布局方向</strong>
@@ -488,6 +491,6 @@ export function PreviewApp() {
         </button>)}
       </div>
       <span className="web-preview-badge">Web Preview · 演示状态</span>
-    </aside>
+    </aside>}
   </>
 }

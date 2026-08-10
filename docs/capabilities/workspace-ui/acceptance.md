@@ -2,8 +2,8 @@
 title: Workspace UI 验收矩阵
 doc_type: capability-acceptance
 owner: workspace-ui
-status: acc-wui-068-070-bounded-electron-verified
-last_verified: 2026-08-09
+status: onboarding-bounded-electron-verified
+last_verified: 2026-08-11
 source_of_truth: docs/capabilities/workspace-ui/product-spec.md
 ---
 
@@ -135,6 +135,7 @@ Fixture 只能用于定向组件测试；Live（真实运行）必须经过 Elec
 | ACC-WUI-074 | WUI-052 | 在有/无当前项目时打开导入导出窗口，分别于有/无可写 D 盘完成导出、导入、取消、冲突和不支持位置失败 | 两个入口明确；无项目只禁用导出；有 D 盘默认 D 盘、否则回退文档；范围和发布者状态可见；失败保留上下文且提交前不出现新项目 |
 | ACC-WUI-075 | WUI-053 | 导入项目后检查四栏、首页、文件顺序并重启；另打开无简介普通文件夹 | 首页固定第一并自动打开，文件第二且兜底；Chat/草稿不重建；重启恢复；无简介不伪造或调用 Provider |
 | ACC-WUI-076 | WUI-054 | 标记案例、从导出窗口改同一开关、打开导入案例文件并继续/取消 | 两处开关一致且键盘可达；案例只读；引用打开真实文件；确认才创建新会话，取消无副作用 |
+| ACC-WUI-077 | WUI-055 | 用全新 Profile 启动、跳过并重启，再从展开/折叠左下角重播并依次浏览十步；另在减弱动效和目标缺失状态操作 | 首次自动出现；跳过/完成后重启不自动出现；两个入口均从第一步重播；真实设置/资料库锚点准确，缺失目标居中且可退出；完整 Skill 工具箱可读；零 Provider、零项目文件写入、零演示数据；键盘与减弱动效可用 |
 
 `ACC-WUI-049` 已在正式 Profile 的真实 Electron 中只读验收：打开《太衡界世界》及来回切换后均为 `runState=completed`，active 处理区为 0、“正在处理”为 0、“已处理”为 1，折叠时内部明细挂载为 0，正式 Owner 回复可见。没有调用 Provider、写文件或重新运行 Growth。
 
@@ -165,3 +166,5 @@ Fixture 只能用于定向组件测试；Live（真实运行）必须经过 Elec
 `ACC-WUI-067` 已由控制器 6/6（19 次断言）、Renderer 100/100（477 次断言）、Typecheck、Production Build 和隔离 Electron 覆盖。Electron 使用本地受控 Provider 生成 80 段长回复，离开后重新进入会话自动到底；手动上滚至 `120` 后重复选择当前会话并缩放窗口仍保持 `120`。没有外部 Provider、正式 Profile 或完整 Desktop；当前 Windows `0.1.17` 产物生成早于本修复。
 
 `ACC-WUI-072` 已由最新选择协调器、同步/异步保存门禁和隔离 Electron 覆盖。Electron 使用 1,200 文件的目标项目与本地受控 Provider，在点击 B 后同一操作窗口发送；下一次 `requestAnimationFrame` 回调中的选中态和项目标题为 B、旧 A 消息节点为 0，最终冻结 Build 在当前负载下测得 205 ms，持久 Timeline 证明目标消息只进入 B。目标项目核心未到达前，Markdown 项目图片与文件链接失败关闭，不借用旧项目。Renderer 113/113（538 次断言）、全量 486/486（3,451 次断言）、Typecheck、Production Build 和 `ACC-WUI-067` 滚动回归通过。没有外部 Provider、正式 Profile、完整 Desktop 或 Windows 打包。
+
+`ACC-WUI-077` 已由定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck、两项 Import Boundary、Production Build 和隔离 Electron 覆盖。Electron 在 1600×1000 验证首次显示、未完成退出后再次显示、完成后重启不自动显示、展开/折叠入口重播、十步真实锚点、完整九项 Skill 工具箱、Escape 与减弱动效；本地 Provider 请求为 0、隔离项目目录写入为 0、退出残留进程为 0。没有 Windows 打包、正式 Profile 或外部 Provider 内容质量 Live，完整边界见 `../../baseline/creatx-production-onboarding-2026-08-11.md`。

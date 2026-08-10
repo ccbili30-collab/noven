@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>艺术馆 / 艺术库目录</title>
+  <script src="./art-route-transition.js?v=20260804-staged-route-4"></script>
+  <link rel="icon" href="./favicon.svg">
+  <link rel="stylesheet" href="./art-route-transition.css?v=20260804-staged-route-4">
+  <link rel="stylesheet" href="./art-concept.css?v=20260805-focused-detail-3">
+</head>
+<body data-concept-page="library" data-route-ready="deferred">
+  <main id="app" class="concept-loading" aria-live="polite">正在读取艺术库……</main>
+  <script>
+  (() => {
+    let initialized = false;
+    const loadScript = (source) => new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = source;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.body.append(script);
+    });
+    window.addEventListener("message", async (event) => {
+      const payload = event.data;
+      if (initialized || !payload || payload.type !== "creatx-art-library-data" || !payload.data) return;
+      initialized = true;
+      window.ART_CONCEPT_DATA = payload.data;
+      window.addEventListener("click", (clickEvent) => {
+        const target = clickEvent.target instanceof Element ? clickEvent.target : null;
+        const back = target?.closest('[aria-label="返回主展览"]');
+        const detail = target?.closest('a[href*="artwork-detail-concept.html"]');
+        const library = target?.closest('[data-library]');
+        if (back || detail) {
+          clickEvent.preventDefault();
+          clickEvent.stopImmediatePropagation();
+        }
+        if (back) parent.postMessage({ type: "creatx-art-library-route", route: "atlas" }, "*");
+        if (detail) parent.postMessage({ type: "creatx-art-library-select", itemId: new URL(detail.href).searchParams.get("id") }, "*");
+        if (library) parent.postMessage({ type: "creatx-art-library-library", library: library.dataset.library }, "*");
+      }, true);
+      await loadScript("./art-concept.js?v=20260805-focused-detail-3");
+    });
+    parent.postMessage({ type: "creatx-art-library-ready" }, "*");
+  })();
+  </script>
+</body>
+</html>

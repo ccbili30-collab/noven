@@ -3,7 +3,7 @@ import { createHash, randomUUID } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { MACHINE_TRUST_WARNING, type ClineSessionRecord } from "@creatx/cline-adapter/contracts"
-import { ART_LIBRARY_CORE_GUIDANCE, ArtLibraryService, createArtLibraryTools, requireReviewArtApprovalCommand, resetBundledArtAtlasSeed } from "@creatx/art-library-runtime"
+import { ART_LIBRARY_CORE_GUIDANCE, ArtLibraryService, createArtLibraryTools, materializeBundledArtAtlasSeed, requireReviewArtApprovalCommand } from "@creatx/art-library-runtime"
 import { growthWorldProStagePolicy, installBuiltinCreativeSkills, isSlashCommandInput, normalizeCreativeSkillSequence, parseGrowthCommand, parseGrowthWorldCommand, parseGrowthWorldProCommand, resolveCreativeSlashCommand, WORKBENCH_CORE_GUIDANCE } from "@creatx/creative-skills"
 import { GROWTH_WORLD_PRO_GOAL_PREFIX } from "@creatx/creative-skills/growth-goal-instruction"
 import {
@@ -200,12 +200,12 @@ async function initializeRuntime() {
   if (!selectedTextConnection) throw new Error("model_settings_persistence: no selected text model profile exists")
   artLibrary = new ArtLibraryService({ root: join(app.getPath("userData"), "creatx", "art-library"), onChanged: (revision) => sendEvent({ type: "art_library.changed", revision }) })
   await artLibrary.initialize()
-  const artLibrarySeed = await resetBundledArtAtlasSeed(artLibrary, [
+  const artLibrarySeed = await materializeBundledArtAtlasSeed(artLibrary, [
     join(__dirname, "../renderer/art-library"),
     join(app.getAppPath(), "apps", "art-library", "public", "art-library"),
     join(process.cwd(), "apps", "art-library", "public", "art-library"),
   ])
-  console.info(`[art_library_seed] ${artLibrarySeed.status} candidates=${artLibrarySeed.candidates} removed=${artLibrarySeed.removed}`)
+  console.info(`[art_library_seed] ${artLibrarySeed.status} approved=${artLibrarySeed.approved} moved=${artLibrarySeed.moved}`)
   const imageRuntime = new ImageRuntime({
     resolveConnection: () => modelSettings?.resolveImageConnection(),
     fileQueries: projectFiles.queries,

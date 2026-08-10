@@ -23,7 +23,8 @@ try {
   const initial = await first.page.evaluate(() => window.creatx.readArtLibrary())
   if (!initial.ok) throw new Error(`Initial art snapshot failed: ${JSON.stringify(initial)}`)
   if (initial.value.approvalItems.length !== 3) throw new Error(`Prepared approvals are missing: ${JSON.stringify(initial.value.approvalItems.map((item) => item.id))}`)
-  if (initial.value.incomingCount !== 63) throw new Error(`Bundled seed reset did not leave exactly 63 re-curation candidates: ${initial.value.incomingCount}`)
+  if (initial.value.incomingCount !== 0) throw new Error(`Pre-approved bundled works leaked into incoming: ${initial.value.incomingCount}`)
+  assertBundledLibraries(initial.value)
   const sourceKinds = initial.value.approvalItems.map((item) => item.sourceKind).sort()
   if (JSON.stringify(sourceKinds) !== JSON.stringify(["chat-attachment", "project-file", "web"])) throw new Error(`Source projections changed: ${JSON.stringify(sourceKinds)}`)
 
@@ -70,9 +71,13 @@ try {
   await rejectDialog.getByRole("button", { name: "确认拒绝" }).click()
   await first.page.getByText("已拒绝并删除待审批内容。").waitFor({ timeout: 10_000 })
 
-  await first.page.locator(".wb-art-library-header").getByRole("button", { name: "分类" }).click()
-  const category = first.page.locator(".wb-art-library-categories article").filter({ hasText: "实机验收分类" })
-  await category.getByRole("button", { name: "导出关键词" }).click()
+  await first.page.locator(".wb-art-library-header").getByRole("button", { name: "展览" }).click()
+  const exhibition = first.page.frameLocator(".art-library-019-frame")
+  await exhibition.locator('.library-list button[data-library="巨构艺术"]').filter({ hasText: "41 WORKS" }).waitFor({ timeout: 10_000 })
+  await first.page.screenshot({ path: resolve(workspace, "..", "artifacts", "art-library-restoration-019-exhibition-final.png"), fullPage: true })
+  await exhibition.locator('.library-list button[data-library="实机验收分类"]').click()
+  await exhibition.locator(".library-copy h2").filter({ hasText: "实机验收分类" }).waitFor({ timeout: 10_000 })
+  await first.page.locator('.art-library-019-frame-wrap > nav').getByRole("button", { name: "导出关键词" }).click()
   const exportedText = await first.page.getByLabel("导出的关键词").inputValue()
   if (exportedText !== "用户形式, 原始构图0, 用户构图, 用户情绪") throw new Error(`Deterministic keyword export changed: ${exportedText}`)
 
@@ -86,9 +91,23 @@ try {
   const restarted = await second.page.evaluate(() => window.creatx.readArtLibrary())
   if (!restarted.ok) throw new Error(`Restarted art snapshot failed: ${JSON.stringify(restarted)}`)
   assertPersistedSnapshot(restarted.value)
+  await second.page.emulateMedia({ reducedMotion: "reduce" })
   await second.page.locator(".wb-library-actions").getByText("艺术库", { exact: true }).click()
-  await second.page.locator(".wb-art-library-list").waitFor({ timeout: 10_000 })
-  await second.page.getByText("实机验收分类", { exact: true }).waitFor()
+  const restartedAtlas = second.page.frameLocator(".art-atlas-019-frame")
+  await restartedAtlas.locator("#orbitWorkCount").filter({ hasText: "64" }).waitFor({ timeout: 10_000 })
+  const activeTitle = await restartedAtlas.locator(".orbit-piece.is-active strong").textContent()
+  if (!activeTitle) throw new Error("Restored atlas has no active artwork title")
+  await restartedAtlas.locator(".orbit-piece.is-active .piece-image").click()
+  const detail = second.page.frameLocator(".art-detail-019-frame")
+  await detail.locator("h1").filter({ hasText: activeTitle }).waitFor({ timeout: 10_000 })
+  await detail.locator("a[data-route-mist]").first().click()
+  await second.page.locator(".art-atlas-019-frame").waitFor({ timeout: 10_000 })
+  await second.page.frameLocator(".art-atlas-019-frame").getByLabel("进入展览").click()
+  const restartedExhibition = second.page.frameLocator(".art-library-019-frame")
+  await restartedExhibition.locator(".library-list button").filter({ hasText: "巨构艺术" }).waitFor({ timeout: 10_000 })
+  await restartedExhibition.locator(".library-list button").filter({ hasText: "暖色风格" }).waitFor()
+  await restartedExhibition.locator(".library-list button").filter({ hasText: "纪念碑谷" }).waitFor()
+  await restartedExhibition.locator(".library-list button").filter({ hasText: "实机验收分类" }).waitFor()
 
   const protocol = await second.page.evaluate(async (id) => {
     const loadImage = (source: string) => new Promise<boolean>((resolveLoad) => {
@@ -128,11 +147,12 @@ try {
     status: "ART LIBRARY ELECTRON PASS",
     isolatedUserData: basename(userData),
     sourceKinds,
-    seedCandidates: initial.value.incomingCount,
+    bundledLibraries: initial.value.libraries.map((library) => [library.title, library.itemCount]),
     approval: { approved: prepared.approvedId, held: prepared.heldId, rejected: prepared.rejectedId },
     exportedText,
     protocol,
     restart: "persisted",
+    reducedMotion: "atlas-detail-exhibition pass",
     formalProfileBoundary: formalBefore,
     provider: "not called",
   }))
@@ -187,15 +207,20 @@ async function launch() {
   })
   activeApps.push(app)
   const page = await app.firstWindow()
-  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.setViewportSize({ width: 1600, height: 1000 })
   await page.waitForSelector(".workspace-shell", { timeout: 30_000 })
   return { app, page }
 }
 
 async function openApproval(page: Page) {
   await page.locator(".wb-library-actions").getByText("艺术库", { exact: true }).click()
-  await page.locator(".wb-art-library-list").waitFor({ timeout: 10_000 })
-  await page.locator(".wb-art-library-header").getByRole("button", { name: /审批/ }).click()
+  const atlas = page.frameLocator(".art-atlas-019-frame")
+  await atlas.locator("#orbitWorkCount").filter({ hasText: "63" }).waitFor({ timeout: 10_000 })
+  await atlas.locator("#orbitTotal").filter({ hasText: "63" }).waitFor({ timeout: 10_000 })
+  if (await atlas.locator("#orbitLibraryCurrent").textContent() !== "巨构艺术") throw new Error("Restored atlas did not open on 巨构艺术")
+  await page.screenshot({ path: resolve(workspace, "..", "artifacts", "art-library-restoration-019-atlas-final.png"), fullPage: true })
+  await atlas.getByLabel("进入审批").click()
+  await page.locator(".wb-art-library-header").waitFor({ timeout: 10_000 })
 }
 
 async function selectApproval(page: Page, title: string) {
@@ -217,6 +242,11 @@ function assertPersistedSnapshot(snapshot: Awaited<ReturnType<ArtLibraryService[
   if (approved.curation.status !== "current" || approved.curation.reversePrompt.style !== "matte architectural illustration, hard charcoal edges, cold gray masses, restrained orange backlight" || JSON.stringify(approved.curation.reversePrompt.negative) !== JSON.stringify(["错误文字"])) throw new Error("Four-layer reverse Prompt edit was not persisted")
   if (!snapshot.approvalItems.some((item) => item.id === prepared.heldId)) throw new Error("Held approval disappeared")
   if (snapshot.approvalItems.some((item) => item.id === prepared.rejectedId) || snapshot.libraries.some((library) => library.items.some((item) => item.id === prepared.rejectedId))) throw new Error("Rejected approval still appears in projection")
+}
+
+function assertBundledLibraries(snapshot: Awaited<ReturnType<ArtLibraryService["projection"]>>) {
+  const counts = new Map(snapshot.libraries.map((library) => [library.title, library.itemCount]))
+  if (counts.get("巨构艺术") !== 41 || counts.get("暖色风格") !== 18 || counts.get("纪念碑谷") !== 4) throw new Error(`Bundled library counts changed: ${JSON.stringify([...counts])}`)
 }
 
 async function findApprovedOriginal(id: string) {

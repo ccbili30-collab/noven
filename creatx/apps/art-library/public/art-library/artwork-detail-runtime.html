@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>艺术馆 / 作品详情</title>
+  <script src="./art-route-transition.js?v=20260804-staged-route-4"></script>
+  <link rel="icon" href="./favicon.svg">
+  <link rel="stylesheet" href="./art-route-transition.css?v=20260804-staged-route-4">
+  <link rel="stylesheet" href="./art-concept.css?v=20260804-embeddable-1">
+</head>
+<body data-concept-page="detail" data-route-ready="deferred">
+  <main id="app" class="concept-loading" aria-live="polite">正在读取作品档案……</main>
+  <script>
+  (() => {
+    let initialized = false;
+    const loadScript = (source) => new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = source;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.body.append(script);
+    });
+    window.addEventListener("message", async (event) => {
+      const payload = event.data;
+      if (initialized || !payload || payload.type !== "creatx-art-detail-data" || !payload.data) return;
+      initialized = true;
+      window.ART_CONCEPT_DATA = payload.data;
+      window.addEventListener("click", (clickEvent) => {
+        const target = clickEvent.target instanceof Element ? clickEvent.target : null;
+        const back = target?.closest('a[data-route-mist]');
+        if (!back) return;
+        clickEvent.preventDefault();
+        clickEvent.stopImmediatePropagation();
+        parent.postMessage({ type: "creatx-art-detail-back" }, "*");
+      }, true);
+      await loadScript("./art-concept.js?v=20260804-embeddable-1");
+    });
+    parent.postMessage({ type: "creatx-art-detail-ready" }, "*");
+  })();
+  </script>
+</body>
+</html>

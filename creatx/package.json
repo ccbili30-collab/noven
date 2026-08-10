@@ -16,6 +16,8 @@
     "install:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-windows.ps1",
     "dev": "electron-vite dev",
     "preview:web": "vite --config vite.preview.config.ts --open /preview.html",
+    "prototype:onboarding": "vite --config vite.onboarding-prototype.config.ts --open /onboarding-prototype.html",
+    "build:prototype:onboarding": "vite build --config vite.onboarding-prototype.config.ts",
     "build:preview:web": "vite build --config vite.preview.config.ts",
     "test:preview:web": "node --experimental-strip-types scripts/web-preview-test.ts",
     "typecheck": "bunx tsc --noEmit -p tsconfig.json",
