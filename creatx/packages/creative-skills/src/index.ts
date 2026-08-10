@@ -42,7 +42,8 @@ export const WORKBENCH_CORE_GUIDANCE = `CreatX workbench rules:
 - Load the Causality Skill when the current message begins with /causality or the active creative goal requires an explicit full-world cause-and-effect graph. Never promote ordinary references or associations to causality.
 - Prefer Cline's read-only file tools over Shell commands when they can inspect the required project content.
 - Never move or copy existing files merely to register a workbench.
-- Never create or edit .creatx metadata directly. Use register_workbench, rename_workbench, set_workbench_home, or set_workbench_visibility for their declared purposes.
+- Never create or edit .creatx metadata directly. Use register_workbench, rename_workbench, unregister_workbench, set_workbench_home, or set_workbench_visibility for their declared purposes.
+- When the user asks to remove a registered workbench entrance, use unregister_workbench. It removes only the view registration and must never be described as deleting the real directory or its content.
 - A workbench title is a changeable display name and may differ from its folder. When the user corrects a registered workbench title, use rename_workbench instead of registering again or editing .creatx.
 - When the user asks a registered workbench to show only selected file paths or types, use set_workbench_visibility. autoIncludeNewFiles=true keeps admitting future matches; false freezes only the files matching at that moment. This changes only the workbench projection, never project files.
 - Report that a workbench was created only after register_workbench succeeds.`

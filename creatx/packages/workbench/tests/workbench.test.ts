@@ -33,8 +33,9 @@ describe("workbench registry", () => {
     await registry.commands.register({ projectId: project.id, folder: "世界", title: "忽略的重复标题" })
     await registry.commands.rename({ projectId: project.id, folder: "世界", title: "世界设定" })
     await registry.commands.rename({ projectId: project.id, folder: "世界", title: "世界设定" })
+    await registry.commands.unregister({ projectId: project.id, folder: "世界" })
 
-    expect(changed).toEqual([project.id, project.id])
+    expect(changed).toEqual([project.id, project.id, project.id])
   })
 
   test("always projects builtin files without writing metadata", async () => {
@@ -169,6 +170,37 @@ describe("workbench registry", () => {
     expect(renamed.home).toEqual({ entry: "index.html", mode: "interactive", state: "ready" })
     await rm(join(root, "世界", "index.html"))
     expect((await registry.queries.snapshot(project.id)).workbenches.find((workbench) => workbench.id === created.id)?.home).toEqual({ entry: "index.html", mode: "interactive", state: "missing" })
+  })
+
+  test("unregisters ready and missing workbenches without deleting project content", async () => {
+    const { root, project, registry } = await setup()
+    await mkdir(join(root, "小说"))
+    await writeFile(join(root, "小说", "第一章.md"), "未来来信正文", "utf8")
+    const ready = await registry.commands.register({ projectId: project.id, folder: "小说", title: "小说" })
+
+    expect(await registry.commands.unregister({ projectId: project.id, folder: "小说" })).toEqual({ projectId: project.id, workbenchId: ready.id, folder: "小说", title: "小说" })
+    expect(await readFile(join(root, "小说", "第一章.md"), "utf8")).toBe("未来来信正文")
+    expect((await registry.queries.snapshot(project.id)).workbenches.map((workbench) => workbench.id)).toEqual(["builtin:files"])
+    await expect(stat(join(root, ".creatx", "workbenches", `${ready.id}.json`))).rejects.toThrow()
+
+    await mkdir(join(root, "旧世界"))
+    const missing = await registry.commands.register({ projectId: project.id, folder: "旧世界", title: "旧世界" })
+    await rm(join(root, "旧世界"), { recursive: true })
+    expect((await registry.queries.snapshot(project.id)).workbenches.find((workbench) => workbench.id === missing.id)?.state).toBe("missing")
+    expect(await registry.commands.unregister({ projectId: project.id, folder: "旧世界" })).toMatchObject({ workbenchId: missing.id, folder: "旧世界" })
+    expect((await registry.queries.snapshot(project.id)).workbenches.map((workbench) => workbench.id)).toEqual(["builtin:files"])
+  })
+
+  test("rejects unknown and conflicting unregister targets without deleting records", async () => {
+    const { root, project, registry } = await setup()
+    await mkdir(join(root, "世界"))
+    await expect(registry.commands.unregister({ projectId: project.id, folder: "世界" })).rejects.toThrow("workbench_invalid")
+    await mkdir(join(root, ".creatx", "workbenches"), { recursive: true })
+    const ids = ["wb_550e8400-e29b-41d4-a716-446655440020", "wb_550e8400-e29b-41d4-a716-446655440021"]
+    await Promise.all(ids.map((id) => writeFile(join(root, ".creatx", "workbenches", `${id}.json`), JSON.stringify({ schemaVersion: 1, id, folder: "世界" }))))
+
+    await expect(registry.commands.unregister({ projectId: project.id, folder: "世界" })).rejects.toThrow("workbench_conflict")
+    expect(await Promise.all(ids.map((id) => Bun.file(join(root, ".creatx", "workbenches", `${id}.json`)).exists()))).toEqual([true, true])
   })
 
   test("upgrades V1 to V3 and automatically projects new files matching the visible scope", async () => {
@@ -418,6 +450,14 @@ describe("workbench registry", () => {
     expect((await renameTool.execute({ folder: "小说", title: "未来来信" }, { sessionId: "s1", projectId: project.id })).ok).toBe(true)
     expect((await renameTool.execute({ folder: "missing", title: "无效" }, { sessionId: "s1", projectId: project.id })).ok).toBe(false)
 
+    const unregisterTool = registry.unregisterTool()
+    expect(unregisterTool.name).toBe("unregister_workbench")
+    expect(unregisterTool.approval).toBe("required")
+    expect(unregisterTool.description).toContain("does not delete")
+    expect((await unregisterTool.execute({ folder: "小说" }, { sessionId: "s1", projectId: project.id })).ok).toBe(true)
+    expect((await unregisterTool.execute({ folder: "小说" }, { sessionId: "s1", projectId: project.id })).ok).toBe(false)
+
+    await registry.commands.register({ projectId: project.id, folder: "小说", title: "未来来信" })
     const visibilityTool = registry.setVisibilityTool()
     expect(visibilityTool.name).toBe("set_workbench_visibility")
     expect(visibilityTool.approval).toBe("required")

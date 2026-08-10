@@ -2,8 +2,8 @@
 title: Workbench Registry 实现计划
 doc_type: capability-plan
 owner: workbench-registry
-status: first-vertical-live-followups-open
-last_verified: 2026-08-10
+status: unregister-runtime-verified-provider-electron-open
+last_verified: 2026-08-11
 ---
 
 # Workbench Registry 实现计划
@@ -42,3 +42,18 @@ last_verified: 2026-08-10
 ```
 
 本批不增加 Renderer 配置界面，不修改 `WorkbenchProjection`，不允许直接编辑 `.creatx`。外部 Provider 自主选择工具是后续独立 Live 验收，不以单元测试或受控直接调用替代。
+
+## 2026-08-11 注销入口批次
+
+新的独立产品需求路由为 `WBR-020..021 / ACC-WBR-032..035`。实现顺序为：
+
+```text
+确认注销只删除视图记录
+→ Project Internal State 带修改时间门禁删除
+→ Workbench Command Port 与 unregister_workbench
+→ Desktop 工具聚合和系统指导
+→ 当前入口消失后的 builtin:files 回退
+→ 定向、类型、导入边界与生产构建验收
+```
+
+本批不删除真实目录，不增加 Renderer 手动按钮，不修复损坏或重复记录，不实现批量注销、重新定位或回收站。

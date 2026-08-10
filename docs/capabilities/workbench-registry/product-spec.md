@@ -2,8 +2,8 @@
 title: Workbench Registry 产品规格
 doc_type: capability-product-spec
 owner: workbench-registry
-status: v3-visible-scope-implemented-not-provider-live
-last_verified: 2026-08-10
+status: unregister-runtime-verified-provider-electron-open
+last_verified: 2026-08-11
 source_of_truth: docs/capabilities/workbench-registry/product-spec.md
 ---
 
@@ -94,3 +94,13 @@ V1/V2 继续严格读取且不自动改写；首次设置可见范围才原子�
 `set_workbench_visibility` 是项目作用域、需要原生审批的中立工具。输入包含已注册 `folder`、可选 `include`、可选 `exclude` 和可选 `autoIncludeNewFiles`；开关省略时按 `true`。AI 不得直接编辑 `.creatx`。
 
 工具只在严格验证模式、真实目录扫描、修改时间冲突门禁、原子写入和重新加载全部成功后返回成功。未知/内置/缺失/冲突工作台、非法模式或并发外部修改都失败关闭。已有交互主页若会被新规则隐藏，整次修改拒绝且原记录不变；被规则隐藏的 HTML 也不能由 `set_workbench_home` 或 `show_in_workbench` 绕过。
+
+## WBR-020 注销只移除视图入口
+
+`unregister_workbench` 只删除一个已注册工作台对应的 `.creatx/workbenches/<id>.json` 记录，不删除、移动、改名或修改 `folder` 指向的真实目录和任何内容。文件夹已经缺失且 Projection 为 `missing` 的合法注册记录仍可注销；内置 `builtin:files` 永远不可注销。
+
+工具按已注册 `folder` 定位记录，项目作用域且需要 Cline 原生审批。未知工作台、损坏记录、重复文件夹冲突、记录身份变化、记录自读取后发生修改或删除均失败关闭；不得把输入不存在当成注销成功。成功必须以受控元数据删除和重新加载后原 ID 消失为准，并发布工作台投影失效事件。
+
+## WBR-021 当前工作台注销回退
+
+Renderer 重新读取工作台投影后，如果当前选择引用的注册工作台已经消失，必须清除其交互主页与临时展示状态并切换到内置 `builtin:files`。其他工作台、当前项目真实文件和会话不受影响。该回退只响应已加载快照中的确定消失，不在加载中猜测注销结果。

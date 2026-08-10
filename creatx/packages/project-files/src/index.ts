@@ -106,10 +106,18 @@ export interface ProjectInternalStateWriteRequest {
   expectedModifiedAt?: string | null
 }
 
+export interface ProjectInternalStateDeleteRequest {
+  projectId: string
+  namespace: string
+  key: string
+  expectedModifiedAt: string
+}
+
 export interface ProjectInternalStatePort {
   readFile(projectId: string, namespace: string, key: string): Promise<ProjectInternalStateRecord | undefined>
   listDirectory(projectId: string, namespace: string, directory: string): Promise<ProjectDirectorySnapshot | undefined>
   writeFile(request: ProjectInternalStateWriteRequest): Promise<ProjectInternalStateRecord>
+  deleteFile(request: ProjectInternalStateDeleteRequest): Promise<void>
   moveContentFileToBackup(projectId: string, relativePath: string, namespace: string, backupKey: string, expectedSha256: string): Promise<void>
 }
 
@@ -153,6 +161,7 @@ export class ProjectFileService {
     readFile: async (projectId, namespace, key) => this.fileOperation(() => readInternalStateFile(this.projectRoot(projectId), namespace, key)),
     listDirectory: async (projectId, namespace, directory) => listInternalStateDirectory(this.projectRoot(projectId), namespace, directory, this.fileOperation),
     writeFile: async (request) => this.fileOperation(() => writeInternalStateFile(this.projectRoot(request.projectId), request)),
+    deleteFile: async (request) => this.fileOperation(() => deleteInternalStateFile(this.projectRoot(request.projectId), request)),
     moveContentFileToBackup: async (projectId, relativePath, namespace, backupKey, expectedSha256) => {
       await this.fileOperation(() => moveContentFileToInternalBackup(this.projectRoot(projectId), relativePath, namespace, backupKey, expectedSha256))
       this.options.onContentChanged?.(projectId)
@@ -398,6 +407,20 @@ async function writeInternalStateFile(root: string, request: ProjectInternalStat
     await rm(temporaryPath, { force: true })
   }
   return (await readInternalStateFile(root, request.namespace, key))!
+}
+
+async function deleteInternalStateFile(root: string, request: ProjectInternalStateDeleteRequest) {
+  const key = normalizeInternalKey(request.key)
+  const path = internalStatePath(root, request.namespace, key)
+  const info = await lstat(path).catch((error: unknown) => {
+    if (isNotFound(error)) return undefined
+    throw error
+  })
+  if (!info) throw new Error("file_conflict: internal state file no longer exists")
+  if (!info.isFile() || info.isSymbolicLink()) throw new Error("file_invalid: internal state target is not a regular file")
+  requirePathInsideRoot(root, await realpath(path))
+  if (info.mtime.toISOString() !== request.expectedModifiedAt) throw new Error("file_conflict: internal state file changed after it was read")
+  await rm(path)
 }
 
 async function listInternalStateDirectory(root: string, namespace: string, directory: string, fileOperation: FileOperationGate) {

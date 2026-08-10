@@ -310,7 +310,7 @@ async function initializeRuntime() {
     permissionStorePath: join(app.getPath("userData"), "creatx", "session.sqlite"),
     defaultConnection: selectedTextConnection,
     connections: textConnections,
-    tools: [workbenches.tool(), workbenches.renameTool(), workbenches.setHomeTool(), workbenches.setVisibilityTool(), workbenches.showTool(), worldBlueprints.tool(), worldMaterialization.tool(), growthProgress.tool(), growthController(), growthIssueResolution.tool(), imageRuntime.tool(), imageRuntime.editTool(), imageQueue.tool(), imageQueue.managementTool(), imageAttachments.tool(), ...heritageSkills.tools(), ...createArtLibraryTools(artLibrary, { projectFiles: projectFiles.queries, turnImages: artTurnSources })],
+    tools: [workbenches.tool(), workbenches.renameTool(), workbenches.unregisterTool(), workbenches.setHomeTool(), workbenches.setVisibilityTool(), workbenches.showTool(), worldBlueprints.tool(), worldMaterialization.tool(), growthProgress.tool(), growthController(), growthIssueResolution.tool(), imageRuntime.tool(), imageRuntime.editTool(), imageQueue.tool(), imageQueue.managementTool(), imageAttachments.tool(), ...heritageSkills.tools(), ...createArtLibraryTools(artLibrary, { projectFiles: projectFiles.queries, turnImages: artTurnSources })],
     systemGuidance: [WORKBENCH_CORE_GUIDANCE, IMAGE_CORE_GUIDANCE, ART_LIBRARY_CORE_GUIDANCE, HERITAGE_SKILL_CORE_GUIDANCE],
     skillDirectories: runtimeSkills.skillDirectories,
     skills: runtimeSkills.skills,

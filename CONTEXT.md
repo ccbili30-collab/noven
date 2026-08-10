@@ -1,5 +1,9 @@
 # CreatX Current Context
 
+## 当前工作台注销入口前沿
+
+2026-08-11 已实现 `WBR-020..021 / ACC-WBR-032..035`：普通项目会话可通过需要原生审批的 `unregister_workbench` 只移除一个工作台视图记录，真实目录与内容不变；合法 `missing` 入口同样可清理，内置、未知、损坏、重复冲突和并发变化目标失败关闭。当前入口消失后 Renderer 回退 `builtin:files` 并清除临时交互展示。联合定向 180/180（1,300 次断言）、全量 598/598（4,495 次断言）、Typecheck、Import Boundary 和 Production Build 通过。没有外部 Provider 自主调用或 Electron 审批/重启 Live；证据与恢复入口见 `docs/baseline/creatx-workbench-unregister-2026-08-11.md`。
+
 ## 当前 Causality 因果图 Skill 前沿
 
 2026-08-10 已实现实验性内置 `creatx-causality`：普通项目会话或 Growth 可通过同一 `/causality` Skill 读取当前世界已经明确登记的 `type: "causes"` 关系，保留原方向与原因，生成项目内无网络依赖的搜索、拖动、缩放因果 Viewer（查看器）。引用、采纳、归属、位置、相似与共同出现不会被提升为因果；没有明确因果、多世界未选择、损坏 Goal、项目外真实路径、Junction（目录联接）输出和非本 Skill 产物覆盖均失败关闭。完整物化关系优先，冻结蓝图只作为明确标记的降级来源。

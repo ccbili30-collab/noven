@@ -1,5 +1,9 @@
 # CreatX Baseline
 
+## 工作台注销入口
+
+2026-08-11 已接通 `unregister_workbench` 的受控元数据删除、原生审批策略、正式 Desktop 工具聚合和当前入口消失后的 `builtin:files` 回退。真实项目内容不会被注销操作删除或修改，`missing` 入口可清理，冲突与过期状态失败关闭。联合定向 180/180（1,300 次断言）、全量 598/598（4,495 次断言）、Typecheck、Import Boundary 和 Production Build 通过；未执行外部 Provider 或 Electron Live。证据见 `docs/baseline/creatx-workbench-unregister-2026-08-11.md`。
+
 ## 传承库与工作台项目引用修复
 
 2026-08-09 已实现 `WUI-046..048 / ACC-WUI-068..070`：内置传承库迁移为四类各五条的版本化 JSON，个人导入分类继续可达；最右工作台导航分隔线恢复指针与键盘调整；对话项目图片、相对文件链接和 Markdown 标题锚点复用真实工作台打开链，非法引用失败关闭。定向 17/17、Renderer 104/104、Typecheck、Production Build 和专用隔离 Electron 通过；全量 476/477 的唯一范围外超时隔离通过，完整 Desktop 在既有布局断言处提前停止。没有外部 Provider、正式 Profile、Windows 打包或迁移。证据见 `docs/baseline/creatx-heritage-workbench-links-2026-08-09.md`。

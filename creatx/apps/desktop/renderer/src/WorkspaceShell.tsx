@@ -92,6 +92,12 @@ import { VISIBLE_PRODUCT_NAME } from "../../src/product-brand"
 
 export type RightSurface = "files" | "preview" | { workbenchId: string } | undefined
 
+export function reconcileWorkbenchSurface(surface: RightSurface, workbenches: { workbenches: readonly { id: string }[] } | undefined): RightSurface {
+  if (!workbenches || typeof surface !== "object") return surface
+  if (workbenches.workbenches.some((workbench) => workbench.id === surface.workbenchId)) return surface
+  return { workbenchId: "builtin:files" }
+}
+
 type WorkspacePanel = "project" | "conversation" | "workbench" | "inspector"
 type WorkspaceSeparator = "project-conversation" | "conversation-workbench" | "workbench-canvas" | "canvas-inspector"
 
@@ -230,6 +236,14 @@ export function WorkspaceShell(props: WorkspaceShellProps) {
     if (!normalized) return entries
     return entries.filter((entry) => entry.name.toLocaleLowerCase("zh-CN").includes(normalized) || entry.relativePath.toLocaleLowerCase("zh-CN").includes(normalized))
   }, [activeWorkbench, props.project, query])
+
+  useEffect(() => {
+    const reconciled = reconcileWorkbenchSurface(props.rightSurface, props.workbenches)
+    if (typeof reconciled !== "object" || reconciled.workbenchId === activeWorkbenchId) return
+    setInteractivePresentation(undefined)
+    setWorkbenchHeadingTarget(undefined)
+    props.setRightSurface(reconciled)
+  }, [activeWorkbenchId, props.workbenches?.refreshedAt])
 
   useEffect(() => {
     const preview = props.preview
@@ -1538,7 +1552,7 @@ function projectEntries(project: ProjectSnapshot | undefined): WorkbenchEntry[] 
 }
 
 function toolLabel(name: string) {
-  const labels: Record<string, string> = { editor: "编辑文件", run_commands: "运行命令", apply_patch: "应用补丁", read_files: "读取文件", search_codebase: "搜索项目", register_workbench: "注册工作台", rename_workbench: "修改工作台标题", generate_image: "生成图片", edit_image: "编辑图片" }
+  const labels: Record<string, string> = { editor: "编辑文件", run_commands: "运行命令", apply_patch: "应用补丁", read_files: "读取文件", search_codebase: "搜索项目", register_workbench: "注册工作台", rename_workbench: "修改工作台标题", unregister_workbench: "移除工作台入口", generate_image: "生成图片", edit_image: "编辑图片" }
   return labels[name] ?? name
 }
 
