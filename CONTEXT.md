@@ -1,5 +1,17 @@
 # CreatX Current Context
 
+## 当前非阻塞错误恢复提示前沿
+
+2026-08-11 已实现 `WUI-056 / ACC-WUI-078`：Renderer（渲染层）只对用户可见摘要精确为“图片任务请求无效。”或“运行时发生错误。”的两类高频提示应用固定展示流程，先以橙色显示 6 秒，再替换为绿色“已恢复！”并在 2 秒后隐藏；同一错误不再重复显示全局红色横幅。余额不足、密钥、权限、持久化、项目冲突及其他错误继续沿用既有红色与阻塞逻辑。
+
+定向 3/3（14 次断言）、全量 617/617（4,559 次断言，86 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）和 Production Build（生产构建）通过。没有执行 Electron（桌面运行壳）视觉计时 Live（真实运行），也没有调用外部 Provider（模型服务）。该流程不检查任务是否实际恢复，不修改 Runtime（运行时）错误事实、Timeline（时间线）持久数据或任务状态；绿色文案仅是按产品要求生成的短暂展示。完整边界见 `docs/baseline/creatx-soft-error-recovery-presentation-2026-08-11.md`。
+
+## 当前应用内重启恢复前沿
+
+2026-08-11 已实现 `DRT-003..006 / ACC-DRT-001..005`：展开和折叠项目导航均提供“恢复诺文”，空闲时安全重启整个 Electron 应用；普通会话/工具、Owner Growth、活动 Growth Goal 或图片生成中会先明确确认。确认后复用既有 Growth 暂停/取消、图片队列关闭、Cline Utility Process（工具子进程）释放和 Store（存储）关闭链，只安排一次 Relaunch（重新启动）。下一次 Bootstrap（启动装载）只采用仍然有效且项目匹配的一次性项目/会话选择，不自动重发消息、Provider（模型服务）请求或工具调用。
+
+定向 11/11、Owner 协调器 14/14、图片队列 38/38、全量 615/615（4,547 次断言，85 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）和 Production Build（生产构建）通过。隔离 Electron 完成空闲重启、项目/会话恢复、活动回复确认取消与确认重启；本地挂起 Provider 请求总数保持 1，证明没有自动重放，未使用外部 Provider 或正式 Profile。本批没有修复 `EMFILE` 或艺术库联网错误根因，也不承诺后台继续、活动 Run 精确续接或严格一次副作用恢复。完整边界见 `docs/baseline/creatx-application-restart-recovery-2026-08-11.md`。
+
 ## 当前诺文 Windows 0.1.22 发布前沿
 
 2026-08-11 已将源代码头 `9b2e2ee` 打包为 Windows `0.1.22`，包含艺术库 `0.1.19` 视觉与 63 件正式藏品恢复、生产十步新手教程以及既有工作台注销。Setup 为 121,561,653 字节，SHA-256 `A457F3990C8A959043A08ECC5C6F04398BFADA51A5A4C89E973E5F85F8DD19D9`；Portable 为 121,337,832 字节，SHA-256 `C013D977E2FC47E7309FCA6A733B0337DE1C18E970CE82F18B6EF5F7F06DD938`。PE 版本与 ProductName（产品名）为 `0.1.22 / 诺文`，产物未签名。

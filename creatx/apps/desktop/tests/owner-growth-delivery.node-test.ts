@@ -131,6 +131,7 @@ test("joins concurrent exact retries to one in-process Owner execution", async (
     await gate
     return "done"
   })
+  assert.equal(coordinator.activeExecutionCount, 1)
   const retry = coordinator.run("activation-concurrent", async () => {
     calls += 1
     return "duplicate"
@@ -139,6 +140,7 @@ test("joins concurrent exact retries to one in-process Owner execution", async (
   assert.equal(calls, 1)
   release()
   assert.equal(await retry, "done")
+  assert.equal(coordinator.activeExecutionCount, 0)
   assert.equal(coordinator.find("activation-concurrent"), undefined)
 })
 
@@ -206,6 +208,8 @@ test("holds the Owner mutation boundary until an ordinary Cline turn is admitted
     }
     return execution
   })
+  await Promise.resolve()
+  assert.equal(coordinator.activeTurnCount, 1)
   const growthAdmission = coordinator.run(() => {
     coordinator.assertSessionIdle("session-ordinary")
     events.push("growth-activation-created")
@@ -217,6 +221,7 @@ test("holds the Owner mutation boundary until an ordinary Cline turn is admitted
   assert.deepEqual(events, ["ordinary-check", "ordinary-admitted"])
   finish()
   assert.equal(await ordinary, "done")
+  assert.equal(coordinator.activeTurnCount, 0)
   await coordinator.run(() => {
     coordinator.assertSessionIdle("session-ordinary")
     events.push("growth-activation-created")

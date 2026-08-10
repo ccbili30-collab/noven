@@ -17,6 +17,7 @@ import {
   type BindArtChatSessionCommand,
   type CaptureWorkbenchAnnotationCommand,
   type CreativeLibraryKind,
+  type DesktopBootstrapSelection,
   type DesktopResult,
   type GrowthGoalProjection,
   type ProjectSnapshot,
@@ -28,6 +29,7 @@ import {
   type SendMessageCommand,
   type SetCreativeLibraryReactionCommand,
   type SessionSummary,
+  type RestartApplicationCommand,
 } from "@creatx/contracts"
 import { appendProjectRevisionContext, ProjectFileService } from "@creatx/project-files"
 import { resolvePreloadPath } from "./preload-path.ts"
@@ -55,6 +57,7 @@ import { captureWorkbenchRegion, type WorkbenchCaptureRect } from "./workbench-c
 import { ArtTurnSourceStore, withArtTurnSources } from "./art-turn-sources.ts"
 import { ArtLibraryAssetProtocol } from "./art-library-asset-protocol.ts"
 import { composeHeritageSkillRuntime, HERITAGE_SKILL_CORE_GUIDANCE, HeritageSkillService } from "./heritage-skill-service.ts"
+import { ApplicationRestartCoordinator } from "./application-restart.ts"
 
 protocol.registerSchemesAsPrivileged([
   { scheme: "creatx-workbench", privileges: { standard: true, secure: true, supportFetchAPI: true } },
@@ -103,6 +106,11 @@ let heritageSkills: HeritageSkillService | undefined
 let worldMaterialization: WorldMaterializationService | undefined
 const ownerGrowthExecutions = new OwnerGrowthExecutionCoordinator()
 const ownerConversationMutations = new OwnerConversationMutationCoordinator()
+const applicationRestart = new ApplicationRestartCoordinator({
+  defer: (action) => setTimeout(action, 100),
+  relaunch: () => app.relaunch(),
+  quit: () => app.quit(),
+})
 let quitting = false
 let acceptingGrowthEvents = true
 const SHUTDOWN_DEADLINE_MS = 8_000
@@ -831,7 +839,10 @@ async function handleCommand(command: string, ...args: unknown[]): Promise<Deskt
     if (command === "bootstrap") {
       const records = await adapter.listSessions()
       const sessions = records.map(toSessionSummary)
-      const root = process.env.CREATX_PROJECT_ROOT ?? records[0]?.projectRoot
+      const selection = requireDesktopBootstrapSelection(args[0])
+      const selectedSessionIndex = sessions.findIndex((session) => session.id === selection?.sessionId && (!selection.projectId || session.projectId === selection.projectId))
+      const selectedProjectIndex = selectedSessionIndex >= 0 ? selectedSessionIndex : sessions.findIndex((session) => session.projectId === selection?.projectId)
+      const root = records[selectedProjectIndex]?.projectRoot ?? process.env.CREATX_PROJECT_ROOT ?? records[0]?.projectRoot
       if (root) currentProject = await loadProject(root).catch(() => undefined)
       const growth = currentProject ? growthGoals?.findLatest(currentProject.id) : undefined
       return success({
@@ -841,6 +852,14 @@ async function handleCommand(command: string, ...args: unknown[]): Promise<Deskt
         ...(currentProject ? { project: currentProject } : {}),
         ...(growth ? { growth: await projectGrowthGoal(growth) } : {}),
       })
+    }
+    if (command === "restartApplication") {
+      const activity = {
+        conversation: ownerConversationMutations.activeTurnCount > 0,
+        growth: ownerGrowthExecutions.activeExecutionCount > 0 || Boolean(growthGoals?.listActive().length),
+        imageGeneration: imageTasks?.hasGenerating() ?? false,
+      }
+      return success(applicationRestart.request(requireRestartApplicationCommand(args[0]), activity))
     }
     if (command === "readModelSettings") return success(modelSettings!.snapshot())
     if (command === "saveTextModelProfile") {
@@ -1279,6 +1298,27 @@ function requireControlImageTaskCommand(value: unknown): ControlImageTaskCommand
   if (typeof input.imageTaskId !== "string" || !input.imageTaskId.trim()) throw new Error("image_queue_invalid: imageTaskId is required")
   if (input.action !== "retry" && input.action !== "skip" && input.action !== "cancel") throw new Error("image_queue_invalid: unsupported image task action")
   return { projectId: requireProjectId(input.projectId), imageTaskId: input.imageTaskId.trim(), action: input.action }
+}
+
+function requireDesktopBootstrapSelection(value: unknown): DesktopBootstrapSelection | undefined {
+  if (value === undefined) return undefined
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("command_invalid: bootstrap selection must be an object")
+  const input = value as Partial<DesktopBootstrapSelection>
+  if (Object.keys(value).some((key) => key !== "projectId" && key !== "sessionId")) throw new Error("command_invalid: bootstrap selection contains unknown fields")
+  if (input.projectId !== undefined && (typeof input.projectId !== "string" || !input.projectId.trim())) throw new Error("project_invalid: projectId must be a non-empty string")
+  if (input.sessionId !== undefined && (typeof input.sessionId !== "string" || !input.sessionId.trim())) throw new Error("session_invalid: sessionId must be a non-empty string")
+  return {
+    ...(input.projectId ? { projectId: input.projectId.trim() } : {}),
+    ...(input.sessionId ? { sessionId: input.sessionId.trim() } : {}),
+  }
+}
+
+function requireRestartApplicationCommand(value: unknown): RestartApplicationCommand {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("command_invalid: restart command must be an object")
+  const input = value as Partial<RestartApplicationCommand>
+  if (Object.keys(value).some((key) => key !== "confirmed")) throw new Error("command_invalid: restart command contains unknown fields")
+  if (typeof input.confirmed !== "boolean") throw new Error("command_invalid: restart confirmation must be boolean")
+  return { confirmed: input.confirmed }
 }
 
 function requireResolveWorkbenchPresentationCommand(value: unknown): ResolveWorkbenchPresentationCommand {

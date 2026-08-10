@@ -136,6 +136,7 @@ Fixture 只能用于定向组件测试；Live（真实运行）必须经过 Elec
 | ACC-WUI-075 | WUI-053 | 导入项目后检查四栏、首页、文件顺序并重启；另打开无简介普通文件夹 | 首页固定第一并自动打开，文件第二且兜底；Chat/草稿不重建；重启恢复；无简介不伪造或调用 Provider |
 | ACC-WUI-076 | WUI-054 | 标记案例、从导出窗口改同一开关、打开导入案例文件并继续/取消 | 两处开关一致且键盘可达；案例只读；引用打开真实文件；确认才创建新会话，取消无副作用 |
 | ACC-WUI-077 | WUI-055 | 用全新 Profile 启动、跳过并重启，再从展开/折叠左下角重播并依次浏览十步；另在减弱动效和目标缺失状态操作 | 首次自动出现；跳过/完成后重启不自动出现；两个入口均从第一步重播；真实设置/资料库锚点准确，缺失目标居中且可退出；完整 Skill 工具箱可读；零 Provider、零项目文件写入、零演示数据；键盘与减弱动效可用 |
+| ACC-WUI-078 | WUI-056 | 投影“图片任务请求无效。”和“运行时发生错误。”，并另投影余额不足等其他错误 | 两个软提示先橙色 6 秒，再绿色“已恢复！”2 秒后隐藏且无全局红条；其他错误继续红色持久显示 |
 
 `ACC-WUI-049` 已在正式 Profile 的真实 Electron 中只读验收：打开《太衡界世界》及来回切换后均为 `runState=completed`，active 处理区为 0、“正在处理”为 0、“已处理”为 1，折叠时内部明细挂载为 0，正式 Owner 回复可见。没有调用 Provider、写文件或重新运行 Growth。
 
@@ -168,3 +169,5 @@ Fixture 只能用于定向组件测试；Live（真实运行）必须经过 Elec
 `ACC-WUI-072` 已由最新选择协调器、同步/异步保存门禁和隔离 Electron 覆盖。Electron 使用 1,200 文件的目标项目与本地受控 Provider，在点击 B 后同一操作窗口发送；下一次 `requestAnimationFrame` 回调中的选中态和项目标题为 B、旧 A 消息节点为 0，最终冻结 Build 在当前负载下测得 205 ms，持久 Timeline 证明目标消息只进入 B。目标项目核心未到达前，Markdown 项目图片与文件链接失败关闭，不借用旧项目。Renderer 113/113（538 次断言）、全量 486/486（3,451 次断言）、Typecheck、Production Build 和 `ACC-WUI-067` 滚动回归通过。没有外部 Provider、正式 Profile、完整 Desktop 或 Windows 打包。
 
 `ACC-WUI-077` 已由定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck、两项 Import Boundary、Production Build 和隔离 Electron 覆盖。Electron 在 1600×1000 验证首次显示、未完成退出后再次显示、完成后重启不自动显示、展开/折叠入口重播、十步真实锚点、完整九项 Skill 工具箱、Escape 与减弱动效；本地 Provider 请求为 0、隔离项目目录写入为 0、退出残留进程为 0。没有 Windows 打包、正式 Profile 或外部 Provider 内容质量 Live，完整边界见 `../../baseline/creatx-production-onboarding-2026-08-11.md`。
+
+`ACC-WUI-078` 已由定向 3/3（14 次断言）、全量 617/617（4,559 次断言，86 个文件）、Typecheck、两项 Import Boundary 和 Production Build 覆盖。自动化证明只有两个精确摘要进入 6 秒橙色、2 秒绿色后隐藏的投影，并抑制对应全局红条；余额不足与持久化错误仍保留原错误投影。没有启动 Electron 做视觉计时 Live，也没有调用 Provider；“已恢复！”是固定展示文案，不是 Runtime 或任务成功回执。完整边界见 `../../baseline/creatx-soft-error-recovery-presentation-2026-08-11.md`。

@@ -37,6 +37,7 @@
     "test:heritage-video-skill": "node --experimental-strip-types scripts/electron-heritage-video-skill-test.ts",
     "test:runtime-isolation": "node --experimental-strip-types scripts/electron-runtime-isolation-test.ts",
     "test:single-instance": "bun run scripts/electron-single-instance-test.ts",
+    "test:application-restart": "node --experimental-strip-types scripts/electron-application-restart-test.ts",
     "test:workbench-interactive": "node --experimental-strip-types scripts/workbench-interactive-electron-test.ts",
     "test:electron-live": "node --experimental-strip-types scripts/electron-live-test.ts",
     "test:electron-natural-live": "node --experimental-strip-types scripts/electron-live-test.ts --natural",

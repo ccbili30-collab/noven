@@ -220,6 +220,19 @@ test("attaches when a receipt binds after image success and does not attach twic
   current.store.close()
 })
 
+test("reports only generating work as active restart-sensitive image work", async () => {
+  const current = await setupStore()
+  const task = current.store.submit(request())
+  assert.equal(current.store.hasGenerating(), false)
+
+  current.store.claimNextForProject("project-1")
+  assert.equal(current.store.hasGenerating(), true)
+
+  current.store.interruptGenerating("application restart")
+  assert.equal(current.store.hasGenerating(), false)
+  current.store.close()
+})
+
 test("repairs one failed same-document legacy attachment from an authoritative receipt", async () => {
   const current = await setupStore()
   const attached: string[] = []

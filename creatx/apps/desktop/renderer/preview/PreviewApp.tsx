@@ -453,6 +453,7 @@ export function PreviewApp({ onboarding = false }: { onboarding?: boolean } = {}
       onResolveWorkbenchPresentation={async () => undefined}
       onResolveHtmlPresentation={async () => undefined}
       onRefresh={() => undefined}
+      onRestartApplication={async () => undefined}
       onApprovalDecision={() => undefined}
       onDismissError={() => undefined}
       navigationContent={["chat-studio", "reference-studio"].includes(previewVariant) ? "workbenches" : "sessions"}

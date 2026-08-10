@@ -227,6 +227,7 @@ html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; }
 .wb-project-menu button.is-danger { color: #a24d41; }
 .wb-navigation-dialog-backdrop { position: fixed; z-index: 110; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(42, 38, 31, .32); backdrop-filter: blur(3px); }
 .wb-navigation-dialog { width: min(390px, 100%); padding: 20px; border: 1px solid #dedbd4; border-radius: 14px; background: #fffefa; box-shadow: 0 20px 70px rgba(44, 42, 37, .2); }
+.wb-navigation-dialog.wb-restart-dialog { width: min(460px, 100%); }
 .wb-navigation-dialog > strong { display: block; color: var(--wb-strong); font-size: calc(16px + var(--wb-interface-font-delta)); }
 .wb-navigation-dialog > p { margin: 9px 0 16px; color: var(--wb-muted); font-size: calc(12px + var(--wb-interface-font-delta)); line-height: 1.6; }
 .wb-navigation-dialog > input { width: 100%; height: 38px; padding: 0 11px; border: 1px solid var(--wb-input-border); border-radius: 8px; outline: 0; background: #fff; color: var(--wb-ink); font: inherit; }
@@ -320,6 +321,8 @@ html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; }
 .wb-growth-repeat { color: #a4564b; font-size: calc(9.5px + var(--wb-interface-font-delta)); }
 .wb-context-notice { display: flex; align-items: flex-start; gap: 7px; padding: 7px 9px; border-radius: 8px; background: rgba(160, 147, 119, .08); color: var(--wb-muted); font-size: calc(11.5px + var(--wb-interface-font-delta)); line-height: 1.5; }
 .wb-context-notice.failed { color: #9f493f; background: rgba(159, 73, 63, .08); }
+.wb-context-notice.soft-recovering { color: #a46b22; background: rgba(196, 128, 35, .1); }
+.wb-context-notice.soft-recovered { color: #337a4c; background: rgba(51, 122, 76, .1); }
 .wb-context-list { display: flex; flex-direction: column; gap: 6px; margin: -4px 0 0; padding-left: 18px; }
 .wb-context-composer { position: relative; display: flex; width: min(var(--wb-conversation-content-max-width), calc(100% - 48px)); flex-direction: column; gap: 8px; margin: 0 auto 16px; padding: 10px 12px; min-height: 56px; border: 1px solid var(--wb-input-border); border-radius: 16px; background: #fff; }
 .wb-message-editing { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 5px 7px; border-radius: 7px; background: #f4efe2; color: var(--wb-muted); font-size: 11px; }

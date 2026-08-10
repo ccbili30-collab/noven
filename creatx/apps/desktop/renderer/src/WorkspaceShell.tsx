@@ -55,6 +55,7 @@ import type {
   ModelSettingsSnapshot,
   ProjectFile,
   ProjectSnapshot,
+  RestartApplicationResult,
   RunState,
   SessionSummary,
   SaveImageModelSettingsCommand,
@@ -90,6 +91,7 @@ import { WorkbenchResourceTree } from "./WorkbenchResourceTree"
 import { WorkbenchAnnotationOverlay } from "./WorkbenchAnnotationOverlay"
 import { markOnboardingSeen, OnboardingTour, readOnboardingSeen } from "./OnboardingTour"
 import { VISIBLE_PRODUCT_NAME } from "../../src/product-brand"
+import { isTransientRecoveringError, transientErrorHiddenMs, transientErrorRecoveringMs } from "./transient-error-presentation"
 
 export type RightSurface = "files" | "preview" | { workbenchId: string } | undefined
 
@@ -191,6 +193,7 @@ interface WorkspaceShellProps {
   onResolveHtmlPresentation: (projectId: string, fileId: string) => Promise<WorkbenchPresentationProjection | undefined>
   onSaveTextFile: (command: SaveProjectTextCommand) => Promise<FilePreview | undefined>
   onRefresh: () => void
+  onRestartApplication: (confirmed: boolean) => Promise<RestartApplicationResult | undefined>
   onApprovalDecision: (approved: boolean) => void
   onDismissError: () => void
   navigationContent?: "sessions" | "workbenches"
@@ -1302,7 +1305,7 @@ function TimelineRow({ item, sessionId, project, onOpenAttachment, onOpenProject
     return <details className="wb-context-reasoning"><summary>{item.state === "streaming" ? <LoaderCircle className="spin" size={13} /> : <Check size={13} />}思考过程</summary>{item.text && <MessageMarkdown text={item.text} project={project} onOpenProjectFile={onOpenProjectFile} />}</details>
   }
   if (item.kind === "notice") {
-    return <div className={`wb-context-notice ${item.state}`} role="status"><Info size={14} /><span>{item.text}</span></div>
+    return <TimelineNotice item={item} />
   }
   const role = item.presentation === "user" ? "user" : item.presentation === "assistant" ? "assistant" : "system"
   const attachments = item.attachments ?? []
@@ -1326,6 +1329,25 @@ function TimelineRow({ item, sessionId, project, onOpenAttachment, onOpenProject
       <button type="button" title="只从你的界面删除" aria-label="只从你的界面删除" onClick={(event) => onDelete(item, event.currentTarget)}><Trash2 size={13} /><span>删除</span></button>
     </div>}
   </article>
+}
+
+function TimelineNotice({ item }: { item: TimelineItem }) {
+  const transient = isTransientRecoveringError(item.text)
+  const [phase, setPhase] = useState<"recovering" | "recovered" | "hidden">("recovering")
+
+  useEffect(() => {
+    if (!transient) return
+    setPhase("recovering")
+    const recovered = window.setTimeout(() => setPhase("recovered"), transientErrorRecoveringMs)
+    const hidden = window.setTimeout(() => setPhase("hidden"), transientErrorHiddenMs)
+    return () => {
+      window.clearTimeout(recovered)
+      window.clearTimeout(hidden)
+    }
+  }, [item.itemId, transient])
+
+  if (transient && phase === "hidden") return null
+  return <div className={`wb-context-notice ${transient ? `soft-${phase}` : item.state}`} role="status"><Info size={14} /><span>{transient && phase === "recovered" ? "已恢复！" : item.text}</span></div>
 }
 
 function AttachmentImage({ name, url, compact = false }: { name: string; url: string; compact?: boolean }) {
