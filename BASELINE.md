@@ -2,11 +2,11 @@
 
 ## 生产新手引导
 
-2026-08-11 当前工作树已把十步 Spotlight（聚光灯）教程接入生产 `WorkspaceShell`：首次 Profile 自动出现，明确退出后记忆，未完成退出后恢复，展开与折叠导航均可重播；设置、项目、Composer、工作台与三类资料库均使用真实生产锚点，第九步完整展示九项正式 Skill（技能）。定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck、两项 Import Boundary、Production Build 和隔离 Electron 通过；Provider 请求 0、项目目录写入 0、退出残留进程 0。功能提交为 `c564192`；未执行 Windows 打包、正式 Profile 或外部 Provider Live。证据见 `docs/baseline/creatx-production-onboarding-2026-08-11.md`。
+2026-08-11 当前工作树已把十步 Spotlight（聚光灯）教程接入生产 `WorkspaceShell`：首次 Profile 自动出现，明确退出后记忆，未完成退出后恢复，展开与折叠导航均可重播；设置、项目、Composer、工作台与三类资料库均使用真实生产锚点，第九步完整展示九项正式 Skill（技能）。定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck、两项 Import Boundary、Production Build 和隔离 Electron 通过；Provider 请求 0、项目目录写入 0、退出残留进程 0。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；未执行 Windows 打包、正式 Profile 或外部 Provider Live。证据见 `docs/baseline/creatx-production-onboarding-2026-08-11.md`。
 
 ## 艺术库 0.1.19 视觉与 63 张正式藏品恢复
 
-2026-08-11 当前工作树已把 63 张预批准基础藏品真实物化为巨构艺术41、暖色风格18、纪念碑谷4，并保留后续新增图片的唯一审批状态机。图鉴、展览、详情、CSS 和动效直接复用 `0.1.19` 提交 `285c018`；展示 iframe 只接受父级 Runtime（运行时）投影，不拥有静态事实。定向 32/32（181 次断言）、全量 601/601（4,516 次断言）、Typecheck、Import Boundary、Production Build 和 1600×1000 隔离 Electron 通过；正式 Profile 摘要不变。功能提交为 `c564192`；未调用外部 Provider、未迁移正式 Profile 或打包。证据见 `docs/baseline/creatx-art-library-019-restoration-2026-08-11.md`。
+2026-08-11 当前工作树已把 63 张预批准基础藏品真实物化为巨构艺术41、暖色风格18、纪念碑谷4，并保留后续新增图片的唯一审批状态机。图鉴、展览、详情、CSS 和动效直接复用 `0.1.19` 提交 `285c018`；展示 iframe 只接受父级 Runtime（运行时）投影，不拥有静态事实。定向 32/32（181 次断言）、全量 601/601（4,516 次断言）、Typecheck、Import Boundary、Production Build 和 1600×1000 隔离 Electron 通过；正式 Profile 摘要不变。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；未调用外部 Provider、未迁移正式 Profile 或打包。证据见 `docs/baseline/creatx-art-library-019-restoration-2026-08-11.md`。
 
 ## Windows 0.1.21 工作台注销发布
 

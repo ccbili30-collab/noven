@@ -2,7 +2,7 @@
 title: Production Onboarding Implementation Plan
 doc_type: implementation-plan
 owner: workspace-ui
-status: completed-in-c564192
+status: completed
 last_verified: 2026-08-11
 ---
 

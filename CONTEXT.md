@@ -4,13 +4,13 @@
 
 2026-08-11 已实现 `WUI-055 / ACC-WUI-077`：生产 `WorkspaceShell` 首次 Profile 自动播放十步 Spotlight（聚光灯）教程，明确跳过、Escape 或完成后才记录，未完成退出下次仍出现；展开与折叠项目导航均有永久重播入口。设置、项目、Composer（输入区）、工作台、艺术库、灵感库和传承库使用真实生产锚点，第九步展示九类能力和九项当前正式 Skill（技能），不加载 Prototype（原型）或 Fixture（测试夹具），不自动填写、发送、调用 Provider（模型服务）或修改项目。
 
-定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）、Production Build（生产构建）和 1600×1000 隔离 Electron（桌面运行壳）通过。实机覆盖未完成退出恢复、完成后重启、展开/折叠入口、十步真实锚点、减弱动效与完整 Skill 工具箱；本地 Provider 请求 0、隔离项目目录写入 0、退出残留进程 0。功能提交为 `c564192`；未执行 Windows 打包、正式 Profile 或外部 Provider Live（真实运行）。完整边界见 `docs/baseline/creatx-production-onboarding-2026-08-11.md`。
+定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）、Production Build（生产构建）和 1600×1000 隔离 Electron（桌面运行壳）通过。实机覆盖未完成退出恢复、完成后重启、展开/折叠入口、十步真实锚点、减弱动效与完整 Skill 工具箱；本地 Provider 请求 0、隔离项目目录写入 0、退出残留进程 0。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；未执行 Windows 打包、正式 Profile 或外部 Provider Live（真实运行）。完整边界见 `docs/baseline/creatx-production-onboarding-2026-08-11.md`。
 
 ## 当前艺术库 0.1.19 恢复前沿
 
 2026-08-11 已在当前工作树恢复艺术库产品语义：63 张预批准基础藏品真实物化为巨构艺术41、暖色风格18、纪念碑谷4，后续新增图片继续走 `incoming → approval → libraries`；新 Profile、错误 reset Profile 和旧 57+6 Profile 可按稳定 ID、snapshot 与 SHA-256 安全恢复，用户艺术数据不被改写。生产图鉴、展览、详情、CSS 和动效直接复用 `0.1.19` 提交 `285c018`，七个核心视觉文件与旧提交 Git blob 哈希逐项一致；三个展示桥只接受当前 Runtime（运行时）投影，静态 JSON、iframe 内默认值和 `localStorage` 不拥有事实。
 
-定向 32/32（181 次断言）、全量 601/601（4,516 次断言，82 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）和 Production Build（生产构建）通过。隔离 Electron 在 1600×1000 完成 63 件圆环、详情返回、41/18/4 展览、新增审批、关键词导出、重启恢复、减弱动效、受限图片负向路径与零残留；正式 Profile 的 136 文件摘要前后不变。功能提交为 `c564192`；没有外部 Provider（模型服务）、正式 Profile 迁移或 Windows 打包。完整边界见 `docs/baseline/creatx-art-library-019-restoration-2026-08-11.md`。
+定向 32/32（181 次断言）、全量 601/601（4,516 次断言，82 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）和 Production Build（生产构建）通过。隔离 Electron 在 1600×1000 完成 63 件圆环、详情返回、41/18/4 展览、新增审批、关键词导出、重启恢复、减弱动效、受限图片负向路径与零残留；正式 Profile 的 136 文件摘要前后不变。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；没有外部 Provider（模型服务）、正式 Profile 迁移或 Windows 打包。完整边界见 `docs/baseline/creatx-art-library-019-restoration-2026-08-11.md`。
 
 ## 当前诺文 Windows 0.1.21 发布前沿
 

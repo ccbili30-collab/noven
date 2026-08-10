@@ -2,7 +2,7 @@
 title: 艺术库 0.1.19 体验恢复实施计划
 doc_type: implementation-plan
 owner: art-library
-status: completed-in-c564192
+status: completed
 date: 2026-08-11
 ---
 
