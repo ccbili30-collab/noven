@@ -1,5 +1,11 @@
 # CreatX Current Context
 
+## 当前诺文 Windows 0.1.21 发布前沿
+
+2026-08-11 已将工作台注销功能头 `7a773ae` 打包为 Windows `0.1.21`。Setup 为 132,231,893 字节，SHA-256 `E133B95418660862C6E2F4FFA0AAFB1E2445298D79F94069D16A2DDF58E67CEC`；Portable 为 132,008,057 字节，SHA-256 `CAEA6AC76680C32F343657817C1584D1CCED079A7A61EA040035D3BF11AB028F`。PE 版本与 ProductName（产品名）为 `0.1.21 / 诺文`，产物未签名。
+
+功能冻结的全量为 598/598（4,495 次断言）；版本批次的 Typecheck（类型检查）、两项 Import Boundary（导入边界）、Production Build（生产构建）、Windows NSIS/Portable、7-Zip 完整性、`app.asar` 版本与边界检查和解包 EXE 隔离品牌烟测通过，退出后残留进程为 0。`app.asar` 包含 `unregister_workbench`，不包含新手引导 Prototype（原型）脚本或 `@creatx/project-package-runtime`。没有外部 Provider（模型服务）、工作台注销原生审批 Live（真实运行）、Setup 安装或 Portable 外壳启动证据；完整边界见 `docs/baseline/creatx-windows-0.1.21-2026-08-11.md`。
+
 ## 当前工作台注销入口前沿
 
 2026-08-11 已实现 `WBR-020..021 / ACC-WBR-032..035`：普通项目会话可通过需要原生审批的 `unregister_workbench` 只移除一个工作台视图记录，真实目录与内容不变；合法 `missing` 入口同样可清理，内置、未知、损坏、重复冲突和并发变化目标失败关闭。当前入口消失后 Renderer 回退 `builtin:files` 并清除临时交互展示。联合定向 180/180（1,300 次断言）、全量 598/598（4,495 次断言）、Typecheck、Import Boundary 和 Production Build 通过。没有外部 Provider 自主调用或 Electron 审批/重启 Live；证据与恢复入口见 `docs/baseline/creatx-workbench-unregister-2026-08-11.md`。
@@ -38,9 +44,9 @@ Task 6 已实现标准 ZIP `.np` 的流式导出：固定写入三个逻辑根�
 
 Task 7 已实现安全导入 Runtime：在解压前拒绝伪扩展、加密/ZIP64/链接、重复或 Windows 不安全路径、条目/大小/压缩比超限、Checksum/身份错误和截断中央目录；通过后分块写入目标旁带标记暂存，逐项复核真实字节，再原子提交新目录。导入案例以受控只读 JSON 保存而不进入 Cline，工作台语义损坏降级并保留文件兜底；同包幂等，同血统异内容要求显式独立副本。提交前取消只清理本批暂存；目录提交后元数据或 Catalog 失败保留文件并记录 `committed-unregistered` 可恢复状态。
 
-Task 8 曾把 `.np` Runtime 接入独立项目包 Contracts（合同）、Preload（预加载桥）和 Desktop 单 Job（任务）协调器；该实现与测试源码保留为 `0.1.21` 恢复材料，但 2026-08-10 发布冻结发现它作为隐藏启动依赖会让普通 Electron 在窗口创建前因 Node ESM 导入边界失效。按产品决定，Windows `0.1.20` 已从生产 Main、Preload、Desktop API 和应用依赖图移除整个项目包入口，不提供或宣传隐藏 `.np` 能力。
+Task 8 曾把 `.np` Runtime 接入独立项目包 Contracts（合同）、Preload（预加载桥）和 Desktop 单 Job（任务）协调器；该实现与测试源码保留为后续恢复材料，但 2026-08-10 发布冻结发现它作为隐藏启动依赖会让普通 Electron 在窗口创建前因 Node ESM 导入边界失效。按产品决定，Windows `0.1.20` 已从生产 Main、Preload、Desktop API 和应用依赖图移除整个项目包入口，不提供或宣传隐藏 `.np` 能力。
 
-`.np` Task 1–7 的 Runtime、Schema、真实 ZIP 导入导出与失败关闭测试继续保留；Task 8 的 Desktop 协调器当前不在生产启动链，Task 9–11 与重新接线统一延期至 `0.1.21`。恢复时必须先完成 Renderer UI、D 盘默认选择器、项目首页、继续创作、Electron 新 Profile 重启和打包纵向验收，不能仅恢复旧 Preload 方法。共享项目包协议位于 `packages/contracts/src/project-package.ts`，恢复入口为 `docs/plans/2026-08-10-portable-noven-project-package.md` Task 9。
+`.np` Task 1–7 的 Runtime、Schema、真实 ZIP 导入导出与失败关闭测试继续保留；Task 8 的 Desktop 协调器当前不在生产启动链，Windows `0.1.21` 仍未接回该能力。Task 9–11 与重新接线继续冻结；恢复时必须先完成 Renderer UI、D 盘默认选择器、项目首页、继续创作、Electron 新 Profile 重启和打包纵向验收，不能仅恢复旧 Preload 方法。共享项目包协议位于 `packages/contracts/src/project-package.ts`，恢复入口为 `docs/plans/2026-08-10-portable-noven-project-package.md` Task 9。
 
 ## 当前传承库视频学习与 Skill 安装前沿
 

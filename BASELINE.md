@@ -1,5 +1,9 @@
 # CreatX Baseline
 
+## Windows 0.1.21 工作台注销发布
+
+2026-08-11 已将功能头 `7a773ae` 发布为 Windows `0.1.21` Setup、Blockmap 和 Portable x64。功能冻结全量 598/598（4,495 次断言）；版本批次的 Typecheck、Import Boundary、Production Build、Windows 打包、7-Zip、`app.asar` 边界和解包 EXE 隔离品牌烟测通过，退出后残留进程为 0。安装包包含 `unregister_workbench`，不包含新手引导原型或 `.np` 生产接线；未安装 Setup、未直接启动 Portable、未调用外部 Provider，也未执行注销审批 Live。证据见 `docs/baseline/creatx-windows-0.1.21-2026-08-11.md`。
+
 ## 工作台注销入口
 
 2026-08-11 已接通 `unregister_workbench` 的受控元数据删除、原生审批策略、正式 Desktop 工具聚合和当前入口消失后的 `builtin:files` 回退。真实项目内容不会被注销操作删除或修改，`missing` 入口可清理，冲突与过期状态失败关闭。联合定向 180/180（1,300 次断言）、全量 598/598（4,495 次断言）、Typecheck、Import Boundary 和 Production Build 通过；未执行外部 Provider 或 Electron Live。证据见 `docs/baseline/creatx-workbench-unregister-2026-08-11.md`。
