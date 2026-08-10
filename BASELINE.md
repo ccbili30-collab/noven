@@ -1,5 +1,9 @@
 # CreatX Baseline
 
+## Windows 0.1.22 艺术库与生产新手教程发布
+
+2026-08-11 已将源代码头 `9b2e2ee` 发布为 Windows `0.1.22` Setup、Blockmap 和 Portable x64。隔离发布树补齐两个既有 `ProjectInternalStatePort.deleteFile` 测试装配字段后，冻结安装、Typecheck（类型检查）、两项 Import Boundary（导入边界）、604/604 全量测试（4,526 次断言，83 个文件）、Production Build（生产构建）、Windows 打包、7-Zip 完整性、`app.asar` 内容边界和解包 EXE 十步教程烟测通过；Provider 请求 0、项目写入 0、残留进程 0。安装包包含艺术库 63 件正式藏品恢复、生产十步教程和工作台注销，不包含另一工作树尚未提交的抖音读取或实验内容。未安装 Setup、未直接启动 Portable、未调用外部 Provider，产物未签名。证据见 `docs/baseline/creatx-windows-0.1.22-2026-08-11.md`。
+
 ## 生产新手引导
 
 2026-08-11 当前工作树已把十步 Spotlight（聚光灯）教程接入生产 `WorkspaceShell`：首次 Profile 自动出现，明确退出后记忆，未完成退出后恢复，展开与折叠导航均可重播；设置、项目、Composer、工作台与三类资料库均使用真实生产锚点，第九步完整展示九项正式 Skill（技能）。定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck、两项 Import Boundary、Production Build 和隔离 Electron 通过；Provider 请求 0、项目目录写入 0、退出残留进程 0。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；未执行 Windows 打包、正式 Profile 或外部 Provider Live。证据见 `docs/baseline/creatx-production-onboarding-2026-08-11.md`。
