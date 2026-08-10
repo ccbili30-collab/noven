@@ -1,0 +1,22 @@
+.DS_Store
+node_modules
+.sst
+.env
+.env.local
+.idea
+.vscode
+.codex
+*~
+tmp
+dist
+ts-dist
+.turbo
+**/.serena
+.serena/
+**/.omo
+.omo/
+
+# Local dev files
+logs/
+*.bun-build
+tsconfig.tsbuildinfo

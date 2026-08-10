@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "title": "冰环火山群岛",
+  "base": "base-map.png",
+  "mask": "region-id-mask.png",
+  "manifest": "map-manifest.json",
+  "review": "alignment-review.png",
+  "minimumRegionPixels": 2000,
+  "minimumAlignmentRatio": 1.25,
+  "regions": [
+    {
+      "id": "outer-frozen-ocean",
+      "name": "外层冰洋",
+      "kind": "water",
+      "maskColor": "#101820",
+      "seeds": [[10, 10], [627, 10], [1243, 10], [10, 627], [1243, 627], [10, 1243], [627, 1243], [1243, 1243], [330, 100], [900, 100], [120, 320], [1130, 330], [120, 900], [1120, 930], [340, 1150], [930, 1150]],
+      "summary": "环绕群岛并穿过卫星岛之间的连续冻结海域。"
+    },
+    {
+      "id": "inner-caldera",
+      "name": "中央冰火破口",
+      "kind": "water",
+      "maskColor": "#2e6f95",
+      "seeds": [[620, 540], [530, 620], [720, 620], [620, 700]],
+      "summary": "主环中央被冰层包围的火山破口，原位高亮。"
+    },
+    {
+      "id": "ember-watch-isle",
+      "name": "余烬守望岛",
+      "kind": "land",
+      "maskColor": "#b23a48",
+      "seeds": [[150, 130]]
+    },
+    {
+      "id": "ash-crown-isle",
+      "name": "灰冠岛",
+      "kind": "land",
+      "maskColor": "#315f8a",
+      "seeds": [[1090, 155]]
+    },
+    {
+      "id": "glass-ice-isle",
+      "name": "镜冰岛",
+      "kind": "land",
+      "maskColor": "#4f806f",
+      "seeds": [[105, 1025], [145, 1055], [90, 1090], [145, 1110], [190, 1080], [215, 1125], [175, 1150]]
+    },
+    {
+      "id": "cinder-bastion-isle",
+      "name": "烬堡岛",
+      "kind": "land",
+      "maskColor": "#675a91",
+      "seeds": [[1050, 1025], [1100, 1045], [1150, 1080], [1145, 1120], [1110, 1160], [1060, 1125]]
+    },
+    {
+      "id": "north-crown-glacier",
+      "name": "北冠冰原",
+      "kind": "land",
+      "maskColor": "#a57d37",
+      "seeds": [[620, 180]]
+    },
+    {
+      "id": "northwest-lava-field",
+      "name": "西北熔岩原",
+      "kind": "land",
+      "maskColor": "#a83f68",
+      "seeds": [[430, 250]]
+    },
+    {
+      "id": "northwest-ice-cliffs",
+      "name": "西北冰崖",
+      "kind": "land",
+      "maskColor": "#2f6f4e",
+      "seeds": [[330, 350]]
+    },
+    {
+      "id": "western-harbor",
+      "name": "西港环湾",
+      "kind": "land",
+      "maskColor": "#7a4d2f",
+      "seeds": [[225, 465]]
+    },
+    {
+      "id": "western-snow-bastion",
+      "name": "西境雪堡",
+      "kind": "land",
+      "maskColor": "#7b6d3f",
+      "seeds": [[165, 675]]
+    },
+    {
+      "id": "western-grey-ridge",
+      "name": "西境灰脊",
+      "kind": "land",
+      "maskColor": "#3e5f73",
+      "seeds": [[285, 650]]
+    },
+    {
+      "id": "ivory-gate",
+      "name": "象牙门地",
+      "kind": "land",
+      "maskColor": "#75507b",
+      "seeds": [[365, 550], [395, 585]]
+    },
+    {
+      "id": "southwest-purple-basin",
+      "name": "西南紫岩盆地",
+      "kind": "land",
+      "maskColor": "#9a5b34",
+      "seeds": [[370, 720]]
+    },
+    {
+      "id": "southwest-mossland",
+      "name": "西南苔原",
+      "kind": "land",
+      "maskColor": "#4b755f",
+      "seeds": [[235, 850]]
+    },
+    {
+      "id": "southwest-ember-field",
+      "name": "西南余烬原",
+      "kind": "land",
+      "maskColor": "#7c3f58",
+      "seeds": [[430, 910]]
+    },
+    {
+      "id": "southern-ash-plain",
+      "name": "南部灰白原",
+      "kind": "land",
+      "maskColor": "#526b9a",
+      "seeds": [[535, 925], [575, 965]]
+    },
+    {
+      "id": "southern-volcano",
+      "name": "南火山领",
+      "kind": "land",
+      "maskColor": "#8c744d",
+      "seeds": [[605, 1015], [665, 1060]]
+    },
+    {
+      "id": "southeast-snow-coast",
+      "name": "东南雪岸",
+      "kind": "land",
+      "maskColor": "#3f7c7a",
+      "seeds": [[885, 1010]]
+    },
+    {
+      "id": "southeast-glacier",
+      "name": "东南裂冰原",
+      "kind": "land",
+      "maskColor": "#804f3e",
+      "seeds": [[850, 850]]
+    },
+    {
+      "id": "southeast-lava-coast",
+      "name": "东南熔岩岸",
+      "kind": "land",
+      "maskColor": "#6e5d8f",
+      "seeds": [[1050, 850]]
+    },
+    {
+      "id": "eastern-brown-rampart",
+      "name": "东境褐岩壁",
+      "kind": "land",
+      "maskColor": "#987a32",
+      "seeds": [[1035, 665], [1070, 715]]
+    },
+    {
+      "id": "eastern-obsidian-enclave",
+      "name": "东境黑曜飞地",
+      "kind": "land",
+      "maskColor": "#4f6b44",
+      "seeds": [[930, 710], [965, 750]]
+    },
+    {
+      "id": "eastern-city-snowfield",
+      "name": "东城雪原",
+      "kind": "land",
+      "maskColor": "#73546d",
+      "seeds": [[1000, 535], [1040, 585]]
+    },
+    {
+      "id": "eastern-gold-plateau",
+      "name": "东境金岩台地",
+      "kind": "land",
+      "maskColor": "#3d6f8d",
+      "seeds": [[900, 650]]
+    },
+    {
+      "id": "eastern-teal-marsh",
+      "name": "东境青岩泽",
+      "kind": "land",
+      "maskColor": "#9b4f4f",
+      "seeds": [[835, 520]]
+    },
+    {
+      "id": "eastern-olive-territory",
+      "name": "东境橄榄原",
+      "kind": "land",
+      "maskColor": "#5e7d51",
+      "seeds": [[950, 500]]
+    },
+    {
+      "id": "northeast-snowfield",
+      "name": "东北雪原",
+      "kind": "land",
+      "maskColor": "#83613c",
+      "seeds": [[935, 320], [980, 365]]
+    },
+    {
+      "id": "northeast-riftland",
+      "name": "东北裂岩地",
+      "kind": "land",
+      "maskColor": "#4d5d83",
+      "seeds": [[835, 380]]
+    },
+    {
+      "id": "north-purple-basin",
+      "name": "北部紫晶盆地",
+      "kind": "land",
+      "maskColor": "#7d4c72",
+      "seeds": [[710, 350]]
+    },
+    {
+      "id": "north-volcano",
+      "name": "北火山领",
+      "kind": "land",
+      "maskColor": "#5f7040",
+      "seeds": [[815, 245]]
+    },
+    {
+      "id": "central-lava-channel",
+      "name": "中西熔流地",
+      "kind": "land",
+      "maskColor": "#8c5c46",
+      "seeds": [[515, 380]]
+    }
+  ]
+}

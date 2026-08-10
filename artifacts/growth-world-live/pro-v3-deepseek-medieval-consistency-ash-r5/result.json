@@ -1,0 +1,21 @@
+{
+  "status": "GROWTH WORLD PRO V3 MEDIEVAL CONTRACT AUTOMATED CHECK PASS — HUMAN REVIEW REQUIRED",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "topicProfileKey": "classic-medieval-fantasy",
+  "sampleCount": 1,
+  "results": [
+    {
+      "title": "灰烬起义",
+      "genreKey": "legendary-chronicle",
+      "genreLabel": "传奇编年史",
+      "contractHash": "0f3ab65197b65c5439cd5ba29eb4ed227174036fcab97ec2b65256f5940c3bbe",
+      "characters": 3128,
+      "auditTerms": [],
+      "selectionReason": "起义含不可逆选择并改变北境统治秩序，符合传奇编年史对改变时代秩序之起义的定位。"
+    }
+  ],
+  "elapsedSeconds": 54,
+  "evidenceDir": "D:\\CodexW\\Creatx\\creat1\\artifacts\\growth-world-live\\pro-v3-deepseek-medieval-consistency-ash-r5",
+  "scope": "Real Provider genre selection + Research cards + frozen Writing Contract + isolated Writer; no Electron, persistent image queue, complete Blueprint tool run, or twelve-layer claim"
+}

@@ -1,0 +1,44 @@
+{
+  "status": "GROWTH WORLD PRO HISTORY STYLE SELECTION LIVE PASS",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "sampleCount": 5,
+  "selections": [
+    {
+      "key": "entry-dawn-kings",
+      "title": "曙冠时代",
+      "locator": "历史、时代与重大事件｜诸王建立早期盟约并开凿第一批跨境道路的时期。",
+      "styleKey": "era-history",
+      "reason": "描述诸王建立盟约并开辟道路的长时段历史阶段，属于时代史而非单一事件。"
+    },
+    {
+      "key": "entry-old-road-code",
+      "title": "王道法典",
+      "locator": "历史、时代与重大事件｜规范驿站、桥梁、庇护地和商旅安全的古代法典残篇。",
+      "styleKey": "document-history",
+      "reason": "法典残篇规范驿站、桥梁和商旅安全，属于法典文献及其历史作用。"
+    },
+    {
+      "key": "entry-sinking-tide",
+      "title": "沉潮之年",
+      "locator": "历史、时代与重大事件｜内海海岸线骤变、港城覆没并留下黑曜塔争议的灾变。",
+      "styleKey": "narrative-history",
+      "reason": "海岸线骤变和港城覆没为自然灾害事件，无英雄化或关键人物选择，采用叙事史。"
+    },
+    {
+      "key": "entry-ash-rebellion",
+      "title": "灰烬起义",
+      "locator": "历史、时代与重大事件｜北岭军镇反抗谷冠王国驻军并建立灰烬王庭的近代战争。",
+      "styleKey": "legendary-chronicle",
+      "reason": "军镇反抗并建立灰烬王庭的起义改变时代秩序并留下象征记忆，属于传奇编年史。"
+    },
+    {
+      "key": "entry-green-pact",
+      "title": "绿幕盟约",
+      "locator": "历史、时代与重大事件｜林庭诸族与南方城镇划定林界、猎场和通商路的协议。",
+      "styleKey": "document-history",
+      "reason": "盟约协议划定林界和通商路，属于盟约及其历史作用。"
+    }
+  ],
+  "scope": "Real Provider blueprint classification only; no project mutation, prose, Electron, or images"
+}

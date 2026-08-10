@@ -1,0 +1,24 @@
+{
+  "status": "GROWTH WORLD PRO LAYER GENRES PROVIDER LIVE PASS",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "projectRoot": "D:\\CodexCache\\Temp\\CreatX Pro V2 经典中世纪蓝图项目 3OVVWf",
+  "workRoot": "阿斯特拉恩",
+  "sampleCount": 1,
+  "results": [
+    {
+      "title": "灰烬起义",
+      "layer": "历史、时代与重大事件",
+      "genre": "传奇编年史",
+      "styleKey": "legendary-chronicle",
+      "oldCharacters": 3246,
+      "newCharacters": 2537,
+      "finishReason": "completed",
+      "oldAuditTerms": 5,
+      "newAuditTerms": 0
+    }
+  ],
+  "elapsedSeconds": 70,
+  "evidenceDir": "D:\\CodexW\\Creatx\\creat1\\artifacts\\growth-world-live\\pro-v5-deepseek-legendary-chronicle-grey-ashes",
+  "scope": "Real Provider prose-only A/B; no Electron, image queue, or production project mutation"
+}

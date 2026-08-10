@@ -1,0 +1,9 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 2 panel 2
+Primary request: Su He has stepped just beyond a taut red safety rope and leans over the bridge rail toward the black rushing water. There is no person below, but a faint chain of blue-white light recedes beneath the river. Meng Huai grabs her shoulder from behind and pulls her back at the exact moment she hears a distant bell.
+Input image: preserve Su He's exact face, low braid, silver hairpin, charcoal cloak, leather ledger satchel and proportions from the supplied reference. Meng Huai is the frost-bearded old bridge carpenter from the previous panel.
+Style/medium: mature graphic novel action panel, decisive ink diagonals, restrained mineral color, subtle paper texture, believable body momentum.
+Composition/framing: strong diagonal from Meng Huai's pulling arm through Su He to the underwater lights; red safety rope visibly separates safe and unsafe space; leave black water at lower left for later sound effect and sky at upper right for a balloon.
+Lighting/mood: sudden danger; cold blue-white uncanny light under black water, no spectacle.
+Constraints: one continuous rescue action; no creature visible; no text, no sound-effect letters, no captions, no speech balloons, no panel border, no watermark.
+Avoid: tentacles, monster face, magic explosion, floating characters, tangled anatomy, camera-facing pose.

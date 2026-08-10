@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interactive Map</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="map-stage">
+      <canvas id="map-canvas" aria-label="可选择地图"></canvas>
+      <article id="region-card" class="region-card" hidden>
+        <header class="region-card-header">
+          <div><p id="region-kind"></p><h1 id="region-name"></h1></div>
+          <button id="region-close" type="button" aria-label="关闭">×</button>
+        </header>
+        <p id="region-summary" class="region-summary"></p>
+        <dl id="region-details"></dl>
+        <div id="region-sources" class="region-sources"></div>
+      </article>
+      <p id="map-error" class="map-error" hidden></p>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

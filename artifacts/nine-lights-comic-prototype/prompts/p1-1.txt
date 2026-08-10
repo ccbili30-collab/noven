@@ -1,0 +1,10 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 1 panel 1
+Primary request: A snowy night establishing shot at Baili Mountain Pass. The third bronze way-lamp burns alone in the storm. Su He approaches uphill from the lower left, immediately looking at the empty hook where the wooden date plaque should hang.
+Input image: the supplied reference defines Su He's exact face, low braid, silver hairpin, charcoal cloak, leather ledger satchel and body proportions. Preserve those identity details; ignore the reference sheet background and poses.
+Scene/backdrop: ancient cold-frontier fantasy mountain road, deep snow, timber-and-stone lamp structure, distant black ridges, no modern objects.
+Style/medium: mature graphic novel panel, confident ink linework, restrained mineral color, subtle paper texture, readable silhouettes, grounded environmental detail.
+Composition/framing: landscape wide shot; the glowing lamp is the first focus, Su He second, the visibly empty date-plaque hook third; clear left-to-right eye path; leave quiet dark sky in the upper left for later narration.
+Lighting/mood: cold blue-black snow night against one small amber flame, mystery rather than spectacle.
+Constraints: one continuous scene, no montage, no text, no letters, no numbers, no captions, no speech balloons, no panel border, no watermark.
+Avoid: decorative concept art, character posing at camera, crowded background, glowing magic symbols, anime school style, photorealism, 3D render.

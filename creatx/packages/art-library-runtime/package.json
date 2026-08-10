@@ -1,0 +1,11 @@
+{
+  "name": "@creatx/art-library-runtime",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@creatx/contracts": "workspace:*",
+    "@creatx/project-files": "workspace:*",
+    "undici": "7.29.0"
+  }
+}

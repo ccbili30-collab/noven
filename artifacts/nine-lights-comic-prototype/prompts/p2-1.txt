@@ -1,0 +1,9 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 2 panel 1
+Primary request: The old North Bridge crosses a narrow violent black river under snow. Meng Huai lies flat at the bridge edge and drives his iron probe into a bridge pier hollowed into a half-body-wide cavity by meltwater. Su He kneels behind him and shields a small oil lamp to illuminate the dangerous void.
+Input image: preserve Su He's exact face, low braid, silver hairpin, charcoal cloak, leather ledger satchel and proportions from the supplied reference. Meng Huai is the same frost-bearded old bridge carpenter in an old sheepskin coat.
+Style/medium: mature graphic novel panel, confident ink linework, restrained mineral color, subtle paper texture, readable bridge engineering and body weight.
+Composition/framing: wide low angle along the bridge; hollow pier and probe are the primary focus, the two characters clearly secondary; leave dark river sky at upper right for later balloon.
+Lighting/mood: cold, precarious, one weak amber lamp over rushing black water.
+Constraints: one inspection action, clear spatial geography, no text, no captions, no speech balloons, no panel border, no watermark.
+Avoid: collapsed bridge already destroyed, enormous fantasy castle, decorative fog hiding the cavity, modern bridge hardware.

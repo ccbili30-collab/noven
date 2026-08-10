@@ -1,0 +1,14 @@
+{
+  "name": "@creatx/cline-adapter",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./contracts": "./src/contracts.ts"
+  },
+  "dependencies": {
+    "@cline/sdk": "0.0.65",
+    "@creatx/contracts": "workspace:*",
+    "undici": "7.29.0"
+  }
+}

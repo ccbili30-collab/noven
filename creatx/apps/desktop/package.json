@@ -1,0 +1,20 @@
+{
+  "name": "@creatx/desktop",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@creatx/art-library-runtime": "workspace:*",
+    "@creatx/cline-adapter": "workspace:*",
+    "@creatx/contracts": "workspace:*",
+    "@creatx/creative-skills": "workspace:*",
+    "@creatx/growth-runtime": "workspace:*",
+    "@creatx/image-runtime": "workspace:*",
+    "@creatx/live-archive-runtime": "workspace:*",
+    "@creatx/project-files": "workspace:*",
+    "@creatx/session-runtime": "workspace:*",
+    "@creatx/workbench": "workspace:*"
+  },
+  "devDependencies": {
+    "@creatx/project-package-runtime": "workspace:*"
+  }
+}

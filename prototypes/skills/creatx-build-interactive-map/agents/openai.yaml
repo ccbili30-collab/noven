@@ -1,0 +1,4 @@
+interface:
+  display_name: "CreatX Interactive Map"
+  short_description: "Build clean full-canvas maps with selectable regions"
+  default_prompt: "Use $creatx-build-interactive-map to turn this project world map into a clean full-canvas interactive atlas."

@@ -1,0 +1,9 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 1 panel 2
+Primary request: Su He's gloved fingers touch a still-warm bronze clasp on the lamp post in the foreground. Beside her, old bridge carpenter Meng Huai crouches and uses an iron probe to lift a neatly severed hemp rope stained with black lamp oil out of the snow.
+Input image: the supplied reference defines Su He's exact face, low braid, silver hairpin, charcoal cloak, leather ledger satchel and body proportions. Preserve them. Meng Huai is a frost-bearded man around sixty in an old sheepskin coat with iron probe and wooden wedges.
+Style/medium: mature graphic novel panel, strong ink drawing, restrained mineral color, subtle paper texture, clear acting and believable hands.
+Composition/framing: medium close shot with Su He's touching hand and warm clasp dominant at upper left, severed rope and Meng Huai dominant at lower right; both discoveries readable at a glance; leave open snow area over Meng Huai for a later balloon.
+Lighting/mood: amber lamp edge light against cold blue snow, forensic tension.
+Constraints: show exactly one investigative action in one continuous moment; no text, no letters, no captions, no speech balloons, no panel border, no watermark.
+Avoid: smiling, theatrical magic, random evidence, excessive particles, collage, duplicated hands, modern tools.

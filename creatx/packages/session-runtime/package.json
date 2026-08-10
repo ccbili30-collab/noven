@@ -1,0 +1,9 @@
+{
+  "name": "@creatx/session-runtime",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@creatx/contracts": "workspace:*"
+  }
+}

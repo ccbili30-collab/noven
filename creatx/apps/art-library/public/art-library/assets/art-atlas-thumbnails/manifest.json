@@ -1,0 +1,464 @@
+{
+  "generated_at": "2026-08-05T06:08:22.319548+00:00",
+  "max_dimension": 960,
+  "quality": 82,
+  "count": 57,
+  "items": {
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-06-01-绝对秩序-0006-04/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/254ad53ada322d6c.webp",
+      "source_width": 1632,
+      "source_height": 2912,
+      "width": 538,
+      "height": 960,
+      "fingerprint": "547292:1780308479462667100:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-06-01-绝对秩序-0006-03/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/044c4933ceb511d9.webp",
+      "source_width": 1632,
+      "source_height": 2912,
+      "width": 538,
+      "height": 960,
+      "fingerprint": "397121:1780308479086955900:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-06-01-绝对秩序-0006-02/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/fc4ac7ecdaf5c0c9.webp",
+      "source_width": 1632,
+      "source_height": 2912,
+      "width": 538,
+      "height": 960,
+      "fingerprint": "527555:1780308478829561000:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-09/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/9a044cbfa065a212.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "613212:1780324849794251600:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-08/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/61703872a168f492.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "768212:1780324849241939500:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-07/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/64bae88dca863002.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "780578:1780324848746983900:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-06/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/133d89bf71888c8f.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "644096:1780324848300639200:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-05/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/ac083812fd09915a.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "565506:1780324847742862400:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-04/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/9c22e33a9ec863fd.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "562968:1780324847476709200:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-03/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/71f844bf33f4acee.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "607338:1780324847025336800:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-02/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/f7a94c4f5356351e.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "492614:1780324846672847900:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-31-夜幕降临-0007-01/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/d21f7f691e633a15.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "683528:1780324846303890100:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-22-最后的希望-0008-06/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/83a2abb7a795906f.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "727132:1780324851848063500:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-22-最后的希望-0008-05/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/83f6164008f1e991.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "525912:1780324851574250800:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-22-最后的希望-0008-04/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/09f80202cf2d2059.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "633726:1780324851351179100:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-22-最后的希望-0008-03/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/a5fef40b522c9c93.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "892992:1780324851103700600:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-22-最后的希望-0008-02/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/a7aa0c7d248e3ce9.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "823896:1780324850912037000:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-22-最后的希望-0008-01/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/59aec80d01af69d1.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "884704:1780324850638673300:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-21-未完成苍穹-0009-06/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/a47aadc377c06e24.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "935648:1780324855019768800:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-21-未完成苍穹-0009-05/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/cc6256178ca4475f.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "667610:1780324854543481200:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-21-未完成苍穹-0009-04/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/c841e5e4550cdba5.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "726300:1780324854007076200:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-21-未完成苍穹-0009-03/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/193b6f31aafa5e26.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "644012:1780324853559947400:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-21-未完成苍穹-0009-02/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/9ea0c331c5bafd1f.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "560820:1780324853149713800:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-21-未完成苍穹-0009-01/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/7295083b076c3ca7.webp",
+      "source_width": 1637,
+      "source_height": 2912,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "449904:1780324852738621800:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-17-永恒缺席-0010-06/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/54e288f1a12cf3a3.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1380636:1780324857813576900:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-17-永恒缺席-0010-05/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/8fd91c3f258faabc.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "735522:1780324857430038100:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-17-永恒缺席-0010-04/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/b887587910e96099.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1285238:1780324857232093400:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-17-永恒缺席-0010-03/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/36284b96e3d8ed90.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "986294:1780324856856284400:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-17-永恒缺席-0010-02/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/ba9273073241a29f.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1463480:1780324856554536800:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-17-永恒缺席-0010-01/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/1e3bd39ecbf6bf57.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1914934:1780324856114626600:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-15-坍塌度量-0011-06/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/7b0e56840e0d4685.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1008894:1780324860073557700:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-15-坍塌度量-0011-05/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/8f7a1f7ec8b9ce03.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "2092304:1780324859843302100:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-15-坍塌度量-0011-04/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/034a5f21f5198040.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1167264:1780324859399728000:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-15-坍塌度量-0011-03/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/cfe3ac169499f35e.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1587370:1780324859088527900:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-15-坍塌度量-0011-02/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/1f62883f02b655f6.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "578682:1780324858851054000:960:82"
+    },
+    "../reference/art-atlas/books/megastructure/items/OneHzPulse-2026-05-15-坍塌度量-0011-01/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/cd21937c6113f8bd.webp",
+      "source_width": 2166,
+      "source_height": 3852,
+      "width": 540,
+      "height": 960,
+      "fingerprint": "1332524:1780324858707527600:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/01.png": {
+      "thumbnail": "./assets/art-atlas-thumbnails/fa40ff879929fc04.webp",
+      "source_width": 1000,
+      "source_height": 600,
+      "width": 960,
+      "height": 576,
+      "fingerprint": "227255:1780168185587805800:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/02.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/8133e42967cd6afb.webp",
+      "source_width": 975,
+      "source_height": 1221,
+      "width": 767,
+      "height": 960,
+      "fingerprint": "385885:1780168189232640000:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/03.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/0df1d61fd6947dfa.webp",
+      "source_width": 1045,
+      "source_height": 1220,
+      "width": 822,
+      "height": 960,
+      "fingerprint": "434523:1780168192280468900:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/04.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/692db76b5c0b7fcf.webp",
+      "source_width": 1032,
+      "source_height": 1219,
+      "width": 813,
+      "height": 960,
+      "fingerprint": "103656:1780168194443355500:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/05.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/c14f074fd5f7d656.webp",
+      "source_width": 1044,
+      "source_height": 1218,
+      "width": 823,
+      "height": 960,
+      "fingerprint": "127415:1780168196626804500:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/06.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/0d7ed9c686180a20.webp",
+      "source_width": 1080,
+      "source_height": 1260,
+      "width": 823,
+      "height": 960,
+      "fingerprint": "213140:1780168199199778100:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/07.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/c7b8835ec94b0095.webp",
+      "source_width": 1080,
+      "source_height": 1080,
+      "width": 960,
+      "height": 960,
+      "fingerprint": "46978:1780168201159986800:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/08.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/d623c7c4ee14b356.webp",
+      "source_width": 1080,
+      "source_height": 1260,
+      "width": 823,
+      "height": 960,
+      "fingerprint": "116097:1780168203427197200:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/09.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/036115644a38a825.webp",
+      "source_width": 1080,
+      "source_height": 1350,
+      "width": 768,
+      "height": 960,
+      "fingerprint": "232209:1780168205973632800:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/10.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/9dac06e0303c5190.webp",
+      "source_width": 1080,
+      "source_height": 1350,
+      "width": 768,
+      "height": 960,
+      "fingerprint": "291262:1780168208808837200:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/11.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/34d6fcf9776667b8.webp",
+      "source_width": 973,
+      "source_height": 1223,
+      "width": 764,
+      "height": 960,
+      "fingerprint": "94180:1780168210784862800:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/12.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/3b8f7a359b73017d.webp",
+      "source_width": 1080,
+      "source_height": 1296,
+      "width": 800,
+      "height": 960,
+      "fingerprint": "200209:1780168213432824400:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/13.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/78714e3b685cea8d.webp",
+      "source_width": 1080,
+      "source_height": 1350,
+      "width": 768,
+      "height": 960,
+      "fingerprint": "248184:1780168215881643100:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/14.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/0515eb146f097529.webp",
+      "source_width": 1080,
+      "source_height": 1349,
+      "width": 769,
+      "height": 960,
+      "fingerprint": "358837:1780168219083440700:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/15.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/0620dca3ab0148db.webp",
+      "source_width": 1080,
+      "source_height": 1346,
+      "width": 770,
+      "height": 960,
+      "fingerprint": "323149:1780168221822109300:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/16.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/725dc37686256b84.webp",
+      "source_width": 1043,
+      "source_height": 1215,
+      "width": 824,
+      "height": 960,
+      "fingerprint": "162991:1780168224973745100:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/17.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/b4605910c2cb4228.webp",
+      "source_width": 1048,
+      "source_height": 1217,
+      "width": 827,
+      "height": 960,
+      "fingerprint": "209991:1780168228360216800:960:82"
+    },
+    "../reference/style-atlas/preview/AndhikaRamadhian-2023-06-06-悬浮图像-0003/original/18.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/1ea6ccd429a67154.webp",
+      "source_width": 1049,
+      "source_height": 1222,
+      "width": 824,
+      "height": 960,
+      "fingerprint": "118116:1780168230851687600:960:82"
+    },
+    "../reference/art-atlas/books/monument-valley/items/UstwoGames-2014-04-03-纪念碑谷-0005-03/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/3e8e44d304b7f5c8.webp",
+      "source_width": 3200,
+      "source_height": 1657,
+      "width": 960,
+      "height": 497,
+      "fingerprint": "329920:1780238240942667200:960:82"
+    },
+    "../reference/art-atlas/books/monument-valley/items/UstwoGames-2014-04-03-纪念碑谷-0005-02/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/0374dbfa64b0d29a.webp",
+      "source_width": 3200,
+      "source_height": 1800,
+      "width": 960,
+      "height": 540,
+      "fingerprint": "208552:1780238240387747600:960:82"
+    },
+    "../reference/art-atlas/books/monument-valley/items/UstwoGames-2014-04-03-纪念碑谷-0005-01/original/01.jpg": {
+      "thumbnail": "./assets/art-atlas-thumbnails/e6bb3dd80197e63f.webp",
+      "source_width": 2876,
+      "source_height": 1616,
+      "width": 960,
+      "height": 539,
+      "fingerprint": "162357:1780238239866934100:960:82"
+    }
+  }
+}

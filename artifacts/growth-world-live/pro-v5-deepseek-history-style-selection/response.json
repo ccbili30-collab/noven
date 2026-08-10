@@ -1,0 +1,29 @@
+{
+  "selections": [
+    {
+      "key": "entry-dawn-kings",
+      "styleKey": "era-history",
+      "reason": "描述诸王建立盟约并开辟道路的长时段历史阶段，属于时代史而非单一事件。"
+    },
+    {
+      "key": "entry-old-road-code",
+      "styleKey": "document-history",
+      "reason": "法典残篇规范驿站、桥梁和商旅安全，属于法典文献及其历史作用。"
+    },
+    {
+      "key": "entry-sinking-tide",
+      "styleKey": "narrative-history",
+      "reason": "海岸线骤变和港城覆没为自然灾害事件，无英雄化或关键人物选择，采用叙事史。"
+    },
+    {
+      "key": "entry-ash-rebellion",
+      "styleKey": "legendary-chronicle",
+      "reason": "军镇反抗并建立灰烬王庭的起义改变时代秩序并留下象征记忆，属于传奇编年史。"
+    },
+    {
+      "key": "entry-green-pact",
+      "styleKey": "document-history",
+      "reason": "盟约协议划定林界和通商路，属于盟约及其历史作用。"
+    }
+  ]
+}

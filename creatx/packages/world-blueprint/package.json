@@ -1,0 +1,11 @@
+{
+  "name": "@creatx/world-blueprint",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@creatx/contracts": "workspace:*",
+    "@creatx/project-files": "workspace:*",
+    "@creatx/workbench": "workspace:*"
+  }
+}

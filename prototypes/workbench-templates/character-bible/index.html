@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>角色圣经工作台</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="character-data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="character-workbench" aria-label="角色圣经工作台">
+      <span class="edge-ornament edge-ornament-left" aria-hidden="true">❧</span>
+      <span class="edge-ornament edge-ornament-right" aria-hidden="true">❧</span>
+
+      <section class="character-overview">
+        <figure class="portrait-frame">
+          <img id="character-portrait" alt="" />
+          <span class="portrait-corner portrait-corner-nw" aria-hidden="true"></span>
+          <span class="portrait-corner portrait-corner-se" aria-hidden="true"></span>
+        </figure>
+
+        <article class="character-dossier">
+          <header class="identity-block">
+            <p class="archive-kicker">CHARACTER ARCHIVE</p>
+            <h1 id="character-name">—</h1>
+            <p id="character-subtitle" class="character-subtitle">—</p>
+          </header>
+
+          <div class="dossier-columns">
+            <section class="dossier-section">
+              <h2><span aria-hidden="true">✥</span>主要角色设定</h2>
+              <dl id="profile-list" class="record-list"></dl>
+            </section>
+
+            <section class="dossier-section relationship-section">
+              <h2><span aria-hidden="true">◇</span>人物关系</h2>
+              <dl id="relationship-list" class="record-list relationship-list"></dl>
+            </section>
+          </div>
+
+          <section class="dossier-section affiliation-section">
+            <h2><span aria-hidden="true">♜</span>地域 / 势力归属</h2>
+            <dl id="affiliation-list" class="affiliation-list"></dl>
+          </section>
+        </article>
+      </section>
+
+      <section class="character-bible">
+        <header class="bible-heading">
+          <span aria-hidden="true"></span>
+          <h2>角色圣经</h2>
+          <span aria-hidden="true"></span>
+        </header>
+        <div id="bible-grid" class="bible-grid"></div>
+      </section>
+    </main>
+  </body>
+</html>

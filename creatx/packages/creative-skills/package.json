@@ -1,0 +1,14 @@
+{
+  "name": "@creatx/creative-skills",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./growth-goal-instruction": "./src/growth-goal-instruction.ts",
+    "./skill-sequence": "./src/skill-sequence.ts",
+    "./slash-commands": "./src/slash-commands.ts"
+  },
+  "dependencies": {
+    "@creatx/world-blueprint": "workspace:*"
+  }
+}

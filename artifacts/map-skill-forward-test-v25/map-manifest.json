@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "title": "冰环火山群岛",
+  "canvas": {
+    "width": 1254,
+    "height": 1254
+  },
+  "base": "base-map.png",
+  "mask": "region-id-mask.png",
+  "regions": [
+    {
+      "id": "outer-frozen-ocean",
+      "name": "外层冰洋",
+      "kind": "water",
+      "maskColor": "#101820",
+      "summary": "环绕群岛并穿过卫星岛之间的连续冻结海域。"
+    },
+    {
+      "id": "inner-caldera",
+      "name": "中央冰火破口",
+      "kind": "water",
+      "maskColor": "#2e6f95",
+      "summary": "主环中央被冰层包围的火山破口，原位高亮。"
+    },
+    {
+      "id": "ember-watch-isle",
+      "name": "余烬守望岛",
+      "kind": "land",
+      "maskColor": "#b23a48"
+    },
+    {
+      "id": "ash-crown-isle",
+      "name": "灰冠岛",
+      "kind": "land",
+      "maskColor": "#315f8a"
+    },
+    {
+      "id": "glass-ice-isle",
+      "name": "镜冰岛",
+      "kind": "land",
+      "maskColor": "#4f806f"
+    },
+    {
+      "id": "cinder-bastion-isle",
+      "name": "烬堡岛",
+      "kind": "land",
+      "maskColor": "#675a91"
+    },
+    {
+      "id": "north-crown-glacier",
+      "name": "北冠冰原",
+      "kind": "land",
+      "maskColor": "#a57d37"
+    },
+    {
+      "id": "northwest-lava-field",
+      "name": "西北熔岩原",
+      "kind": "land",
+      "maskColor": "#a83f68"
+    },
+    {
+      "id": "northwest-ice-cliffs",
+      "name": "西北冰崖",
+      "kind": "land",
+      "maskColor": "#2f6f4e"
+    },
+    {
+      "id": "western-harbor",
+      "name": "西港环湾",
+      "kind": "land",
+      "maskColor": "#7a4d2f"
+    },
+    {
+      "id": "western-snow-bastion",
+      "name": "西境雪堡",
+      "kind": "land",
+      "maskColor": "#7b6d3f"
+    },
+    {
+      "id": "western-grey-ridge",
+      "name": "西境灰脊",
+      "kind": "land",
+      "maskColor": "#3e5f73"
+    },
+    {
+      "id": "ivory-gate",
+      "name": "象牙门地",
+      "kind": "land",
+      "maskColor": "#75507b"
+    },
+    {
+      "id": "southwest-purple-basin",
+      "name": "西南紫岩盆地",
+      "kind": "land",
+      "maskColor": "#9a5b34"
+    },
+    {
+      "id": "southwest-mossland",
+      "name": "西南苔原",
+      "kind": "land",
+      "maskColor": "#4b755f"
+    },
+    {
+      "id": "southwest-ember-field",
+      "name": "西南余烬原",
+      "kind": "land",
+      "maskColor": "#7c3f58"
+    },
+    {
+      "id": "southern-ash-plain",
+      "name": "南部灰白原",
+      "kind": "land",
+      "maskColor": "#526b9a"
+    },
+    {
+      "id": "southern-volcano",
+      "name": "南火山领",
+      "kind": "land",
+      "maskColor": "#8c744d"
+    },
+    {
+      "id": "southeast-snow-coast",
+      "name": "东南雪岸",
+      "kind": "land",
+      "maskColor": "#3f7c7a"
+    },
+    {
+      "id": "southeast-glacier",
+      "name": "东南裂冰原",
+      "kind": "land",
+      "maskColor": "#804f3e"
+    },
+    {
+      "id": "southeast-lava-coast",
+      "name": "东南熔岩岸",
+      "kind": "land",
+      "maskColor": "#6e5d8f"
+    },
+    {
+      "id": "eastern-brown-rampart",
+      "name": "东境褐岩壁",
+      "kind": "land",
+      "maskColor": "#987a32"
+    },
+    {
+      "id": "eastern-obsidian-enclave",
+      "name": "东境黑曜飞地",
+      "kind": "land",
+      "maskColor": "#4f6b44"
+    },
+    {
+      "id": "eastern-city-snowfield",
+      "name": "东城雪原",
+      "kind": "land",
+      "maskColor": "#73546d"
+    },
+    {
+      "id": "eastern-gold-plateau",
+      "name": "东境金岩台地",
+      "kind": "land",
+      "maskColor": "#3d6f8d"
+    },
+    {
+      "id": "eastern-teal-marsh",
+      "name": "东境青岩泽",
+      "kind": "land",
+      "maskColor": "#9b4f4f"
+    },
+    {
+      "id": "eastern-olive-territory",
+      "name": "东境橄榄原",
+      "kind": "land",
+      "maskColor": "#5e7d51"
+    },
+    {
+      "id": "northeast-snowfield",
+      "name": "东北雪原",
+      "kind": "land",
+      "maskColor": "#83613c"
+    },
+    {
+      "id": "northeast-riftland",
+      "name": "东北裂岩地",
+      "kind": "land",
+      "maskColor": "#4d5d83"
+    },
+    {
+      "id": "north-purple-basin",
+      "name": "北部紫晶盆地",
+      "kind": "land",
+      "maskColor": "#7d4c72"
+    },
+    {
+      "id": "north-volcano",
+      "name": "北火山领",
+      "kind": "land",
+      "maskColor": "#5f7040"
+    },
+    {
+      "id": "central-lava-channel",
+      "name": "中西熔流地",
+      "kind": "land",
+      "maskColor": "#8c5c46"
+    }
+  ]
+}

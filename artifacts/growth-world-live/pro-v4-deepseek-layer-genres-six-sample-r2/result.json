@@ -1,0 +1,79 @@
+{
+  "status": "GROWTH WORLD PRO LAYER GENRES PROVIDER LIVE PASS",
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "projectRoot": "D:\\CodexCache\\Temp\\CreatX Pro V2 经典中世纪蓝图项目 3OVVWf",
+  "workRoot": "阿斯特拉恩",
+  "sampleCount": 6,
+  "results": [
+    {
+      "title": "灰烬起义",
+      "layer": "历史、时代与重大事件",
+      "genre": "叙事史",
+      "styleKey": "default",
+      "oldCharacters": 3246,
+      "newCharacters": 1213,
+      "finishReason": "resumed",
+      "oldAuditTerms": 5,
+      "newAuditTerms": 0
+    },
+    {
+      "title": "艾尔长河",
+      "layer": "宇宙、自然与地理",
+      "genre": "区域地理志",
+      "styleKey": "default",
+      "oldCharacters": 2704,
+      "newCharacters": 1507,
+      "finishReason": "resumed",
+      "oldAuditTerms": 0,
+      "newAuditTerms": 0
+    },
+    {
+      "title": "河原马",
+      "layer": "生态、资源与物种",
+      "genre": "通俗自然史",
+      "styleKey": "default",
+      "oldCharacters": 3138,
+      "newCharacters": 2105,
+      "finishReason": "resumed",
+      "oldAuditTerms": 0,
+      "newAuditTerms": 0
+    },
+    {
+      "title": "泛原迁居月",
+      "layer": "社会、文化与日常生活",
+      "genre": "风俗志",
+      "styleKey": "default",
+      "oldCharacters": 2253,
+      "newCharacters": 1857,
+      "finishReason": "completed",
+      "oldAuditTerms": 0,
+      "newAuditTerms": 0
+    },
+    {
+      "title": "谷冠女王伊莱安",
+      "layer": "人物、关系与阵营",
+      "genre": "人物传记",
+      "styleKey": "default",
+      "oldCharacters": 3390,
+      "newCharacters": 2042,
+      "finishReason": "completed",
+      "oldAuditTerms": 1,
+      "newAuditTerms": 0
+    },
+    {
+      "title": "沉王之歌",
+      "layer": "故事、传说与叙事入口",
+      "genre": "传说重述",
+      "styleKey": "default",
+      "oldCharacters": 3477,
+      "newCharacters": 3357,
+      "finishReason": "completed",
+      "oldAuditTerms": 1,
+      "newAuditTerms": 0
+    }
+  ],
+  "elapsedSeconds": 124,
+  "evidenceDir": "D:\\CodexW\\Creatx\\creat1\\artifacts\\growth-world-live\\pro-v4-deepseek-layer-genres-six-sample-r2",
+  "scope": "Real Provider prose-only A/B; no Electron, image queue, or production project mutation"
+}

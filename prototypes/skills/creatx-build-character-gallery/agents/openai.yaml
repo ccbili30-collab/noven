@@ -1,0 +1,4 @@
+interface:
+  display_name: "CreatX Character Gallery"
+  short_description: "Build cinematic casts from existing CreatX worlds"
+  default_prompt: "Use $creatx-build-character-gallery to build a cinematic cast gallery from this world."

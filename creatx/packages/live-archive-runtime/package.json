@@ -1,0 +1,13 @@
+{
+  "name": "@creatx/live-archive-runtime",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@creatx/cline-adapter": "workspace:*",
+    "@creatx/growth-runtime": "workspace:*",
+    "@creatx/image-runtime": "workspace:*",
+    "@creatx/project-files": "workspace:*",
+    "@creatx/session-runtime": "workspace:*"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "baseUrl": ".",
+    "paths": {
+      "@creatx/contracts": ["packages/contracts/src/index.ts"],
+      "@creatx/art-library-runtime": ["packages/art-library-runtime/src/index.ts"],
+      "@creatx/creative-skills": ["packages/creative-skills/src/index.ts"],
+      "@creatx/creative-skills/skill-sequence": ["packages/creative-skills/src/skill-sequence.ts"],
+      "@creatx/creative-skills/slash-commands": ["packages/creative-skills/src/slash-commands.ts"],
+      "@creatx/image-runtime": ["packages/image-runtime/src/index.ts"],
+      "@creatx/live-archive-runtime": ["packages/live-archive-runtime/src/index.ts"],
+      "@creatx/model-settings": ["packages/model-settings/src/index.ts"],
+      "@creatx/project-package-runtime": ["packages/project-package-runtime/src/index.ts"],
+      "@creatx/growth-runtime": ["packages/growth-runtime/src/index.ts"],
+      "@creatx/project-files": ["packages/project-files/src/index.ts"],
+      "@creatx/session-runtime": ["packages/session-runtime/src/index.ts"],
+      "@creatx/workbench": ["packages/workbench/src/index.ts"],
+      "@creatx/world-blueprint": ["packages/world-blueprint/src/index.ts"],
+      "@creatx/cline-adapter": ["packages/cline-adapter/src/index.ts"]
+    }
+  },
+  "include": ["apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts", "scripts/**/*.ts", "electron.vite.config.ts"]
+}

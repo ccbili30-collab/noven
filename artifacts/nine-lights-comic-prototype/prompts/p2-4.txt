@@ -1,0 +1,9 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 2 panel 4, page-ending reveal
+Primary request: Moonless snow night outside the closed frontier gate. Su He stands alone in the foreground, seen from behind and slightly in profile. In the far direction of North Bridge, nine blue-white lamps emerge one by one through blowing snow, forming an uneven road into the mountains. The nearest final light has sunk under the snow near the third lamp post, and the snow surface bulges toward Su He as if something large moves beneath it.
+Input image: preserve Su He's exact low braid, silver hairpin, charcoal cloak, leather ledger satchel and proportions from the supplied reference. Her silhouette must remain identifiable.
+Style/medium: mature graphic novel page-ending panel, powerful ink silhouette, restrained mineral color, subtle paper texture, high spatial clarity.
+Composition/framing: very wide deep view; Su He large at lower right, nine lights curve from distant upper left toward the third lamp at center, bulging snow points toward her; large dark sky at upper left for later narration; strong final-page hook.
+Lighting/mood: vast cold darkness, nine small uncanny lights, imminent underground threat; awe and danger without decorative fantasy excess.
+Constraints: exactly nine distinct blue-white lights; one continuous landscape; no visible monster; no text, no numbers, no captions, no speech balloons, no panel border, no watermark.
+Avoid: starry galaxy, glowing city, aurora, fireworks, symmetrical ritual circle, tiny unreadable protagonist, ornamental concept art.

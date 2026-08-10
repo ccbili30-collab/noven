@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CreatX Registered Workbench V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "folder"],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^wb_[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "folder": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Project-relative non-root directory using forward slashes. Runtime validation rejects absolute paths, dot segments, empty segments, files, missing directories, and symbolic-link escape."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "\\S",
+      "description": "Optional trimmed display title. The folder basename is used when omitted."
+    }
+  }
+}

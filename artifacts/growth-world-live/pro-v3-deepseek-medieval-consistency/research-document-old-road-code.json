@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 6,
+  "objectId": "live-history-1",
+  "writingContractHash": "4726a61c3616e7dc82c7d5bbedfb70bc461d59efb3e5bf928737ad9b054f9ebf",
+  "contentBrief": {
+    "focus": "旧路法典的制定背景、施行修订与长期解释分歧",
+    "requiredElements": [
+      "摄政王阿德里安召集十二座驿城代表议定",
+      "初版免桥税但要求无补偿驿马引发三郡抗税",
+      "赤历三十一年修订为道路银库按里程偿付",
+      "七港商团与北境边侯的立场分歧",
+      "今日四国援引法典但解释不同",
+      "洛恩王国与北境边侯对军队征用条款的相反解释"
+    ],
+    "concreteDetails": [
+      "赤历二十七年",
+      "赤历三十一年",
+      "摄政王阿德里安",
+      "十二座驿城",
+      "三郡抗税",
+      "七港商团",
+      "北境边侯",
+      "洛恩王国法官《旧路释例》",
+      "北境关隘书记官的战时抄本"
+    ],
+    "developmentSpace": [
+      "可扩展法典具体条款的措辞细节",
+      "可描述三郡抗税的军事或外交后果",
+      "可补充道路银库的运作机制",
+      "可展开四国解释差异的典型案例"
+    ],
+    "avoidDuplication": [
+      "不要写成法典全文或注释",
+      "不要重复初版条款细节",
+      "不要重复修订过程的逐字记录"
+    ]
+  },
+  "claims": [
+    {
+      "id": "established-1",
+      "claim": "法典由摄政王阿德里安在赤历二十七年召集十二座驿城代表议定。",
+      "epistemicStatus": "established",
+      "sourcePaths": [
+        "烬冠诸国/世界基准.md"
+      ],
+      "relevance": "制定背景与制定者"
+    },
+    {
+      "id": "established-2",
+      "claim": "初版规定持王印者免桥税，却要求沿途村庄无偿提供驿马，引发三郡抗税。",
+      "epistemicStatus": "established",
+      "sourcePaths": [
+        "烬冠诸国/世界基准.md"
+      ],
+      "relevance": "初版争议与施行问题"
+    },
+    {
+      "id": "established-3",
+      "claim": "赤历三十一年修订后，驿马改由道路银库按里程偿付。",
+      "epistemicStatus": "established",
+      "sourcePaths": [
+        "烬冠诸国/世界基准.md"
+      ],
+      "relevance": "修订结果"
+    },
+    {
+      "id": "established-4",
+      "claim": "七港商团支持统一秤量条款，北境边侯反对商人武装护卫越过领界。",
+      "epistemicStatus": "established",
+      "sourcePaths": [
+        "烬冠诸国/世界基准.md"
+      ],
+      "relevance": "不同利益方立场"
+    },
+    {
+      "id": "established-5",
+      "claim": "今日仍有四个王国援引法典保护朝圣者，但对军队征用条款解释不同。",
+      "epistemicStatus": "established",
+      "sourcePaths": [
+        "烬冠诸国/世界基准.md"
+      ],
+      "relevance": "长期影响与解释分歧"
+    },
+    {
+      "id": "contested-1",
+      "claim": "洛恩王国法官称军队征用条款只适用于王道境内。",
+      "epistemicStatus": "contested",
+      "sourcePaths": [
+        "烬冠诸国/世界基准.md"
+      ],
+      "relevance": "关于军队征用条款的一种解释"
+    },
+    {
+      "id": "contested-2",
+      "claim": "北境边侯的战时抄本称军队可以越过领界征用驿马。",
+      "epistemicStatus": "contested",
+      "sourcePaths": [
+        "烬冠诸国/世界基准.md"
+      ],
+      "relevance": "关于军队征用条款的相反解释"
+    }
+  ],
+  "contentCards": [
+    {
+      "beat": "交代制定背景和制定者",
+      "text": "赤历二十七年，摄政王阿德里安召集十二座驿城代表，议定一部统一道路与关卡的法典。",
+      "claimIds": [
+        "established-1"
+      ]
+    },
+    {
+      "beat": "呈现争议、施行与修订",
+      "text": "初版令持王印者免桥税，却要求村庄无偿供马，遂有三郡抗税。七港商团赞同统一秤量，北境边侯则反对商人武装越领。",
+      "claimIds": [
+        "established-2",
+        "established-4"
+      ]
+    },
+    {
+      "beat": "呈现争议、施行与修订",
+      "text": "赤历三十一年修订，驿马改由道路银库按里程偿付，取代原有征调。",
+      "claimIds": [
+        "established-3"
+      ]
+    },
+    {
+      "beat": "说明长期影响和不同解释",
+      "text": "四个王国至今援引法典保护朝圣者。洛恩法官称军队征用仅限王道境内；北境战时抄本则允许越界征用。",
+      "claimIds": [
+        "established-5",
+        "contested-1",
+        "contested-2"
+      ]
+    }
+  ],
+  "terms": [
+    {
+      "canonical": "旧路法典",
+      "aliases": [
+        "旧路律例",
+        "法典"
+      ],
+      "usedBy": "烬冠诸国历史文献"
+    },
+    {
+      "canonical": "摄政王阿德里安",
+      "aliases": [
+        "阿德里安"
+      ],
+      "usedBy": "制典记录"
+    },
+    {
+      "canonical": "驿城",
+      "aliases": [
+        "驿道城镇"
+      ],
+      "usedBy": "十二驿城代表"
+    },
+    {
+      "canonical": "道路银库",
+      "aliases": [
+        "路银库"
+      ],
+      "usedBy": "修订条款"
+    },
+    {
+      "canonical": "王印",
+      "aliases": [
+        "御印"
+      ],
+      "usedBy": "初版条款"
+    },
+    {
+      "canonical": "赤历二十七年",
+      "aliases": [],
+      "usedBy": "史年表"
+    },
+    {
+      "canonical": "赤历三十一年",
+      "aliases": [],
+      "usedBy": "史年表"
+    },
+    {
+      "canonical": "三郡抗税",
+      "aliases": [
+        "三郡拒供"
+      ],
+      "usedBy": "施行记录"
+    },
+    {
+      "canonical": "七港商团",
+      "aliases": [
+        "七港盟商"
+      ],
+      "usedBy": "商团议事录"
+    },
+    {
+      "canonical": "北境边侯",
+      "aliases": [
+        "边侯"
+      ],
+      "usedBy": "北境档案"
+    },
+    {
+      "canonical": "洛恩王国",
+      "aliases": [
+        "洛恩"
+      ],
+      "usedBy": "洛恩王室法庭"
+    },
+    {
+      "canonical": "旧路释例",
+      "aliases": [
+        "释例"
+      ],
+      "usedBy": "洛恩王室法庭"
+    },
+    {
+      "canonical": "战时抄本",
+      "aliases": [
+        "北境抄本"
+      ],
+      "usedBy": "北境关隘书记官"
+    }
+  ],
+  "consistencyGuard": {
+    "invariants": [
+      {
+        "text": "摄政王阿德里安在赤历二十七年召集十二驿城代表议定法典，初版以无补偿驿马引发三郡抗税，赤历三十一年改为道路银库按里程偿付。",
+        "claimIds": [
+          "established-1",
+          "established-2",
+          "established-3"
+        ]
+      },
+      {
+        "text": "今日四个王国援引法典保护朝圣者，但军队征用条款存在相反解读。",
+        "claimIds": [
+          "established-5"
+        ]
+      }
+    ],
+    "attributedClaims": [
+      {
+        "text": "军队征用条款只适用于王道境内。",
+        "attribution": "洛恩王国法官（《旧路释例》）",
+        "claimIds": [
+          "contested-1"
+        ]
+      },
+      {
+        "text": "军队可以越过领界征用驿马。",
+        "attribution": "北境边侯的战时抄本（北境关隘书记官署名保存）",
+        "claimIds": [
+          "contested-2"
+        ]
+      }
+    ],
+    "openFields": [
+      "十二座驿城具体名称",
+      "三郡的具体郡名",
+      "道路银库的财政来源细节",
+      "统一秤量的实施方式",
+      "七港商团与北境边侯争议的具体后果",
+      "四个王国的具体名称"
+    ]
+  },
+  "unresolvedDetails": [
+    "洛恩王国法官的具体姓名与裁判年份",
+    "北境关隘书记官的姓名",
+    "战时抄本的形成时间"
+  ],
+  "criticalGaps": [],
+  "excludedExternalTerms": []
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "世界因果图"
+  short_description: "从真实世界文件生成纯因果交互网络"
+  default_prompt: "Use $creatx-causality to read this project's explicit causal relations and build an offline full-world causal graph."

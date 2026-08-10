@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>九灯之夜 · 两页漫画样片</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+        background: #17191d;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        display: grid;
+        justify-content: center;
+        gap: 64px;
+        padding: 64px;
+        background:
+          radial-gradient(circle at 50% 0%, #30333a 0, #17191d 42%, #0d0e11 100%);
+      }
+
+      .page {
+        position: relative;
+        width: 1536px;
+        height: 2176px;
+        padding: 34px;
+        overflow: hidden;
+        background: #eee8dc;
+        box-shadow: 0 28px 90px #000c;
+      }
+
+      .page-grid {
+        height: 100%;
+        display: grid;
+        gap: 18px;
+      }
+
+      .page-one .page-grid { grid-template-rows: 610px 770px 1fr; }
+      .page-two .page-grid { grid-template-rows: 620px 590px 1fr; }
+      .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; min-height: 0; }
+
+      .panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 7px solid #111215;
+        background: #15171a;
+      }
+
+      .panel img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      .p11 img { object-position: 50% 55%; }
+      .p12 img { object-position: 50% 48%; }
+      .p13 img { object-position: 50% 55%; }
+      .p14 img { object-position: 50% 44%; }
+      .p21 img { object-position: 52% 55%; }
+      .p22 img { object-position: 52% 47%; }
+      .p23 img { object-position: 50% 47%; }
+      .p24 img { object-position: 50% 50%; }
+
+      .caption,
+      .balloon,
+      .sfx {
+        position: absolute;
+        z-index: 2;
+        text-wrap: balance;
+      }
+
+      .caption {
+        padding: 13px 20px 15px;
+        border: 3px solid #16171a;
+        background: #f0eadf;
+        color: #16171a;
+        font-family: "Noto Serif CJK SC", "SimSun", serif;
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: .04em;
+        box-shadow: 7px 7px 0 #1119;
+      }
+
+      .balloon {
+        max-width: 360px;
+        padding: 18px 25px 20px;
+        border: 4px solid #111;
+        border-radius: 50%;
+        background: #fffdf6;
+        color: #111;
+        font-size: 31px;
+        font-weight: 700;
+        line-height: 1.38;
+        text-align: center;
+        filter: drop-shadow(5px 6px 0 #0008);
+      }
+
+      .balloon::after {
+        content: "";
+        position: absolute;
+        width: 28px;
+        height: 48px;
+        background: #fffdf6;
+        border-right: 4px solid #111;
+        border-bottom: 4px solid #111;
+        transform: rotate(35deg) skew(-10deg);
+      }
+
+      .tail-down::after { left: 46%; bottom: -24px; }
+      .tail-right::after { right: -10px; bottom: 20px; transform: rotate(-42deg) skew(-10deg); }
+      .tail-left::after { left: -10px; bottom: 18px; transform: rotate(125deg) skew(-10deg); }
+
+      .sfx {
+        color: #eaf5f6;
+        font-family: "STKaiti", "KaiTi", serif;
+        font-size: 74px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-shadow: 0 0 8px #89cbd9, 5px 7px 0 #101216;
+        transform: rotate(-10deg);
+      }
+
+      .p11 .caption { top: 28px; left: 30px; }
+      .p12 .balloon { top: 30px; right: 26px; max-width: 300px; }
+      .p13 .balloon { top: 28px; right: 25px; max-width: 330px; }
+      .p14 .su { top: 38px; left: 35px; max-width: 235px; }
+      .p14 .rider { bottom: 33px; left: 42px; max-width: 390px; }
+
+      .p21 .balloon { top: 28px; right: 25px; max-width: 330px; }
+      .p22 .sfx { left: 35px; bottom: 95px; }
+      .p22 .balloon { top: 25px; right: 25px; max-width: 245px; }
+      .p23 .he { top: 28px; right: 28px; max-width: 290px; }
+      .p23 .su { top: 28px; left: 28px; max-width: 260px; }
+      .p23 .salt { bottom: 30px; right: 24px; max-width: 340px; }
+      .p24 .caption.first { top: 34px; left: 34px; max-width: 520px; }
+      .p24 .caption.last { right: 34px; bottom: 34px; max-width: 530px; }
+
+      .page-number {
+        position: absolute;
+        right: 45px;
+        bottom: 7px;
+        z-index: 3;
+        color: #eee8dc;
+        font: 700 20px Georgia, serif;
+        mix-blend-mode: difference;
+      }
+    </style>
+  </head>
+  <body>
+    <article class="page page-one" aria-label="九灯之夜漫画第一页">
+      <div class="page-grid">
+        <section class="panel p11">
+          <img src="p1-1.png" alt="雪夜里，苏禾走向来历不明的第三灯" />
+          <div class="caption">第三灯亮着。</div>
+        </section>
+        <div class="pair">
+          <section class="panel p12">
+            <img src="p1-2.png" alt="苏禾检查温热铜扣，孟槐从雪中挑出断绳" />
+            <div class="balloon tail-down">刚点上不到<br />半个时辰。</div>
+          </section>
+          <section class="panel p13">
+            <img src="p1-3.png" alt="骑手将盐袋扔入雪中，苏禾查看登记簿" />
+            <div class="balloon tail-right">北桥驿棚没人。<br />运盐队没到。</div>
+          </section>
+        </div>
+        <section class="panel p14">
+          <img src="p1-4.png" alt="苏禾认出盐袋上的红线针脚" />
+          <div class="balloon tail-right su">哪一队？</div>
+          <div class="balloon tail-left rider">鸦嘴渡来的那队。<br /><strong>领队姓苏。</strong></div>
+        </section>
+      </div>
+      <div class="page-number">1</div>
+    </article>
+
+    <article class="page page-two" aria-label="九灯之夜漫画第二页">
+      <div class="page-grid">
+        <div class="pair">
+          <section class="panel p21">
+            <img src="p2-1.png" alt="孟槐发现北桥桥墩已经被掏空" />
+            <div class="balloon tail-left">带货的兽上去，<br />桥会翻。</div>
+          </section>
+          <section class="panel p22">
+            <img src="p2-2.png" alt="桥下响铃，孟槐将苏禾拉回封止线内" />
+            <div class="sfx">当——</div>
+            <div class="balloon tail-down">别下去！</div>
+          </section>
+        </div>
+        <section class="panel p23">
+          <img src="p2-3.png" alt="苏禾用白鳞与守将贺沉砚对质" />
+          <div class="balloon tail-down su">有九个人<br />在山里。</div>
+          <div class="balloon tail-down he">明天卯时开关。</div>
+          <div class="balloon tail-left salt">关外还有<br /><strong>六十三车盐粮。</strong></div>
+        </section>
+        <section class="panel p24">
+          <img src="p2-4.png" alt="雪夜中九盏青白灯连向第三节点，雪下有东西逼近苏禾" />
+          <div class="caption first">最末一盏灯<br />停在第三节点。</div>
+          <div class="caption last">随后，那片雪<br />朝她的方向鼓了一下。</div>
+        </section>
+      </div>
+      <div class="page-number">2</div>
+    </article>
+  </body>
+</html>

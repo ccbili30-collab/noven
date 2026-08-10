@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>艺术馆 / 圆环展览</title>
+<script>(()=>{if(window.matchMedia("(prefers-reduced-motion: reduce)").matches||new URLSearchParams(location.search).get("intro")==="0")return;const key="creatx-art-atlas-intro-seen";try{if(sessionStorage.getItem(key)==="1")return;sessionStorage.setItem(key,"1")}catch{}document.documentElement.classList.add("has-atlas-intro")})();</script>
+<script src="./art-route-transition.js?v=20260804-staged-route-4"></script>
+<link rel="stylesheet" href="./art-route-transition.css?v=20260804-staged-route-4">
+<style>
+  @font-face{font-family:"JetBrains Mono";src:url("./fonts/JetBrainsMono-Regular.woff2") format("woff2");font-style:normal;font-weight:400;font-display:swap}
+  @font-face{font-family:"JetBrains Mono";src:url("./fonts/JetBrainsMono-SemiBold.woff2") format("woff2");font-style:normal;font-weight:600;font-display:swap}
+  :root{--ink:#172d32;--paper:#eee9de;--gold:#b18a42;--line:rgba(23,45,50,.22);--muted:rgba(23,45,50,.62);--display:"JetBrains Mono","Microsoft YaHei UI","Noto Sans CJK SC",monospace;--body:"JetBrains Mono","Microsoft YaHei UI","Noto Sans CJK SC",monospace}
+  *{box-sizing:border-box}
+  html{height:100%;background:var(--paper)}
+  body{height:100%;margin:0;color:var(--ink);font-family:var(--body);background:radial-gradient(circle at 74% 12%,color-mix(in srgb,var(--gold) 14%,transparent),transparent 25rem),linear-gradient(135deg,color-mix(in srgb,var(--paper) 82%,white),var(--paper-deep));overflow:hidden}
+  body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;background-image:linear-gradient(rgba(23,45,50,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(23,45,50,.05) 1px,transparent 1px);background-size:44px 44px}
+  a{color:inherit;text-decoration:none}
+  .museum-shell{position:relative;height:100dvh;overflow:hidden}
+  .museum-main{position:relative;min-width:0;height:100dvh;overflow:hidden}
+  .atlas-opening{position:fixed;inset:0;z-index:80;display:none;overflow:hidden;pointer-events:auto}
+  .has-atlas-intro .atlas-opening{display:block}
+  .opening-line{position:absolute;top:50%;left:50%;width:1.5px;height:min(36vh,420px);transform:translate(-50%,-50%) scaleY(0);transform-origin:center;background:linear-gradient(180deg,transparent,rgba(23,45,50,.48) 20%,rgba(177,138,66,.82) 50%,rgba(23,45,50,.48) 80%,transparent);box-shadow:0 0 12px rgba(177,138,66,.16);opacity:0;will-change:transform,opacity}
+  .opening-bird{position:absolute;top:50%;left:50%;width:92px;height:92px;transform:translate(-50%,-50%);opacity:0;will-change:transform,opacity}
+  .opening-bird svg,.opening-bird img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;overflow:visible}
+  .opening-bird__body,.opening-bird__wing{position:absolute;inset:0}
+  .opening-bird__wing{transform-origin:51.1% 58.15%;will-change:transform}
+  .has-atlas-intro .exhibition-intro .eyebrow,.has-atlas-intro .exhibition-intro h1,.has-atlas-intro .intro-copy,.has-atlas-intro .portal-switch,.has-atlas-intro .orbit-hud,.has-atlas-intro .orbit-hint{opacity:0}
+  .has-atlas-intro .title-mark{opacity:0}
+  .has-atlas-intro .orbit-stage{opacity:0;pointer-events:none}
+  .exhibition-intro{position:absolute;top:50%;left:6.6vw;width:min(300px,23vw);transform:translateY(-50%);z-index:30;pointer-events:none}
+  .eyebrow{color:var(--gold);font-size:11px;letter-spacing:.28em;text-transform:uppercase}
+  .title-lockup{display:flex;align-items:center;gap:3px;margin-top:18px}
+  .title-mark{display:block;flex:none;width:clamp(43px,4vw,62px);height:clamp(58px,5.4vw,82px);object-fit:contain}
+  h1{margin:0;font-family:var(--display);font-size:clamp(64px,6vw,94px);font-weight:400;line-height:.94;letter-spacing:-.045em}
+  .intro-copy{max-width:19em;margin-top:26px;color:var(--muted);font-family:var(--display);font-size:clamp(14px,1.15vw,18px);font-style:italic;line-height:1.55}
+  .intro-copy p{margin:0 0 8px}
+  .poem-credit{display:block;margin-bottom:22px;color:var(--muted);font-family:var(--body);font-size:9px;font-style:normal;letter-spacing:.12em}
+  .collection-line{display:flex;align-items:center;gap:10px;width:max-content;max-width:43vw;color:var(--gold);font-family:var(--body);font-size:10px;font-style:normal;letter-spacing:.17em;text-transform:uppercase;white-space:nowrap}
+  .work-total,.collection-divider{flex:none}
+  .work-count{display:inline-block;min-width:2ch;text-align:right;font-variant-numeric:tabular-nums}
+  .library-reel{display:grid;grid-template-columns:repeat(3,max-content);align-items:center;gap:9px;min-width:0;overflow:hidden}
+  .library-name{display:inline-flex;align-items:center;gap:9px;opacity:.34;transform:translateY(0)}
+  .library-name:not(:last-child):after{content:"·";opacity:.5}
+  .library-name.is-current{opacity:1}
+  .library-reel.is-changing .library-name{animation:libraryNameReveal .46s cubic-bezier(.22,1,.36,1) both}
+  .library-reel.is-changing .library-name:nth-child(2){animation-delay:.045s}
+  .library-reel.is-changing .library-name:nth-child(3){animation-delay:.09s}
+  @keyframes libraryNameReveal{from{opacity:0;transform:translateY(8px)}to{transform:translateY(0)}}
+  .portal-switch{position:absolute;top:50%;left:43.5%;z-index:34;display:flex;align-items:center;gap:clamp(44px,5vw,78px);transform:translate(-50%,-50%);pointer-events:none}
+  .portal-link{--direction:1;--travel-x:-8px;position:relative;display:flex;align-items:center;justify-content:center;width:112px;height:72px;color:var(--ink);font-family:var(--display);font-size:16px;letter-spacing:.12em;pointer-events:auto;outline:none}
+  .portal-link--left{--direction:-1;--travel-x:8px}
+  .portal-arrow{position:relative;display:grid;place-items:center;width:48px;height:48px;color:rgba(23,45,50,.12);font-family:var(--body);font-size:29px;font-weight:300;line-height:1;transition:color .5s ease,transform .6s cubic-bezier(.22,1,.36,1),filter .5s ease}
+  .portal-arrow:before,.portal-arrow:after{content:attr(data-arrow);position:absolute;inset:0;display:grid;place-items:center;color:rgba(177,138,66,.07);filter:blur(1.6px);transform:translateX(calc(var(--direction) * 9px));transition:opacity .45s ease,transform .7s cubic-bezier(.22,1,.36,1),filter .5s ease}
+  .portal-arrow:after{opacity:.55;transform:translateX(calc(var(--direction) * 17px))}
+  .portal-label{position:absolute;top:50%;left:calc(50% + 25px);color:rgba(23,45,50,0);white-space:nowrap;filter:blur(6px);opacity:0;transform:translate(calc(var(--direction) * -8px),-50%);transition:opacity .45s ease,color .45s ease,filter .5s ease,transform .6s cubic-bezier(.22,1,.36,1)}
+  .portal-link--left .portal-label{right:calc(50% + 25px);left:auto}
+  .portal-link:hover .portal-arrow,.portal-link:focus-visible .portal-arrow{color:var(--gold);filter:blur(0);transform:translateX(var(--travel-x))}
+  .portal-link:hover .portal-arrow:before,.portal-link:hover .portal-arrow:after,.portal-link:focus-visible .portal-arrow:before,.portal-link:focus-visible .portal-arrow:after{opacity:1;filter:blur(0);transform:translateX(0)}
+  .portal-link:hover .portal-label,.portal-link:focus-visible .portal-label{color:var(--ink);filter:blur(0);opacity:1;transform:translate(0,-50%)}
+  .portal-link:focus-visible{outline:1px solid rgba(177,138,66,.55);outline-offset:5px}
+  .chat-reveal{position:absolute;top:calc(100% + 8px);left:50%;z-index:2;width:104px;height:48px;padding:0;border:0;background:transparent;color:color-mix(in srgb,var(--ink) 13%,transparent);font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.3em;line-height:1;transform:translateX(-50%);pointer-events:auto;cursor:default;opacity:1;text-shadow:none;transition:color .42s ease,filter .52s ease,text-shadow .52s ease,transform .52s cubic-bezier(.22,1,.36,1)}
+  .chat-reveal:hover{color:var(--gold);filter:brightness(1.06);text-shadow:0 1px 0 color-mix(in srgb,var(--ink) 28%,transparent),0 3px 3px color-mix(in srgb,var(--gold) 24%,transparent),0 8px 14px color-mix(in srgb,var(--ink) 18%,transparent);transform:translate(-50%,-2px)}
+  .orbit-stage{position:absolute;inset:0;overflow:hidden;isolation:isolate;cursor:grab;touch-action:none;user-select:none}
+  .orbit-stage.is-dragging{cursor:grabbing}
+  .orbit-guide{position:absolute;top:-4%;left:40%;width:66%;height:108%;overflow:visible;pointer-events:none}
+  .orbit-guide path{fill:none;stroke:rgba(177,138,66,.18);stroke-width:.35;vector-effect:non-scaling-stroke}
+  .orbit-piece{--piece-width:clamp(340px,36vw,650px);position:absolute;top:0;left:0;width:var(--piece-width);opacity:0;pointer-events:none;transform-origin:center}
+  .orbit-stage.is-moving .orbit-piece{will-change:transform,opacity}
+  .piece-image{display:block;background:#d4cec1;box-shadow:0 24px 55px rgba(23,45,50,.18);transform:scale(1);transform-origin:center;transition:transform .34s cubic-bezier(.22,1,.36,1),box-shadow .3s ease}
+  .orbit-piece.is-active .piece-image{box-shadow:0 42px 80px rgba(23,45,50,.26)}
+  .orbit-stage.is-moving .piece-image,.orbit-stage.is-moving .orbit-piece.is-active .piece-image{box-shadow:0 14px 30px rgba(23,45,50,.14)}
+  .piece-image img{display:block;width:100%;height:auto;opacity:0;transition:opacity .24s ease}
+  .orbit-piece.is-image-ready .piece-image img{opacity:1}
+  .piece-image:hover,.piece-image:focus-visible{transform:scale(1.045);box-shadow:0 40px 70px rgba(23,45,50,.29);outline:none}
+  .piece-caption{position:absolute;left:50%;top:calc(100% + 18px);display:flex;flex-direction:column;align-items:center;gap:4px;width:220px;margin-left:-110px;color:var(--muted);font-size:10px;line-height:1.6;text-align:center;opacity:0;visibility:hidden;transform:translate3d(0,var(--caption-hidden-y,12px),0);transform-origin:center top;transition:opacity .32s ease,transform .42s cubic-bezier(.22,1,.36,1),visibility 0s linear .32s}
+  .orbit-piece.is-caption-visible .piece-caption{opacity:1;visibility:visible;transform:translate3d(0,0,0);transition-delay:0s}
+  .orbit-stage.is-moving .piece-caption{will-change:opacity,transform}
+  .piece-caption>div{width:100%}
+  .piece-number{flex:none;color:var(--gold);font-size:13px;letter-spacing:.12em}
+  .piece-caption strong,.piece-caption span,.piece-caption em{display:block}
+  .piece-caption strong{color:var(--ink);font-family:var(--display);font-size:18px;font-weight:400}
+  .piece-caption em{margin-top:3px;color:var(--gold);font-style:normal;font-size:10px;letter-spacing:.08em}
+  .orbit-hud{position:absolute;top:50%;right:26px;z-index:32;display:grid;justify-items:center;gap:12px;color:var(--gold);transform:translateY(-50%);font-size:10px;letter-spacing:.16em}
+  .orbit-hud-line{position:relative;width:30px;height:260px;padding:0;border:0;background:transparent;color:inherit;cursor:ns-resize;touch-action:none}
+  .orbit-hud-line:before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:rgba(23,45,50,.18);transform:translateX(-50%)}
+  .orbit-hud-line:after{content:"";position:absolute;left:50%;top:var(--orbit-progress,0%);width:6px;height:42px;background:var(--gold);transform:translate(-50%,-50%);transition:width .18s ease,background .18s ease}
+  .orbit-hud-line:hover:after,.orbit-hud-line.is-dragging:after{width:10px;background:#9d742d}
+  .orbit-hud-line:focus-visible{outline:1px solid var(--gold);outline-offset:5px}
+  .orbit-zoom{min-width:42px;color:var(--muted);font:inherit;letter-spacing:.08em;text-align:center;opacity:.42;transition:color .2s ease,opacity .2s ease,transform .2s ease}
+  .orbit-stage.is-zooming .orbit-zoom{color:var(--gold);opacity:1;transform:scale(1.08)}
+  .orbit-hint{position:absolute;right:25px;bottom:30px;z-index:32;color:var(--muted);font-size:9px;letter-spacing:.18em;writing-mode:vertical-rl;text-transform:uppercase}
+  @media(prefers-reduced-motion:reduce){.atlas-opening{display:none!important}.orbit-piece{will-change:auto}.piece-caption,.portal-arrow,.portal-arrow:before,.portal-arrow:after,.portal-label{transition:none}.library-reel.is-changing .library-name{animation:none}}
+  @media(max-width:760px){.exhibition-intro{top:23%;left:22px;width:210px}.eyebrow{font-size:8px}.title-lockup{gap:2px;margin-top:12px}.title-mark{width:30px;height:42px}h1{font-size:42px}.intro-copy{display:none}.portal-switch{top:72%;left:39%;gap:28px}.portal-link{width:82px;height:58px;font-size:13px}.portal-arrow{width:38px;height:38px;font-size:23px}.portal-label{left:calc(50% + 20px)}.portal-link--left .portal-label{right:calc(50% + 20px);left:auto}.chat-reveal{top:calc(100% + 4px);width:82px;height:42px;font-size:10px}.orbit-guide{left:26%;width:92%}.piece-caption{left:50%;top:calc(100% + 12px);width:140px;margin-left:-70px;font-size:8px}.piece-caption strong{font-size:14px}.orbit-hud{right:8px}.orbit-hint{display:none}}
+</style>
+</head>
+<body>
+  <div class="museum-shell">
+    <div class="atlas-opening" id="atlasOpening" aria-hidden="true">
+      <span class="opening-line opening-line--left"></span>
+      <span class="opening-line opening-line--right"></span>
+      <span class="opening-bird" id="openingBird">
+        <span class="opening-bird__body" id="openingBirdBody"></span>
+        <span class="opening-bird__wing" id="openingBirdWing"></span>
+      </span>
+    </div>
+    <main class="museum-main" id="top">
+      <section class="exhibition-intro">
+        <div>
+          <div class="eyebrow">The poetics of sight</div>
+          <div class="title-lockup">
+            <img class="title-mark" src="./assets/bird-wing-logo-clean.svg" alt="" aria-hidden="true">
+            <h1>诺文</h1>
+          </div>
+        </div>
+        <div class="intro-copy">
+          <p>“美即是真，真即是美。这就是你在世间所知的一切，也是你需要知道的一切。”</p>
+          <cite class="poem-credit">John Keats · Ode on a Grecian Urn</cite>
+          <small class="collection-line">
+            <span class="work-total"><span class="work-count" id="orbitWorkCount">57</span> works</span>
+            <span class="collection-divider" aria-hidden="true">/</span>
+            <span class="library-reel" id="orbitLibraryReel" aria-live="polite">
+              <span class="library-name" id="orbitLibraryPrev">纪念碑谷</span>
+              <span class="library-name is-current" id="orbitLibraryCurrent">巨构艺术</span>
+              <span class="library-name" id="orbitLibraryNext">暖色风格</span>
+            </span>
+          </small>
+        </div>
+      </section>
+      <nav class="portal-switch" aria-label="艺术馆功能入口">
+        <a class="portal-link portal-link--left" href="./art-approval-concept.html" data-route-mist="ltr" aria-label="进入审批">
+          <span class="portal-arrow" data-arrow="←" aria-hidden="true">←</span>
+          <span class="portal-label">审批</span>
+        </a>
+        <a class="portal-link portal-link--right" href="./art-library-concept.html" data-route-mist="rtl" aria-label="进入展览">
+          <span class="portal-arrow" data-arrow="→" aria-hidden="true">→</span>
+          <span class="portal-label">展览</span>
+        </a>
+        <button class="chat-reveal" type="button" aria-label="打开艺术库 Chat" title="打开艺术库 Chat">CHAT</button>
+      </nav>
+      <section class="orbit-stage" id="orbitStage" aria-label="艺术展览，滚动、拖拽或按住画圈浏览，按住 Control 并滚动可缩放全部图片" tabindex="0">
+        <svg class="orbit-guide" viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M 4 -4 Q 198 50 4 104"></path></svg>
+        <article class="orbit-piece" data-orbit-slot="0" aria-hidden="true">
+    <a class="piece-image" href="#" aria-label="" draggable="false">
+      <img alt="" draggable="false" decoding="async">
+    </a>
+    <div class="piece-caption">
+      <span class="piece-number"></span>
+      <div>
+        <strong></strong>
+        <span></span>
+        <em></em>
+      </div>
+    </div>
+  </article><article class="orbit-piece" data-orbit-slot="1" aria-hidden="true">
+    <a class="piece-image" href="#" aria-label="" draggable="false">
+      <img alt="" draggable="false" decoding="async">
+    </a>
+    <div class="piece-caption">
+      <span class="piece-number"></span>
+      <div>
+        <strong></strong>
+        <span></span>
+        <em></em>
+      </div>
+    </div>
+  </article><article class="orbit-piece" data-orbit-slot="2" aria-hidden="true">
+    <a class="piece-image" href="#" aria-label="" draggable="false">
+      <img alt="" draggable="false" decoding="async">
+    </a>
+    <div class="piece-caption">
+      <span class="piece-number"></span>
+      <div>
+        <strong></strong>
+        <span></span>
+        <em></em>
+      </div>
+    </div>
+  </article><article class="orbit-piece" data-orbit-slot="3" aria-hidden="true">
+    <a class="piece-image" href="#" aria-label="" draggable="false">
+      <img alt="" draggable="false" decoding="async">
+    </a>
+    <div class="piece-caption">
+      <span class="piece-number"></span>
+      <div>
+        <strong></strong>
+        <span></span>
+        <em></em>
+      </div>
+    </div>
+  </article><article class="orbit-piece" data-orbit-slot="4" aria-hidden="true">
+    <a class="piece-image" href="#" aria-label="" draggable="false">
+      <img alt="" draggable="false" decoding="async">
+    </a>
+    <div class="piece-caption">
+      <span class="piece-number"></span>
+      <div>
+        <strong></strong>
+        <span></span>
+        <em></em>
+      </div>
+    </div>
+  </article><article class="orbit-piece" data-orbit-slot="5" aria-hidden="true">
+    <a class="piece-image" href="#" aria-label="" draggable="false">
+      <img alt="" draggable="false" decoding="async">
+    </a>
+    <div class="piece-caption">
+      <span class="piece-number"></span>
+      <div>
+        <strong></strong>
+        <span></span>
+        <em></em>
+      </div>
+    </div>
+  </article><article class="orbit-piece" data-orbit-slot="6" aria-hidden="true">
+    <a class="piece-image" href="#" aria-label="" draggable="false">
+      <img alt="" draggable="false" decoding="async">
+    </a>
+    <div class="piece-caption">
+      <span class="piece-number"></span>
+      <div>
+        <strong></strong>
+        <span></span>
+        <em></em>
+      </div>
+    </div>
+  </article>
+        <div class="orbit-hud">
+          <span id="orbitCurrent" aria-hidden="true">01</span>
+          <button class="orbit-hud-line" id="orbitHudLine" type="button" role="slider" aria-label="选择展览作品" aria-valuemin="1" aria-valuemax="57" aria-valuenow="1"></button>
+          <span aria-hidden="true">57</span>
+          <output class="orbit-zoom" id="orbitZoom" aria-label="图片缩放比例" aria-live="polite">100%</output>
+        </div>
+        <div class="orbit-hint">Scroll / Hold + circle</div>
+      </section>
+    </main>
+  </div>
+<script>
+if (false) {
+const orbitStage = document.getElementById("orbitStage");
+const orbitPieces = [...document.querySelectorAll("[data-orbit-piece]")];
+const orbitCurrent = document.getElementById("orbitCurrent");
+const orbitHudLine = document.getElementById("orbitHudLine");
+const orbitCount = orbitPieces.length;
+const orbitStep = orbitCount ? (Math.PI * 2) / orbitCount : 0;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let currentAngle = orbitCount ? -2 * orbitStep : 0;
+let targetAngle = currentAngle;
+let snapTimer = 0;
+let dragging = false;
+let pointerStartY = 0;
+let pointerStartAngle = 0;
+
+function normalizeAngle(angle) {
+  return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function nearestIndex(angle) {
+  if (!orbitCount) return 0;
+  return ((Math.round(-angle / orbitStep) % orbitCount) + orbitCount) % orbitCount;
+}
+
+function snapOrbit() {
+  if (!orbitCount) return;
+  targetAngle = Math.round(targetAngle / orbitStep) * orbitStep;
+}
+
+function scheduleSnap() {
+  window.clearTimeout(snapTimer);
+  snapTimer = window.setTimeout(snapOrbit, 150);
+}
+
+function renderOrbit() {
+  if (!orbitStage || !orbitCount) return;
+  const rect = orbitStage.getBoundingClientRect();
+  const mobile = rect.width < 760;
+  const focusX = rect.width * (mobile ? .62 : .58);
+  const focusY = rect.height * .5;
+  const radiusX = rect.width * (mobile ? .17 : .2);
+  const radiusY = rect.height * (mobile ? .76 : .72);
+  const visibleArc = Math.max(.42, orbitStep * 3.7);
+  let activeIndex = 0;
+  let activeDistance = Infinity;
+
+  orbitPieces.forEach((piece, index) => {
+    const delta = normalizeAngle(index * orbitStep + currentAngle);
+    const distance = Math.abs(delta);
+    const visible = distance <= visibleArc * 1.12;
+    if (!visible) {
+      piece.style.opacity = "0";
+      piece.style.pointerEvents = "none";
+      piece.setAttribute("aria-hidden", "true");
+      piece.classList.remove("is-active");
+      return;
+    }
+
+    const t = clamp(delta / visibleArc, -1, 1);
+    const phase = t * Math.PI * .5;
+    const arcSin = Math.sin(phase);
+    const arcCos = Math.max(0, Math.cos(phase));
+    const x = focusX + arcSin * radiusX + (1 - arcCos) * rect.width * .055;
+    const y = focusY + arcSin * radiusY;
+    const depth = Math.pow(arcCos, 1.35);
+    const scale = .36 + depth * .78;
+    const opacity = .2 + Math.pow(arcCos, .7) * .8;
+    const zIndex = 100 + Math.round(depth * 900);
+
+    piece.style.opacity = opacity.toFixed(3);
+    piece.style.zIndex = String(zIndex);
+    piece.style.pointerEvents = distance < visibleArc * .94 ? "auto" : "none";
+    piece.style.transform = "translate3d(" + x.toFixed(2) + "px," + y.toFixed(2) + "px,0) translate(-50%,-50%) scale(" + scale.toFixed(4) + ")";
+    piece.setAttribute("aria-hidden", distance < visibleArc * .94 ? "false" : "true");
+
+    const caption = piece.querySelector(".piece-caption");
+    if (caption) {
+      const captionScale = Math.min(1.58, 1 / Math.max(scale, .54));
+      caption.style.transform = "scale(" + captionScale.toFixed(4) + ")";
+      caption.style.transformOrigin = "center top";
+    }
+
+    if (distance < activeDistance) {
+      activeDistance = distance;
+      activeIndex = index;
+    }
+  });
+
+  orbitPieces.forEach((piece, index) => piece.classList.toggle("is-active", index === activeIndex));
+  orbitCurrent.textContent = String(activeIndex + 1).padStart(2, "0");
+  const progress = orbitCount > 1 ? (activeIndex / (orbitCount - 1)) * 100 : 0;
+  orbitHudLine.style.setProperty("--orbit-progress", progress.toFixed(2) + "%");
+}
+
+function animateOrbit() {
+  const distance = targetAngle - currentAngle;
+  currentAngle = reduceMotion ? targetAngle : currentAngle + distance * .115;
+  if (Math.abs(distance) < .00001) currentAngle = targetAngle;
+  renderOrbit();
+  window.requestAnimationFrame(animateOrbit);
+}
+
+function moveOrbit(delta) {
+  targetAngle += delta;
+  scheduleSnap();
+}
+
+orbitStage?.addEventListener("wheel", (event) => {
+  event.preventDefault();
+  const wheelDelta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+  moveOrbit(-wheelDelta * .00105);
+}, { passive: false });
+
+orbitStage?.addEventListener("pointerdown", (event) => {
+  dragging = true;
+  pointerStartY = event.clientY;
+  pointerStartAngle = targetAngle;
+  orbitStage.classList.add("is-dragging");
+  orbitStage.setPointerCapture(event.pointerId);
+});
+
+orbitStage?.addEventListener("pointermove", (event) => {
+  if (!dragging) return;
+  targetAngle = pointerStartAngle - (event.clientY - pointerStartY) * .0038;
+});
+
+function stopDragging(event) {
+  if (!dragging) return;
+  dragging = false;
+  orbitStage.classList.remove("is-dragging");
+  if (event?.pointerId !== undefined && orbitStage.hasPointerCapture(event.pointerId)) {
+    orbitStage.releasePointerCapture(event.pointerId);
+  }
+  scheduleSnap();
+}
+
+orbitStage?.addEventListener("pointerup", stopDragging);
+orbitStage?.addEventListener("pointercancel", stopDragging);
+
+orbitStage?.addEventListener("keydown", (event) => {
+  if (["ArrowDown", "ArrowRight", "PageDown"].includes(event.key)) {
+    event.preventDefault();
+    targetAngle -= orbitStep;
+    scheduleSnap();
+  }
+  if (["ArrowUp", "ArrowLeft", "PageUp"].includes(event.key)) {
+    event.preventDefault();
+    targetAngle += orbitStep;
+    scheduleSnap();
+  }
+});
+
+orbitPieces.forEach((piece, index) => {
+  piece.addEventListener("dragstart", (event) => event.preventDefault());
+  piece.querySelector("a")?.addEventListener("click", (event) => {
+    const delta = normalizeAngle(index * orbitStep + targetAngle);
+    if (Math.abs(delta) > orbitStep * .45) {
+      event.preventDefault();
+      targetAngle -= delta;
+      scheduleSnap();
+    }
+  });
+});
+
+window.addEventListener("resize", renderOrbit);
+window.__artOrbit = {
+  getState: () => ({ currentAngle, targetAngle, activeIndex: nearestIndex(currentAngle), count: orbitCount }),
+  rotateTo: (index) => {
+    if (!orbitCount) return;
+    const normalizedIndex = ((Number(index) % orbitCount) + orbitCount) % orbitCount;
+    targetAngle = -normalizedIndex * orbitStep;
+    scheduleSnap();
+  },
+};
+
+renderOrbit();
+window.requestAnimationFrame(animateOrbit);
+}
+</script>
+<script>window.ART_ATLAS_LIBRARY_NAMES = ["巨构艺术","暖色风格","纪念碑谷"]; window.ART_ATLAS_ORBIT_ITEMS = [{"index":0,"title":"冰壁巨柱","image":"./assets/art-atlas-thumbnails/254ad53ada322d6c.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=0&title=%E5%86%B0%E5%A3%81%E5%B7%A8%E6%9F%B1","meta":"2026-06-01 / 1hz脉冲 / WeChat Official Account","tags":"无限住宅墙 · 混凝土立面 · 强中轴","size":"wide"},{"index":1,"title":"雾塔阵列","image":"./assets/art-atlas-thumbnails/044c4933ceb511d9.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=1&title=%E9%9B%BE%E5%A1%94%E9%98%B5%E5%88%97","meta":"2026-06-01 / 1hz脉冲 / WeChat Official Account","tags":"无限住宅墙 · 混凝土立面 · 强中轴","size":"medium"},{"index":2,"title":"高墙天际","image":"./assets/art-atlas-thumbnails/fc4ac7ecdaf5c0c9.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=2&title=%E9%AB%98%E5%A2%99%E5%A4%A9%E9%99%85","meta":"2026-06-01 / 1hz脉冲 / WeChat Official Account","tags":"无限住宅墙 · 混凝土立面 · 强中轴","size":"portrait"},{"index":3,"title":"夜幕降临-09","image":"./assets/art-atlas-thumbnails/9a044cbfa065a212.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=3&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-09","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":4,"title":"夜幕降临-08","image":"./assets/art-atlas-thumbnails/61703872a168f492.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=4&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-08","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":5,"title":"夜幕降临-07","image":"./assets/art-atlas-thumbnails/64bae88dca863002.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=5&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-07","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"small"},{"index":6,"title":"夜幕降临-06","image":"./assets/art-atlas-thumbnails/133d89bf71888c8f.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=6&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-06","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":7,"title":"夜幕降临-05","image":"./assets/art-atlas-thumbnails/ac083812fd09915a.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=7&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-05","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":8,"title":"夜幕降临-04","image":"./assets/art-atlas-thumbnails/9c22e33a9ec863fd.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=8&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-04","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"portrait"},{"index":9,"title":"夜幕降临-03","image":"./assets/art-atlas-thumbnails/71f844bf33f4acee.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=9&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-03","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":10,"title":"夜幕降临-02","image":"./assets/art-atlas-thumbnails/f7a94c4f5356351e.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=10&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-02","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":11,"title":"夜幕降临-01","image":"./assets/art-atlas-thumbnails/d21f7f691e633a15.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=11&title=%E5%A4%9C%E5%B9%95%E9%99%8D%E4%B8%B4-01","meta":"2026-05-31 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"small"},{"index":12,"title":"最后的希望-06","image":"./assets/art-atlas-thumbnails/83a2abb7a795906f.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=12&title=%E6%9C%80%E5%90%8E%E7%9A%84%E5%B8%8C%E6%9C%9B-06","meta":"2026-05-22 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":13,"title":"最后的希望-05","image":"./assets/art-atlas-thumbnails/83f6164008f1e991.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=13&title=%E6%9C%80%E5%90%8E%E7%9A%84%E5%B8%8C%E6%9C%9B-05","meta":"2026-05-22 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":14,"title":"最后的希望-04","image":"./assets/art-atlas-thumbnails/09f80202cf2d2059.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=14&title=%E6%9C%80%E5%90%8E%E7%9A%84%E5%B8%8C%E6%9C%9B-04","meta":"2026-05-22 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"portrait"},{"index":15,"title":"最后的希望-03","image":"./assets/art-atlas-thumbnails/a5fef40b522c9c93.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=15&title=%E6%9C%80%E5%90%8E%E7%9A%84%E5%B8%8C%E6%9C%9B-03","meta":"2026-05-22 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":16,"title":"最后的希望-02","image":"./assets/art-atlas-thumbnails/a7aa0c7d248e3ce9.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=16&title=%E6%9C%80%E5%90%8E%E7%9A%84%E5%B8%8C%E6%9C%9B-02","meta":"2026-05-22 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":17,"title":"最后的希望-01","image":"./assets/art-atlas-thumbnails/59aec80d01af69d1.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=17&title=%E6%9C%80%E5%90%8E%E7%9A%84%E5%B8%8C%E6%9C%9B-01","meta":"2026-05-22 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"small"},{"index":18,"title":"未完成苍穹-06","image":"./assets/art-atlas-thumbnails/a47aadc377c06e24.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=18&title=%E6%9C%AA%E5%AE%8C%E6%88%90%E8%8B%8D%E7%A9%B9-06","meta":"2026-05-21 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":19,"title":"未完成苍穹-05","image":"./assets/art-atlas-thumbnails/cc6256178ca4475f.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=19&title=%E6%9C%AA%E5%AE%8C%E6%88%90%E8%8B%8D%E7%A9%B9-05","meta":"2026-05-21 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":20,"title":"未完成苍穹-04","image":"./assets/art-atlas-thumbnails/c841e5e4550cdba5.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=20&title=%E6%9C%AA%E5%AE%8C%E6%88%90%E8%8B%8D%E7%A9%B9-04","meta":"2026-05-21 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"portrait"},{"index":21,"title":"未完成苍穹-03","image":"./assets/art-atlas-thumbnails/193b6f31aafa5e26.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=21&title=%E6%9C%AA%E5%AE%8C%E6%88%90%E8%8B%8D%E7%A9%B9-03","meta":"2026-05-21 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":22,"title":"未完成苍穹-02","image":"./assets/art-atlas-thumbnails/9ea0c331c5bafd1f.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=22&title=%E6%9C%AA%E5%AE%8C%E6%88%90%E8%8B%8D%E7%A9%B9-02","meta":"2026-05-21 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":23,"title":"未完成苍穹-01","image":"./assets/art-atlas-thumbnails/7295083b076c3ca7.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=23&title=%E6%9C%AA%E5%AE%8C%E6%88%90%E8%8B%8D%E7%A9%B9-01","meta":"2026-05-21 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"small"},{"index":24,"title":"永恒缺席-06","image":"./assets/art-atlas-thumbnails/54e288f1a12cf3a3.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=24&title=%E6%B0%B8%E6%81%92%E7%BC%BA%E5%B8%AD-06","meta":"2026-05-17 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":25,"title":"永恒缺席-05","image":"./assets/art-atlas-thumbnails/8fd91c3f258faabc.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=25&title=%E6%B0%B8%E6%81%92%E7%BC%BA%E5%B8%AD-05","meta":"2026-05-17 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":26,"title":"永恒缺席-04","image":"./assets/art-atlas-thumbnails/b887587910e96099.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=26&title=%E6%B0%B8%E6%81%92%E7%BC%BA%E5%B8%AD-04","meta":"2026-05-17 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"portrait"},{"index":27,"title":"永恒缺席-03","image":"./assets/art-atlas-thumbnails/36284b96e3d8ed90.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=27&title=%E6%B0%B8%E6%81%92%E7%BC%BA%E5%B8%AD-03","meta":"2026-05-17 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":28,"title":"永恒缺席-02","image":"./assets/art-atlas-thumbnails/ba9273073241a29f.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=28&title=%E6%B0%B8%E6%81%92%E7%BC%BA%E5%B8%AD-02","meta":"2026-05-17 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":29,"title":"永恒缺席-01","image":"./assets/art-atlas-thumbnails/1e3bd39ecbf6bf57.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=29&title=%E6%B0%B8%E6%81%92%E7%BC%BA%E5%B8%AD-01","meta":"2026-05-17 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"small"},{"index":30,"title":"坍塌度量-06","image":"./assets/art-atlas-thumbnails/7b0e56840e0d4685.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=30&title=%E5%9D%8D%E5%A1%8C%E5%BA%A6%E9%87%8F-06","meta":"2026-05-15 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":31,"title":"坍塌度量-05","image":"./assets/art-atlas-thumbnails/8f7a1f7ec8b9ce03.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=31&title=%E5%9D%8D%E5%A1%8C%E5%BA%A6%E9%87%8F-05","meta":"2026-05-15 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":32,"title":"坍塌度量-04","image":"./assets/art-atlas-thumbnails/034a5f21f5198040.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=32&title=%E5%9D%8D%E5%A1%8C%E5%BA%A6%E9%87%8F-04","meta":"2026-05-15 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"portrait"},{"index":33,"title":"坍塌度量-03","image":"./assets/art-atlas-thumbnails/cfe3ac169499f35e.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=33&title=%E5%9D%8D%E5%A1%8C%E5%BA%A6%E9%87%8F-03","meta":"2026-05-15 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"medium"},{"index":34,"title":"坍塌度量-02","image":"./assets/art-atlas-thumbnails/1f62883f02b655f6.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=34&title=%E5%9D%8D%E5%A1%8C%E5%BA%A6%E9%87%8F-02","meta":"2026-05-15 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"wide"},{"index":35,"title":"坍塌度量-01","image":"./assets/art-atlas-thumbnails/cd21937c6113f8bd.webp","library":"巨构艺术","href":"./artwork-detail-concept.html?from=library&library=%E5%B7%A8%E6%9E%84%E8%89%BA%E6%9C%AF&orbitIndex=35&title=%E5%9D%8D%E5%A1%8C%E5%BA%A6%E9%87%8F-01","meta":"2026-05-15 / 1hz脉冲 / 巨构 / WeChat Official Account / appmsgtopic","tags":"混凝土体量 · 废墟秩序 · 超大尺度","size":"small"},{"index":36,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/fa40ff879929fc04.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=36&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"wide"},{"index":37,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/8133e42967cd6afb.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=37&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"medium"},{"index":38,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/0df1d61fd6947dfa.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=38&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"portrait"},{"index":39,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/692db76b5c0b7fcf.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=39&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"medium"},{"index":40,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/c14f074fd5f7d656.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=40&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"wide"},{"index":41,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/0d7ed9c686180a20.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=41&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"small"},{"index":42,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/c7b8835ec94b0095.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=42&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"wide"},{"index":43,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/d623c7c4ee14b356.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=43&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"medium"},{"index":44,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/036115644a38a825.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=44&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"portrait"},{"index":45,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/9dac06e0303c5190.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=45&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"medium"},{"index":46,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/34d6fcf9776667b8.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=46&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"wide"},{"index":47,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/3b8f7a359b73017d.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=47&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"small"},{"index":48,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/78714e3b685cea8d.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=48&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"wide"},{"index":49,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/0515eb146f097529.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=49&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"medium"},{"index":50,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/0620dca3ab0148db.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=50&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"portrait"},{"index":51,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/725dc37686256b84.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=51&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"medium"},{"index":52,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/b4605910c2cb4228.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=52&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"wide"},{"index":53,"title":"暖野孤境","image":"./assets/art-atlas-thumbnails/1ea6ccd429a67154.webp","library":"暖色风格","href":"./artwork-detail-concept.html?from=library&library=%E6%9A%96%E8%89%B2%E9%A3%8E%E6%A0%BC&orbitIndex=53&title=%E6%9A%96%E9%87%8E%E5%AD%A4%E5%A2%83","meta":"2023-06-06 / Andhika Ramadhian / picame","tags":"纯色背景 · 主体悬置 · 大留白","size":"small"},{"index":54,"title":"青山孤柱","image":"./assets/art-atlas-thumbnails/3e8e44d304b7f5c8.webp","library":"纪念碑谷","href":"./artwork-detail-concept.html?from=library&library=%E7%BA%AA%E5%BF%B5%E7%A2%91%E8%B0%B7&orbitIndex=54&title=%E9%9D%92%E5%B1%B1%E5%AD%A4%E6%9F%B1","meta":"2014-04-03 / ustwo games / ustwo","tags":"等距建筑 · 不可能空间 · 中心舞台","size":"wide"},{"index":55,"title":"空中白阶","image":"./assets/art-atlas-thumbnails/0374dbfa64b0d29a.webp","library":"纪念碑谷","href":"./artwork-detail-concept.html?from=library&library=%E7%BA%AA%E5%BF%B5%E7%A2%91%E8%B0%B7&orbitIndex=55&title=%E7%A9%BA%E4%B8%AD%E7%99%BD%E9%98%B6","meta":"2014-04-03 / ustwo games / ustwo","tags":"等距建筑 · 不可能空间 · 中心舞台","size":"medium"},{"index":56,"title":"粉塔回廊","image":"./assets/art-atlas-thumbnails/e6bb3dd80197e63f.webp","library":"纪念碑谷","href":"./artwork-detail-concept.html?from=library&library=%E7%BA%AA%E5%BF%B5%E7%A2%91%E8%B0%B7&orbitIndex=56&title=%E7%B2%89%E5%A1%94%E5%9B%9E%E5%BB%8A","meta":"2014-04-03 / ustwo games / ustwo","tags":"等距建筑 · 不可能空间 · 中心舞台","size":"portrait"}];</script>
+<script src="./art-atlas-orbit.js?v=20260805-orbit-intro-8"></script>
+<script src="./art-atlas-intro.js?v=20260805-opening-14"></script>
+<script src="./art-atlas-shell.js?v=20260806-chat-1"></script>
+</body>
+</html>

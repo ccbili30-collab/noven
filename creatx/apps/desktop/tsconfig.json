@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "composite": true, "noEmit": true },
+  "include": ["src/**/*.ts", "renderer/src/**/*.ts", "renderer/src/**/*.tsx"],
+  "references": [
+    { "path": "../../packages/contracts" },
+    { "path": "../../packages/project-files" },
+    { "path": "../../packages/cline-adapter" }
+  ]
+}

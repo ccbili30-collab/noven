@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://creatx.local/schemas/workbench-v3.schema.json",
+  "title": "CreatX Workbench V3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "folder", "visibility"],
+  "properties": {
+    "schemaVersion": { "const": 3 },
+    "id": { "type": "string", "pattern": "^wb_[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "folder": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "home": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entry", "mode"],
+      "properties": {
+        "entry": { "type": "string", "minLength": 1 },
+        "mode": { "const": "interactive" }
+      }
+    },
+    "visibility": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["include", "exclude", "autoIncludeNewFiles"],
+          "properties": {
+            "include": { "$ref": "#/$defs/patterns" },
+            "exclude": { "$ref": "#/$defs/patterns" },
+            "autoIncludeNewFiles": { "const": true }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["include", "exclude", "autoIncludeNewFiles", "files"],
+          "properties": {
+            "include": { "$ref": "#/$defs/patterns" },
+            "exclude": { "$ref": "#/$defs/patterns" },
+            "autoIncludeNewFiles": { "const": false },
+            "files": {
+              "type": "array",
+              "maxItems": 10000,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 1, "maxLength": 1024 }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "patterns": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 240 }
+    }
+  }
+}

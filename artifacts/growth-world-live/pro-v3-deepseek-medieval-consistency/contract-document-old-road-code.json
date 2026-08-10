@@ -1,0 +1,60 @@
+{
+  "hash": "4726a61c3616e7dc82c7d5bbedfb70bc461d59efb3e5bf928737ad9b054f9ebf",
+  "contract": {
+    "schemaVersion": 1,
+    "genreLibraryVersion": 1,
+    "topicProfileKey": "classic-medieval-fantasy",
+    "topicProfileVersion": 1,
+    "genreKey": "document-history",
+    "genreLabel": "法典与文献史",
+    "object": {
+      "id": "live-history-1",
+      "key": "document-old-road-code",
+      "title": "旧路法典",
+      "layer": "历史、时代与重大事件",
+      "locator": "历史、时代与重大事件｜规范王道通行、桥税、驿马和旅人保护并经历多次争议修订的法典"
+    },
+    "appliesTo": "法典、盟约、诏令及其历史作用",
+    "narrator": "文献史与制度史作者",
+    "reader": "希望理解文献如何进入历史的读者",
+    "structure": [
+      "交代制定背景和制定者",
+      "呈现争议、施行与修订",
+      "说明长期影响和不同解释"
+    ],
+    "language": [
+      "围绕人物与施行事件",
+      "适量引用文献语言",
+      "解释变化而非复述条文"
+    ],
+    "researchDimensions": [
+      "为何制定",
+      "谁支持反对",
+      "如何施行或失败",
+      "后世怎样修改和解释"
+    ],
+    "forbidden": [
+      "纯法条摘要",
+      "证据审计结语",
+      "把文本写成自动执行的规则"
+    ],
+    "worldStyle": {
+      "schemaVersion": 1,
+      "narrativeDistance": "historical",
+      "register": "literary",
+      "knowledgePosition": "retrospective",
+      "languageConventions": [
+        "使用世界内部纪年、地名和制度称呼",
+        "历史判断必须归属于后世记录或具体群体"
+      ],
+      "forbiddenPatterns": [
+        "现代项目管理语言",
+        "研究审计腔",
+        "把普通灾难传奇化"
+      ],
+      "sourceIds": [
+        "medieval-live-baseline"
+      ]
+    }
+  }
+}

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>角色圣经</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="character-data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="character-workbench" aria-label="角色圣经工作台">
+      <section class="character-hero" aria-labelledby="character-name">
+        <a class="gallery-return" href="../../index.html">返回群像</a>
+        <figure class="hero-portrait">
+          <img id="character-portrait" alt="" />
+        </figure>
+        <div class="hero-vignette" aria-hidden="true"></div>
+        <p id="hero-index" class="hero-index" aria-hidden="true"><span>—</span> / WORLD CAST</p>
+        <header class="hero-identity">
+          <p id="character-kicker" class="archive-kicker">CHARACTER / WORLD CAST</p>
+          <h1 id="character-name">—</h1>
+          <p id="character-subtitle" class="character-subtitle">—</p>
+          <blockquote id="character-quote" class="character-quote">—</blockquote>
+        </header>
+        <a class="scroll-cue" href="#character-dossier">
+          <span>阅读角色圣经</span>
+          <i aria-hidden="true"></i>
+        </a>
+      </section>
+
+      <article id="character-dossier" class="character-dossier">
+        <header class="dossier-intro">
+          <p class="section-number">I / DOSSIER</p>
+          <div>
+            <p id="headline-kicker" class="section-kicker">—</p>
+            <h2 id="headline-title">—</h2>
+          </div>
+          <p id="headline-intro" class="intro-copy">—</p>
+        </header>
+
+        <section class="dossier-section profile-section">
+          <header class="section-heading">
+            <span>01</span>
+            <h2>主要角色设定</h2>
+            <p>PROFILE</p>
+          </header>
+          <dl id="profile-list" class="record-list profile-list"></dl>
+        </section>
+
+        <section class="dossier-section affiliation-section">
+          <header class="section-heading">
+            <span>02</span>
+            <h2>地域与势力</h2>
+            <p>AFFILIATION</p>
+          </header>
+          <dl id="affiliation-list" class="affiliation-list"></dl>
+        </section>
+
+        <section class="dossier-section relationship-section">
+          <header class="section-heading">
+            <span>03</span>
+            <h2>人物关系</h2>
+            <p>RELATIONSHIPS</p>
+          </header>
+          <div class="relationship-axis" aria-hidden="true"><i></i></div>
+          <dl id="relationship-list" class="record-list relationship-list"></dl>
+        </section>
+      </article>
+
+      <section class="character-bible" aria-labelledby="bible-title">
+        <header class="bible-heading">
+          <p class="section-number">II / CHARACTER BIBLE</p>
+          <h2 id="bible-title">角色圣经</h2>
+          <p>她如何判断、渴望、说话，以及什么不能被写错。</p>
+        </header>
+        <div id="bible-grid" class="bible-grid"></div>
+      </section>
+
+      <footer class="character-footer">
+        <p id="footer-world">WORLD</p>
+        <span aria-hidden="true"></span>
+        <p id="footer-character">CHARACTER</p>
+      </footer>
+    </main>
+  </body>
+</html>

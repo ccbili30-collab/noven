@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>全世界因果链 · 实验版</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input id="search" type="search" placeholder="搜索这个世界" autocomplete="off" />
+        <kbd>Esc</kbd>
+      </label>
+    </header>
+
+    <section class="neural-stage" aria-label="可平移缩放的全世界因果链">
+      <canvas id="neural-canvas" aria-label="拖动画布，滚轮缩放，输入关键词检索"></canvas>
+      <div class="quiet-status" aria-live="polite">
+        <i></i>
+        <span id="activity-label">全世界因果正在舒展</span>
+        <span id="search-summary">因果节点正在显现</span>
+        <span class="metrics"><b id="work-total">0</b> 作品 · <b id="fact-total">0</b> 事实 · <b id="relation-total">0</b> 因果</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="graph-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

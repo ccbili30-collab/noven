@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 2,
+  "categories": ["OC创作", "艺术欣赏", "世界观", "图画创作"],
+  "items": [
+    {
+      "id": "heritage-ted-story-clues",
+      "platform": "TED",
+      "category": "OC创作",
+      "title": "The clues to a great story",
+      "author": "Andrew Stanton",
+      "sourceUrl": "https://www.ted.com/talks/andrew_stanton_the_clues_to_a_great_story",
+      "coverUrl": "https://pe.tedcdn.com/images/ted/97f77e029c9830292cf611f5aef3df9d6b4b5665_2400x1800.jpg",
+      "analysisPreview": "TED 页面提供完整英文字幕。Andrew Stanton 从观众投入、角色驱动力、信息隐藏和结局反推开端等角度说明故事如何持续制造期待，可转化为角色与叙事检查方法。",
+      "skillDirection": "以角色驱动力和观众投入检查故事",
+      "verifiedAt": "2026-08-10",
+      "learningEvidence": {
+        "kind": "ted-transcript",
+        "transcriptUrl": "https://www.ted.com/talks/andrew_stanton_the_clues_to_a_great_story?view=transcript",
+        "language": "en",
+        "cueCount": 415
+      }
+    },
+    {
+      "id": "heritage-bili-character-design",
+      "platform": "哔哩哔哩",
+      "category": "OC创作",
+      "title": "15分钟保姆级角色设计入门",
+      "author": "翟家班",
+      "sourceUrl": "https://www.bilibili.com/video/BV16vAweBE8z/",
+      "coverUrl": "https://i1.hdslb.com/bfs/archive/a834e76cee24966e36642748b4b71e6069b55f03.jpg",
+      "analysisPreview": "作者说明该视频由四节共八小时课程浓缩而来，并明确提示短视频会省略细节，适合作为角色设计总览而非完整课程替代。",
+      "skillDirection": "从角色目标到视觉辨识度的入门路线",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-bili-hair-design",
+      "platform": "哔哩哔哩",
+      "category": "OC创作",
+      "title": "六分钟教你角色OC发型设计思路及刘海画法",
+      "author": "乌咔果",
+      "sourceUrl": "https://www.bilibili.com/video/BV1mT411r7gB/",
+      "coverUrl": "https://i1.hdslb.com/bfs/archive/878c945e77d68b4c83d61438d8ffe4fc427f0ca8.jpg",
+      "analysisPreview": "来源页确认主题聚焦角色发型设计与刘海画法，内容范围窄而明确，适合补充角色轮廓和头部识别特征。",
+      "skillDirection": "OC发型轮廓与刘海结构设计",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-proko-monster-lab",
+      "platform": "Proko",
+      "category": "OC创作",
+      "title": "Character Design Monster Lab",
+      "author": "Proko",
+      "sourceUrl": "https://www.proko.com/course/character-design-monster-lab",
+      "analysisPreview": "课程页以怪物角色为练习对象组织角色设计训练，适合观察形状、性格和叙事功能如何共同形成可识别角色。",
+      "skillDirection": "以形状语言发展非人角色",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-clipstudio-character-design",
+      "platform": "CLIP STUDIO TIPS",
+      "category": "OC创作",
+      "title": "Character design 教程检索",
+      "author": "CLIP STUDIO TIPS",
+      "sourceUrl": "https://tips.clip-studio.com/en-us/search?word=character%20design",
+      "analysisPreview": "CLIP STUDIO TIPS 的角色设计检索页聚合由官方与创作者发布的分步教程，适合按当前角色问题选择窄主题参考，而不是套用单一模板。",
+      "skillDirection": "按角色问题检索分步教程",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-ted-painting-story",
+      "platform": "TED",
+      "category": "艺术欣赏",
+      "title": "Finding the story inside the painting",
+      "author": "Tracy Chevalier",
+      "sourceUrl": "https://www.ted.com/talks/tracy_chevalier_finding_the_story_inside_the_painting",
+      "coverUrl": "https://pe.tedcdn.com/images/ted/6bb150131584b25d26088761c4b4942a51fb979e_1600x1200.jpg",
+      "analysisPreview": "TED 页面提供完整英文字幕。Tracy Chevalier 以人物视线、姿态、画外关系和历史空白为证据，从绘画中提出问题并发展叙事，适合转化为有根据的作品观看方法。",
+      "skillDirection": "从画面证据发展叙事性赏析",
+      "verifiedAt": "2026-08-10",
+      "learningEvidence": {
+        "kind": "ted-transcript",
+        "transcriptUrl": "https://www.ted.com/talks/tracy_chevalier_finding_the_story_inside_the_painting?view=transcript",
+        "language": "en",
+        "cueCount": 281
+      }
+    },
+    {
+      "id": "heritage-bili-crazy-stone",
+      "platform": "哔哩哔哩",
+      "category": "艺术欣赏",
+      "title": "《疯狂的石头》深度拉片分析",
+      "author": "研毕果艺术考研",
+      "sourceUrl": "https://www.bilibili.com/video/BV1s6421c7RW/",
+      "coverUrl": "https://i0.hdslb.com/bfs/archive/e58657dcc49d46442667357fd1b46db71ccb30a9.jpg",
+      "analysisPreview": "来源说明明确覆盖历年真题、导演、美学风格、人物、视听语言和主题，可作为结构化电影拉片维度的实例。",
+      "skillDirection": "电影视听语言与主题的分层分析",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-tate-art-terms",
+      "platform": "Tate",
+      "category": "艺术欣赏",
+      "title": "Art Terms",
+      "author": "Tate",
+      "sourceUrl": "https://www.tate.org.uk/art/art-terms",
+      "analysisPreview": "Tate 的艺术术语索引把流派、媒介、方法和批评概念连接到馆藏说明，适合在赏析前校准概念而非只凭直觉贴标签。",
+      "skillDirection": "艺术术语检索与概念校准",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-national-gallery-depth",
+      "platform": "英国国家美术馆",
+      "category": "艺术欣赏",
+      "title": "Paintings in depth",
+      "author": "The National Gallery, London",
+      "sourceUrl": "https://www.nationalgallery.org.uk/paintings/learn-about-art/paintings-in-depth",
+      "analysisPreview": "英国国家美术馆把单件绘画的细节、材料、历史和解释整理为深度入口，适合作为从画面证据进入背景研究的范例。",
+      "skillDirection": "从画面细节到历史语境的赏析",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-getty-formal-analysis",
+      "platform": "Getty",
+      "category": "艺术欣赏",
+      "title": "Understanding Formal Analysis",
+      "author": "J. Paul Getty Museum",
+      "sourceUrl": "https://www.getty.edu/education/teachers/building_lessons/formal_analysis.html",
+      "analysisPreview": "Getty 教育页用线条、形状、色彩、空间、质感等视觉要素说明形式分析，适合建立有证据的第一轮观看清单。",
+      "skillDirection": "基于视觉要素的形式分析",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-ted-fictional-world",
+      "platform": "TED",
+      "category": "世界观",
+      "title": "How to build a fictional world",
+      "author": "Kate Messner",
+      "sourceUrl": "https://www.ted.com/talks/kate_messner_how_to_build_a_fictional_world",
+      "coverUrl": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/45725aa5-4e09-48aa-a47f-303e66f186af/25_fictionalworld.jpg",
+      "analysisPreview": "TED 页面提供完整英文字幕。Kate Messner 从时空、历史、物理与社会规则、权力信仰、日常生活、技术和角色冲突逐层提出世界构建问题，方法范围清晰可执行。",
+      "skillDirection": "以一致规则和日常生活构建世界",
+      "verifiedAt": "2026-08-10",
+      "learningEvidence": {
+        "kind": "ted-transcript",
+        "transcriptUrl": "https://www.ted.com/talks/kate_messner_how_to_build_a_fictional_world?view=transcript",
+        "language": "en",
+        "cueCount": 105
+      }
+    },
+    {
+      "id": "heritage-bili-worldbuilding-basic",
+      "platform": "哔哩哔哩",
+      "category": "世界观",
+      "title": "所有作者都应该知道如何创建基础世界观",
+      "author": "编辑托马",
+      "sourceUrl": "https://www.bilibili.com/video/BV1Xwup6kEXG/",
+      "coverUrl": "https://i1.hdslb.com/bfs/archive/00d0dd4dc94b1209ac302303f9d5228323b391e9.jpg",
+      "analysisPreview": "来源页将内容定位为面向作者的基础世界观创建指引，适合作为首次建库时的最小设定清单入口。",
+      "skillDirection": "基础世界观要素清单",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-bili-fantasy-world",
+      "platform": "哔哩哔哩",
+      "category": "世界观",
+      "title": "90分钟全面入门奇幻世界观设定",
+      "author": "星白Knut",
+      "sourceUrl": "https://www.bilibili.com/video/BV1N7xQeCERp/",
+      "coverUrl": "https://i0.hdslb.com/bfs/archive/219748b7cab0d333cb7a37bfb10166ccbad328a5.jpg",
+      "analysisPreview": "来源页明确是九十分钟的奇幻世界观入门内容，适合作为较完整的学习路线，而不是被压缩成单一万能模板。",
+      "skillDirection": "奇幻世界观渐进式学习路线",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-bili-fantasy-construction",
+      "platform": "哔哩哔哩",
+      "category": "世界观",
+      "title": "小说写作：如何构建幻想世界",
+      "author": "黄瓜片儿",
+      "sourceUrl": "https://www.bilibili.com/video/BV1ug3G65Ew9/",
+      "coverUrl": "https://i1.hdslb.com/bfs/archive/3ab994cae5b7aa29a68c6270fb5d06e1dfcaaf5b.jpg",
+      "analysisPreview": "作者说明这是带中文字幕的幻想写作内容转载，并保留原 YouTube 来源，适合交叉查证幻想世界构建方法。",
+      "skillDirection": "幻想世界设定的来源交叉核验",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-reedsy-worldbuilding",
+      "platform": "Reedsy",
+      "category": "世界观",
+      "title": "Worldbuilding: Create Brave New Worlds",
+      "author": "Reedsy",
+      "sourceUrl": "https://reedsy.com/blog/worldbuilding-guide/",
+      "analysisPreview": "Reedsy 的指南把世界构建组织为可执行步骤并提供模板入口，适合把背景设定约束到故事真正需要的部分。",
+      "skillDirection": "世界设定模板与故事相关性检查",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-ted-design-discovery",
+      "platform": "TED",
+      "category": "图画创作",
+      "title": "Design and discovery",
+      "author": "David Carson",
+      "sourceUrl": "https://www.ted.com/talks/david_carson_design_and_discovery",
+      "coverUrl": "https://pe.tedcdn.com/images/ted/66438_800x600.jpg",
+      "analysisPreview": "TED 页面提供完整英文字幕。David Carson 通过排版、图像、语境误读和个人判断的案例讨论设计发现过程，适合提炼为先理解内容与受众、再选择视觉语言的工作方法。",
+      "skillDirection": "从内容语境和个人判断发展视觉设计",
+      "verifiedAt": "2026-08-10",
+      "learningEvidence": {
+        "kind": "ted-transcript",
+        "transcriptUrl": "https://www.ted.com/talks/david_carson_design_and_discovery?view=transcript",
+        "language": "en",
+        "cueCount": 452
+      }
+    },
+    {
+      "id": "heritage-bili-card-composition",
+      "platform": "哔哩哔哩",
+      "category": "图画创作",
+      "title": "卡牌构图练习过程步骤解说",
+      "author": "月安尘",
+      "sourceUrl": "https://www.bilibili.com/video/BV1oa4y1h7cm/",
+      "coverUrl": "https://i2.hdslb.com/bfs/archive/c7891bedee6a6902f55d2989fbfb499dcf7abaed.jpg",
+      "analysisPreview": "作者说明视频记录第四张卡牌的构成练习，并在结尾分析如何进步，适合观察练习、复盘和下一轮修正的完整循环。",
+      "skillDirection": "卡牌插画构图练习与复盘",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-drawabox-lesson-one",
+      "platform": "Drawabox",
+      "category": "图画创作",
+      "title": "Lesson 1: Lines, Ellipses and Boxes",
+      "author": "Drawabox",
+      "sourceUrl": "https://drawabox.com/lesson/1",
+      "analysisPreview": "Drawabox 第一课围绕线条、椭圆和盒体安排基础练习，强调按顺序训练空间控制，适合作为结构绘画的可重复日课。",
+      "skillDirection": "线条控制与三维盒体练习",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-ctrlpaint-library",
+      "platform": "Ctrl+Paint",
+      "category": "图画创作",
+      "title": "Free Video Library",
+      "author": "Ctrl+Paint",
+      "sourceUrl": "https://www.ctrlpaint.com/library",
+      "analysisPreview": "Ctrl+Paint 免费库把数字绘画短课按基础、观察、绘制和上色组织，适合按薄弱环节选择窄主题练习。",
+      "skillDirection": "数字绘画短课与针对性练习",
+      "verifiedAt": "2026-08-09"
+    },
+    {
+      "id": "heritage-proko-figure-drawing",
+      "platform": "Proko",
+      "category": "图画创作",
+      "title": "Figure Drawing Fundamentals",
+      "author": "Proko",
+      "sourceUrl": "https://www.proko.com/course/figure-drawing-fundamentals",
+      "analysisPreview": "Proko 课程页将人体速写基础组织为姿态、结构和训练单元，适合把人体学习从临摹结果转为可检查的过程。",
+      "skillDirection": "人体姿态与结构化速写训练",
+      "verifiedAt": "2026-08-09"
+    }
+  ]
+}

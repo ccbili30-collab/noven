@@ -1,0 +1,137 @@
+@view-transition {
+  navigation: auto;
+}
+
+@property --route-mist-front {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 118%;
+}
+
+html.route-arrival-pending body {
+  overflow: hidden;
+}
+
+html.route-arrival-pending body > :not(script) {
+  opacity: 0 !important;
+}
+
+html.is-route-departing,
+body.is-route-departing,
+html.is-route-arriving {
+  cursor: progress;
+  overflow: hidden;
+}
+
+body.is-route-departing,
+html.is-route-arriving body {
+  pointer-events: none;
+}
+
+html.is-route-departing :is(.museum-shell, .concept-shell, .concept-error),
+html.is-route-arriving :is(.museum-shell, .concept-shell, .concept-error) {
+  animation-duration: .46s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(.55, .04, .18, 1);
+  will-change: transform, filter, opacity, -webkit-mask-image;
+}
+
+html.is-route-arriving :is(.museum-shell, .concept-shell, .concept-error) {
+  animation-duration: .66s;
+}
+
+html.is-route-departing.route-direction-rtl :is(.museum-shell, .concept-shell, .concept-error) {
+  animation-name: route-surface-old-rtl;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 calc(var(--route-mist-front) - 12%), rgba(0,0,0,.68) calc(var(--route-mist-front) - 4%), rgba(0,0,0,.16) calc(var(--route-mist-front) + 8%), transparent calc(var(--route-mist-front) + 15%), transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 calc(var(--route-mist-front) - 12%), rgba(0,0,0,.68) calc(var(--route-mist-front) - 4%), rgba(0,0,0,.16) calc(var(--route-mist-front) + 8%), transparent calc(var(--route-mist-front) + 15%), transparent 100%);
+}
+
+html.is-route-departing.route-direction-ltr :is(.museum-shell, .concept-shell, .concept-error) {
+  animation-name: route-surface-old-ltr;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent calc(var(--route-mist-front) - 15%), rgba(0,0,0,.16) calc(var(--route-mist-front) - 8%), rgba(0,0,0,.68) calc(var(--route-mist-front) + 4%), #000 calc(var(--route-mist-front) + 12%), #000 100%);
+  mask-image: linear-gradient(to right, transparent 0%, transparent calc(var(--route-mist-front) - 15%), rgba(0,0,0,.16) calc(var(--route-mist-front) - 8%), rgba(0,0,0,.68) calc(var(--route-mist-front) + 4%), #000 calc(var(--route-mist-front) + 12%), #000 100%);
+}
+
+html.is-route-arriving.route-direction-rtl :is(.museum-shell, .concept-shell, .concept-error) {
+  animation-name: route-surface-new-rtl;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent calc(var(--route-mist-front) - 15%), rgba(0,0,0,.16) calc(var(--route-mist-front) - 8%), rgba(0,0,0,.68) calc(var(--route-mist-front) + 4%), #000 calc(var(--route-mist-front) + 12%), #000 100%);
+  mask-image: linear-gradient(to right, transparent 0%, transparent calc(var(--route-mist-front) - 15%), rgba(0,0,0,.16) calc(var(--route-mist-front) - 8%), rgba(0,0,0,.68) calc(var(--route-mist-front) + 4%), #000 calc(var(--route-mist-front) + 12%), #000 100%);
+}
+
+html.is-route-arriving.route-direction-ltr :is(.museum-shell, .concept-shell, .concept-error) {
+  animation-name: route-surface-new-ltr;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 calc(var(--route-mist-front) - 12%), rgba(0,0,0,.68) calc(var(--route-mist-front) - 4%), rgba(0,0,0,.16) calc(var(--route-mist-front) + 8%), transparent calc(var(--route-mist-front) + 15%), transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 calc(var(--route-mist-front) - 12%), rgba(0,0,0,.68) calc(var(--route-mist-front) - 4%), rgba(0,0,0,.16) calc(var(--route-mist-front) + 8%), transparent calc(var(--route-mist-front) + 15%), transparent 100%);
+}
+
+::view-transition-group(root) {
+  animation-duration: 1.02s;
+  animation-timing-function: linear;
+}
+
+::view-transition-image-pair(root) {
+  isolation: isolate;
+  background: #eee9de;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(.55, .04, .18, 1);
+  mix-blend-mode: normal;
+}
+
+html:active-view-transition-type(route-rtl)::view-transition-old(root) {
+  animation: route-surface-old-rtl .48s cubic-bezier(.55,.04,.18,1) both;
+}
+html:active-view-transition-type(route-rtl)::view-transition-new(root) {
+  animation: route-surface-new-rtl .58s .38s cubic-bezier(.22,1,.36,1) both;
+}
+html:active-view-transition-type(route-ltr)::view-transition-old(root) {
+  animation: route-surface-old-ltr .48s cubic-bezier(.55,.04,.18,1) both;
+}
+html:active-view-transition-type(route-ltr)::view-transition-new(root) {
+  animation: route-surface-new-ltr .58s .38s cubic-bezier(.22,1,.36,1) both;
+}
+
+html:active-view-transition-type(route-explicit):active-view-transition-type(route-rtl)::view-transition-old(root),
+html:active-view-transition-type(route-explicit):active-view-transition-type(route-ltr)::view-transition-old(root) {
+  animation: route-paper-hold .68s linear both;
+}
+html:active-view-transition-type(route-explicit):active-view-transition-type(route-rtl)::view-transition-new(root) {
+  animation: route-surface-new-rtl .64s .04s cubic-bezier(.22,1,.36,1) both;
+}
+html:active-view-transition-type(route-explicit):active-view-transition-type(route-ltr)::view-transition-new(root) {
+  animation: route-surface-new-ltr .64s .04s cubic-bezier(.22,1,.36,1) both;
+}
+
+@keyframes route-surface-old-rtl {
+  from { --route-mist-front: 118%; opacity: 1; filter: blur(0) saturate(1); transform: translateX(0); }
+  to { --route-mist-front: -18%; opacity: 0; filter: blur(15px) saturate(.72); transform: translateX(-10px); }
+}
+@keyframes route-surface-new-rtl {
+  from { --route-mist-front: 118%; opacity: 0; filter: blur(16px) saturate(.72); transform: translateX(10px); }
+  to { --route-mist-front: -18%; opacity: 1; filter: blur(0) saturate(1); transform: translateX(0); }
+}
+@keyframes route-surface-old-ltr {
+  from { --route-mist-front: -18%; opacity: 1; filter: blur(0) saturate(1); transform: translateX(0); }
+  to { --route-mist-front: 118%; opacity: 0; filter: blur(15px) saturate(.72); transform: translateX(10px); }
+}
+@keyframes route-surface-new-ltr {
+  from { --route-mist-front: -18%; opacity: 0; filter: blur(16px) saturate(.72); transform: translateX(-10px); }
+  to { --route-mist-front: 118%; opacity: 1; filter: blur(0) saturate(1); transform: translateX(0); }
+}
+@keyframes route-paper-hold {
+  from, to { opacity: 1; filter: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.is-route-departing :is(.museum-shell, .concept-shell, .concept-error),
+  html.is-route-arriving :is(.museum-shell, .concept-shell, .concept-error),
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+  }
+}

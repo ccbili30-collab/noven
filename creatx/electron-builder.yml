@@ -1,0 +1,38 @@
+appId: com.creatx.desktop
+productName: 诺文
+copyright: Copyright © 2026 诺文
+
+directories:
+  output: release
+
+files:
+  - out/**/*
+  - package.json
+
+asar: true
+asarUnpack:
+  - "node_modules/**/*.node"
+
+npmRebuild: false
+
+win:
+  executableName: 诺文
+  icon: apps/desktop/build/icon.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+nsis:
+  artifactName: "${productName}-${version}-${arch}-Setup.${ext}"
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 诺文
+  uninstallDisplayName: 诺文
+
+portable:
+  artifactName: "${productName}-${version}-${arch}-Portable.${ext}"

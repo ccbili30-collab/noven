@@ -1,0 +1,9 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 1 panel 4
+Primary request: Close dramatic reaction. Su He grips the corner of the frozen salt sack and recognizes the red family stitching. Her controlled expression breaks into alarm for the first time. Behind her out of focus, the bronze lamp gives one sharp spark.
+Input image: preserve Su He's exact face, low braid, silver hairpin, charcoal cloak, leather ledger satchel and proportions from the supplied reference. Her identity must be unmistakable.
+Style/medium: mature graphic novel panel, expressive inked face and hand, restrained mineral color, subtle paper texture.
+Composition/framing: close three-quarter face at right, her hand and red stitching at lower center, lamp spark at distant left; leave dark negative space at upper left and lower left for two later speech balloons; clear emotional focal hierarchy.
+Lighting/mood: cold blue ambient light with a thin amber rim; sudden private fear, not melodrama.
+Constraints: one reaction moment; no text, no letters, no captions, no speech balloons, no panel border, no watermark.
+Avoid: crying, screaming, glamour portrait, looking at camera, extra fingers, glowing eyes, decorative magic.

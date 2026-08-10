@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>世界关系球 · Prototype</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="title-block">
+        <p id="world-name">读取世界</p>
+        <h1>世界星图 <span>Prototype</span></h1>
+      </div>
+      <div class="source-status" title="读取真实作品、事实与分类型关系">
+        <i></i><strong id="source-summary">读取真实关系中</strong>
+      </div>
+      <label class="search-box">
+        <span>⌕</span>
+        <input id="search" type="search" placeholder="搜索作品或作品内星辰" autocomplete="off" />
+        <kbd>F</kbd>
+      </label>
+    </header>
+
+    <section class="workspace">
+      <aside class="layer-panel" aria-label="世界层级">
+        <div class="panel-heading">
+          <span>十二星座</span>
+          <button id="reset-view" type="button">重置</button>
+        </div>
+        <div id="layer-list" class="layer-list"></div>
+        <div class="legend-note">
+          <p>星座表达世界层级</p>
+          <small>作品是星座中的恒星，正文事实是作品周围的小星辰。星际航道表达作品引用，不伪装成因果。</small>
+        </div>
+      </aside>
+
+      <section class="canvas-stage" aria-label="可交互世界星图">
+        <div id="graph" tabindex="0" aria-label="拖动环绕，滚轮穿行，点击进入星座和作品"></div>
+        <div class="sky-mode-switch" aria-label="星空背景版本">
+          <button type="button" data-sky-mode="procedural">程序星空</button>
+          <button type="button" data-sky-mode="panorama">全景贴图</button>
+        </div>
+        <div class="sphere-caption">
+          <span id="view-title">十二星座天球</span>
+          <small id="view-help">拖动环绕 · 点击星座 · 航道靠近后变亮</small>
+        </div>
+        <div id="search-results" class="search-results" hidden></div>
+        <div class="canvas-tools" aria-label="视图工具">
+          <button id="zoom-in" type="button" aria-label="放大">＋</button>
+          <button id="zoom-out" type="button" aria-label="缩小">−</button>
+          <button id="clear-focus" type="button" aria-label="清除选择">◎</button>
+        </div>
+      </section>
+
+      <aside class="detail-panel" aria-live="polite">
+        <div id="empty-detail" class="empty-detail">
+          <span class="orb-icon">◎</span>
+          <h2>选择一个世界星座</h2>
+          <p>十二个星座对应十二层作品。进入星座后选择作品恒星，再查看引用航道和内部事实星辰。</p>
+        </div>
+        <div id="node-detail" hidden>
+          <div class="node-meta"><span id="node-layer"></span><span id="node-degree"></span></div>
+          <h2 id="node-title"></h2>
+          <p id="node-path" class="node-path"></p>
+          <div class="detail-actions">
+            <button id="open-document" class="primary-action" type="button">打开真实作品</button>
+            <button id="focus-local" class="secondary-action" type="button">返回星座</button>
+          </div>
+          <section>
+            <h3>作品内部星辰 <span id="fact-count"></span></h3>
+            <div id="fact-list" class="relation-list"></div>
+          </section>
+          <section>
+            <h3>引用的作品 <span id="outbound-count"></span></h3>
+            <div id="outbound-list" class="relation-list"></div>
+          </section>
+          <section>
+            <h3>引用它的作品 <span id="inbound-count"></span></h3>
+            <div id="inbound-list" class="relation-list"></div>
+          </section>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <section id="document-view" class="document-view" hidden aria-label="作品只读预览">
+    <div class="document-shell">
+      <header>
+        <div><small>真实文件只读预览</small><h2 id="document-title"></h2><p id="document-path"></p></div>
+        <button id="close-document" type="button" aria-label="关闭作品预览">×</button>
+      </header>
+      <article id="document-content"></article>
+    </div>
+  </section>
+
+  <script src="graph-data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.46.1/dist/globe.gl.min.js"></script>
+  <script type="module" src="globe-app.js"></script>
+</body>
+</html>

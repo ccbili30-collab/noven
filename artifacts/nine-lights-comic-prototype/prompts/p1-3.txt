@@ -1,0 +1,9 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 1 panel 3
+Primary request: At the snowy roadside shelter, Su He holds open a worn duty ledger whose witness spaces are visibly blank but contain no readable writing. A breathless frontier rider has just arrived and throws a frozen salt sack into the snow between them. The sack corner has a distinctive hand-sewn red thread mark.
+Input image: preserve Su He's exact identity, low braid, silver hairpin, charcoal cloak, leather ledger satchel and proportions from the supplied reference; ignore its poses and background.
+Style/medium: mature graphic novel panel, confident ink linework, restrained mineral color, subtle paper texture, physical acting over decorative beauty.
+Composition/framing: diagonal action from rider at upper right to falling salt sack center to Su He's open ledger at lower left; the red stitch is the only saturated accent; leave pale steam-filled sky near the rider for later dialogue.
+Lighting/mood: cold urgency, hard lamp light and windblown snow.
+Constraints: capture the instant the sack hits snow; no readable text in the ledger, no text anywhere, no captions, no speech balloons, no panel border, no watermark.
+Avoid: static portrait lineup, modern saddle, ornate royal clothing, magic runes, multiple salt sacks, collage.

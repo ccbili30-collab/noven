@@ -1,0 +1,14 @@
+{
+  "name": "@creatx/image-runtime",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./queue": "./src/queue.ts",
+    "./live-archive": "./src/live-archive.ts"
+  },
+  "dependencies": {
+    "@creatx/contracts": "workspace:*",
+    "@creatx/project-files": "workspace:*"
+  }
+}

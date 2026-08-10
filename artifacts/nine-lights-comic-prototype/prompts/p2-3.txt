@@ -1,0 +1,9 @@
+Use case: illustration-story
+Asset type: one finished comic panel, page 2 panel 3
+Primary request: Inside the timber gatehouse, commander He Chenyuan sits behind a rough table in dark layered frontier armor. On the table are a royal travel permit, a thick salt ledger, a bowl of cold bean soup, and one translucent white scale. Su He stands opposite and presses one blood-touched hand beside the scale. They hold each other's gaze in a restrained argument.
+Input image: preserve Su He's exact face, low braid, silver hairpin, charcoal cloak, leather ledger satchel and proportions from the supplied reference. He Chenyuan is a severe man around forty, cropped dark hair with some grey, practical dark lamellar armor, no crown.
+Style/medium: mature graphic novel dialogue panel, confident ink linework, restrained mineral color, subtle paper texture, acting through posture and gaze.
+Composition/framing: medium two-shot across the table; Su He at left standing, commander at right seated; documents and luminous scale form the lower center conflict line; generous empty wall space above each speaker for later balloons.
+Lighting/mood: low amber brazier light, controlled moral pressure rather than shouting.
+Constraints: no readable writing on documents, no text, no captions, no speech balloons, no panel border, no watermark.
+Avoid: throne room, royal luxury, sword fight, melodramatic pointing, smiling, modern office, magic hologram.

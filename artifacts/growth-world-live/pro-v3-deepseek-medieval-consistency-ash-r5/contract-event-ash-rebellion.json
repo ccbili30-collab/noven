@@ -1,0 +1,66 @@
+{
+  "hash": "0f3ab65197b65c5439cd5ba29eb4ed227174036fcab97ec2b65256f5940c3bbe",
+  "contract": {
+    "schemaVersion": 1,
+    "genreLibraryVersion": 1,
+    "topicProfileKey": "classic-medieval-fantasy",
+    "topicProfileVersion": 1,
+    "genreKey": "legendary-chronicle",
+    "genreLabel": "传奇编年史",
+    "object": {
+      "id": "live-history-1",
+      "key": "event-ash-rebellion",
+      "title": "灰烬起义",
+      "layer": "历史、时代与重大事件",
+      "locator": "历史、时代与重大事件｜烧炭领民反抗旧税契并以一次不可逆选择改变北境统治秩序的起义"
+    },
+    "appliesTo": "改变时代秩序并留下英雄、烈士或象征记忆的起义、战争、远征与覆亡",
+    "narrator": "综合编年记录、亲历者传述与后世记忆的历史作者",
+    "reader": "希望看见一个时代如何被具体人物和行动改变的普通读者",
+    "structure": [
+      "从旧秩序和风暴将至的征兆起笔",
+      "写清关键人物为何作出不可逆的选择",
+      "让冲突在具体场面、对抗和转折中升级",
+      "以决定性行动及其代价完成历史转折",
+      "说明胜负如何变成后世共同记忆"
+    ],
+    "language": [
+      "保持历史距离而不冷却人物命运",
+      "用具名人物、地点、器物和动作承载大势",
+      "关键场面完整且有节奏",
+      "传奇感来自选择与代价而非夸大神迹"
+    ],
+    "researchDimensions": [
+      "旧秩序为何已无法维持",
+      "谁最先越过不可回头的界线",
+      "哪些对抗、失败或牺牲改变了局势",
+      "什么行动决定胜负",
+      "后世记住了谁又改写了什么"
+    ],
+    "forbidden": [
+      "后勤与制度分析占据正文",
+      "用抽象势力代替行动者",
+      "只有结果没有关键场面",
+      "把历史写成未经区分的民间传说",
+      "审计事实充分性"
+    ],
+    "worldStyle": {
+      "schemaVersion": 1,
+      "narrativeDistance": "historical",
+      "register": "literary",
+      "knowledgePosition": "retrospective",
+      "languageConventions": [
+        "使用世界内部纪年、地名和制度称呼",
+        "历史判断必须归属于后世记录或具体群体"
+      ],
+      "forbiddenPatterns": [
+        "现代项目管理语言",
+        "研究审计腔",
+        "把普通灾难传奇化"
+      ],
+      "sourceIds": [
+        "medieval-live-baseline"
+      ]
+    }
+  }
+}

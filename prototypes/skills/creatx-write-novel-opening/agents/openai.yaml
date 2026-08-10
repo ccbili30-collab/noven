@@ -1,0 +1,4 @@
+interface:
+  display_name: "CreatX 小说开篇"
+  short_description: "把现有世界变成成熟故事主线并完成两章可读小说开篇样章"
+  default_prompt: "Use $creatx-write-novel-opening to turn this CreatX world into a compelling novel premise and two opening chapters."
