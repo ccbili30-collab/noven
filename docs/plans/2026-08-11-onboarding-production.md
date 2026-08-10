@@ -1,3 +1,11 @@
+---
+title: Production Onboarding Implementation Plan
+doc_type: implementation-plan
+owner: workspace-ui
+status: completed-in-c564192
+last_verified: 2026-08-11
+---
+
 # Production Onboarding Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.

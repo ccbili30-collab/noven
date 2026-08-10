@@ -2,7 +2,7 @@
 title: 首次引导进入生产软件的产品确认
 doc_type: discussion
 owner: workspace-ui
-status: accepted-for-implementation
+status: implemented-in-c564192
 last_verified: 2026-08-11
 ---
 

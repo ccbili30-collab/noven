@@ -2,7 +2,7 @@
 title: 艺术库 0.1.19 体验恢复与基础藏品归属澄清
 doc_type: product-discussion
 owner: art-library
-status: accepted-for-implementation
+status: implemented-in-c564192
 date: 2026-08-11
 ---
 
