@@ -9,6 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  Clapperboard,
   Clock3,
   Eye,
   Feather,
@@ -24,6 +25,7 @@ import {
   LoaderCircle,
   Map,
   MessageSquare,
+  Mic,
   Paperclip,
   PanelRightClose,
   PanelRightOpen,
@@ -58,6 +60,8 @@ import type {
   RunState,
   SessionSummary,
   SaveImageModelSettingsCommand,
+  SaveTranscriptionModelSettingsCommand,
+  SaveVideoSettingsCommand,
   SaveTextModelProfileCommand,
   SaveProjectTextCommand,
   SetCreativeLibraryReactionCommand,
@@ -67,6 +71,7 @@ import type {
   WorkbenchSnapshot,
   TimelineItem,
 } from "@creatx/contracts"
+import { TEXT_PROVIDER_OPTIONS, isKnownTextProviderId, textProviderLabel } from "@creatx/contracts"
 import { CREATIVE_SLASH_COMMANDS } from "@creatx/creative-skills/slash-commands"
 import { growthGoalDisplayInstruction } from "@creatx/creative-skills/growth-goal-instruction"
 import { MessageMarkdown } from "./MessageMarkdown"
@@ -83,6 +88,7 @@ import { editDocument, openDocument, redoDocument, saveDocument, undoDocument, t
 import { buildWorkbenchExhibition } from "./workbench-exhibition"
 import { appearanceStorageKey, defaultAppearancePreferences, interfaceFontStacks, parseAppearancePreferences, type AppearancePreferences } from "./appearance-preferences"
 import { clampWorkspaceSplitRatio, collapsedNavigationWidth, defaultAuxiliaryPanelWidth, defaultWorkspaceMode, scalePanelWidthForViewport, settleProjectNavigationResize, transitionWorkspaceMode, type WorkspaceMode } from "./workspace-layout"
+import { douyinAnalysisPrompt, draftWithDouyinLink, findDouyinLink } from "./video-link"
 import { SkillSequenceControl } from "./SkillSequenceControl"
 import type { SkillSequenceSlot } from "./skill-sequence-preferences"
 import { DesktopDialog } from "./DesktopDialog"
@@ -165,6 +171,8 @@ interface WorkspaceShellProps {
   onSaveTextModelProfile: (command: SaveTextModelProfileCommand) => Promise<boolean>
   onSelectModel: (profileId: string) => Promise<boolean>
   onSaveImageModelSettings: (command: SaveImageModelSettingsCommand) => Promise<boolean>
+  onSaveTranscriptionModelSettings: (command: SaveTranscriptionModelSettingsCommand) => Promise<boolean>
+  onSaveVideoSettings: (command: SaveVideoSettingsCommand) => Promise<boolean>
   onSend: () => void
   messageDeletionAcknowledged: boolean
   onAcknowledgeMessageDeletion: () => void
@@ -539,6 +547,8 @@ export function WorkspaceShell(props: WorkspaceShellProps) {
       onClose={() => setSettingsOpen(false)}
       onSaveText={props.onSaveTextModelProfile}
       onSaveImage={props.onSaveImageModelSettings}
+      onSaveTranscription={props.onSaveTranscriptionModelSettings}
+      onSaveVideo={props.onSaveVideoSettings}
       appearance={appearance}
       onAppearance={setAppearance}
     /> : <>
@@ -748,6 +758,7 @@ function ConversationPanel(props: WorkspaceShellProps & { onOpenModelSettings: (
   const [slashSelection, setSlashSelection] = useState(0)
   const [slashMenuDismissed, setSlashMenuDismissed] = useState(false)
   const [dropActive, setDropActive] = useState(false)
+  const [linkDrop, setLinkDrop] = useState(false)
   const [pendingMessageDeletion, setPendingMessageDeletion] = useState<{ item: TimelineItem; returnFocus: HTMLElement }>()
   const dropDepth = useRef(0)
   const slashMatch = props.draft.match(/^\/([^\s]*)$/)
@@ -805,31 +816,42 @@ function ConversationPanel(props: WorkspaceShellProps & { onOpenModelSettings: (
     setSlashMenuDismissed(true)
     setSlashSelection(0)
   }
+  // A link dragged from a browser arrives as text/uri-list, never as Files. Without this branch
+  // the drop falls through to Electron's default navigation instead of reaching the composer.
+  const droppedText = (transfer: DataTransfer) => transfer.types.includes("Files") ? undefined : transfer.getData("text/uri-list") || transfer.getData("text/plain")
+  const acceptsDrop = (transfer: DataTransfer) => transfer.types.includes("Files") || transfer.types.includes("text/uri-list") || transfer.types.includes("text/plain")
   return <aside className={`wb-context-panel conversation-stage ${dropActive ? "is-file-drop-target" : ""}`} aria-label="主会话" data-surface="conversation"
     onDragEnter={(event) => {
-      if (!event.dataTransfer.types.includes("Files")) return
+      if (!acceptsDrop(event.dataTransfer)) return
       event.preventDefault()
       dropDepth.current += 1
+      setLinkDrop(!event.dataTransfer.types.includes("Files"))
       setDropActive(true)
     }}
     onDragOver={(event) => {
-      if (!event.dataTransfer.types.includes("Files")) return
+      if (!acceptsDrop(event.dataTransfer)) return
       event.preventDefault()
       event.dataTransfer.dropEffect = "copy"
     }}
     onDragLeave={(event) => {
-      if (!event.dataTransfer.types.includes("Files")) return
+      if (!acceptsDrop(event.dataTransfer)) return
       dropDepth.current = Math.max(0, dropDepth.current - 1)
       if (dropDepth.current === 0) setDropActive(false)
     }}
     onDrop={(event) => {
-      if (!event.dataTransfer.types.includes("Files")) return
+      if (!acceptsDrop(event.dataTransfer)) return
       event.preventDefault()
       dropDepth.current = 0
       setDropActive(false)
-      props.onDropAttachments(Array.from(event.dataTransfer.files))
+      const text = droppedText(event.dataTransfer)
+      if (text === undefined) {
+        props.onDropAttachments(Array.from(event.dataTransfer.files))
+        return
+      }
+      const link = findDouyinLink(text)
+      if (link) props.setDraft(draftWithDouyinLink(props.draft, link))
     }}>
-    {dropActive && <div className="wb-file-drop-overlay" role="status"><Paperclip size={24} /><strong>松开以添加到对话</strong><span>文件只会成为待发送附件</span></div>}
+    {dropActive && <div className="wb-file-drop-overlay" role="status">{linkDrop ? <><Clapperboard size={24} /><strong>松开以分析这条视频</strong><span>只支持抖音链接；分析需要你确认</span></> : <><Paperclip size={24} /><strong>松开以添加到对话</strong><span>文件只会成为待发送附件</span></>}</div>}
     <header className="wb-panel-heading"><div><MessageSquare size={16} /><strong>{conversationProjectName}</strong></div><div className="wb-heading-actions"><button title="新会话" disabled={!props.project || !activeProjectReady} onClick={props.onCreateSession}><Plus size={16} /></button></div></header>
     {props.showSessionList && <div className="wb-conversation-session-strip" aria-label="项目会话列表">
       {props.sessions.filter((session) => session.projectId === (props.activeSession?.projectId ?? props.project?.id)).map((session) => <button key={session.id} data-session-id={session.id} className={session.id === props.activeSession?.id ? "is-active" : ""} title={session.title} onClick={() => void props.onSelectSession(session.id)}><MessageSquare size={12} /><span>{session.title}</span></button>)}
@@ -878,7 +900,15 @@ function ConversationPanel(props: WorkspaceShellProps & { onOpenModelSettings: (
           onClick={() => selectSlashCommand(index)}
         ><Sparkles size={15} /><span><strong>{command.command}</strong><small>{command.description}</small></span>{command.activation === "growth" && <em>长期运行</em>}</button>)}
       </div>}
-      <textarea value={props.draft} onChange={(event) => { props.setDraft(event.target.value); setSlashMenuDismissed(false); setSlashSelection(0) }} onKeyDown={(event) => {
+      <textarea value={props.draft} onChange={(event) => { props.setDraft(event.target.value); setSlashMenuDismissed(false); setSlashSelection(0) }} onPaste={(event) => {
+        // 抖音's share button copies a whole sentence around the link. Only an empty composer is
+        // replaced with a clean prompt; anything already typed keeps the ordinary paste.
+        if (props.draft.trim()) return
+        const link = findDouyinLink(event.clipboardData.getData("text/plain"))
+        if (!link) return
+        event.preventDefault()
+        props.setDraft(douyinAnalysisPrompt(link))
+      }} onKeyDown={(event) => {
         if (slashCommands.length > 0) {
           if (event.key === "ArrowDown") { event.preventDefault(); setSlashSelection((current) => (current + 1) % slashCommands.length); return }
           if (event.key === "ArrowUp") { event.preventDefault(); setSlashSelection((current) => (current - 1 + slashCommands.length) % slashCommands.length); return }
@@ -1407,15 +1437,23 @@ function ErrorBanner({ error, onClose }: { error: CreatXError; onClose: () => vo
   return <div className="wb-error-banner"><div><strong>{error.message}</strong>{error.detail && <span>{error.detail}</span>}</div><button onClick={onClose}><X size={14} /></button></div>
 }
 
-function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, onAppearance }: {
+// Provider · model · host, so two profiles that share a display name stay distinguishable.
+function savedConnectionLabel(profile: ModelSettingsSnapshot["textProfiles"][number]) {
+  const host = profile.baseUrl ? (() => { try { return new URL(profile.baseUrl!).host } catch { return profile.baseUrl } })() : undefined
+  return [textProviderLabel(profile.providerId), profile.modelId, host].filter(Boolean).join(" · ")
+}
+
+function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, onSaveTranscription, onSaveVideo, onAppearance }: {
   settings: ModelSettingsSnapshot | undefined
   appearance: AppearancePreferences
   onClose: () => void
   onSaveText: (command: SaveTextModelProfileCommand) => Promise<boolean>
   onSaveImage: (command: SaveImageModelSettingsCommand) => Promise<boolean>
+  onSaveTranscription: (command: SaveTranscriptionModelSettingsCommand) => Promise<boolean>
+  onSaveVideo: (command: SaveVideoSettingsCommand) => Promise<boolean>
   onAppearance: (appearance: AppearancePreferences) => void
 }) {
-  const [section, setSection] = useState<"models" | "images" | "appearance">("models")
+  const [section, setSection] = useState<"models" | "images" | "video" | "appearance">("models")
   const [profileId, setProfileId] = useState(settings?.selectedTextProfileId ?? "")
   const selectedProfile = settings?.textProfiles.find((profile) => profile.id === profileId)
   const [name, setName] = useState(selectedProfile?.name ?? "")
@@ -1426,8 +1464,14 @@ function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, 
   const [imageBaseUrl, setImageBaseUrl] = useState(settings?.image.baseUrl ?? "")
   const [imageApiKey, setImageApiKey] = useState("")
   const [imageModel, setImageModel] = useState<SaveImageModelSettingsCommand["defaultModel"]>(settings?.image.defaultModel ?? "gpt-image-2-cheap")
+  const [transcriptionBaseUrl, setTranscriptionBaseUrl] = useState(settings?.transcription.baseUrl ?? "")
+  const [transcriptionModel, setTranscriptionModel] = useState(settings?.transcription.model ?? "")
+  const [transcriptionLanguage, setTranscriptionLanguage] = useState(settings?.transcription.language ?? "")
+  const [transcriptionApiKey, setTranscriptionApiKey] = useState("")
+  const [cookieSource, setCookieSource] = useState<SaveVideoSettingsCommand["cookieSource"]>(settings?.video.cookieSource ?? "noven")
   const [savingText, setSavingText] = useState(false)
   const [savingImage, setSavingImage] = useState(false)
+  const [savingVideo, setSavingVideo] = useState(false)
 
   useEffect(() => {
     const profile = settings?.textProfiles.find((candidate) => candidate.id === profileId)
@@ -1466,6 +1510,20 @@ function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, 
     if (saved) setImageApiKey("")
   }
 
+  async function saveVideo(event: FormEvent) {
+    event.preventDefault()
+    setSavingVideo(true)
+    const savedTranscription = await onSaveTranscription({
+      baseUrl: transcriptionBaseUrl,
+      model: transcriptionModel,
+      ...(transcriptionLanguage.trim() ? { language: transcriptionLanguage } : {}),
+      ...(transcriptionApiKey.trim() ? { apiKey: transcriptionApiKey } : {}),
+    })
+    const saved = savedTranscription && await onSaveVideo({ cookieSource })
+    setSavingVideo(false)
+    if (saved) setTranscriptionApiKey("")
+  }
+
   function newProfile() {
     setProfileId("")
     setName("")
@@ -1481,6 +1539,7 @@ function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, 
       <nav aria-label="设置分类">
         <button className={section === "models" ? "is-active" : ""} onClick={() => setSection("models")}><MessageSquare size={16} /><span>模型</span></button>
         <button className={section === "images" ? "is-active" : ""} onClick={() => setSection("images")}><FileImage size={16} /><span>生图</span></button>
+        <button className={section === "video" ? "is-active" : ""} onClick={() => setSection("video")}><Clapperboard size={16} /><span>视频与转写</span></button>
         <button className={section === "appearance" ? "is-active" : ""} onClick={() => setSection("appearance")}><Palette size={16} /><span>外观</span></button>
         <button disabled><FolderOpen size={16} /><span>项目与文件</span><small>稍后</small></button>
         <button disabled><ShieldCheck size={16} /><span>权限</span><small>稍后</small></button>
@@ -1490,15 +1549,18 @@ function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, 
     </aside>
     <div className="wb-settings-content">
       <header className="wb-settings-hero">
-        <div><span className="dialog-eyebrow">{VISIBLE_PRODUCT_NAME}偏好</span><h1>{section === "models" ? "模型" : section === "images" ? "生图" : "外观"}</h1><p>{section === "models" ? "管理交流模型。它负责理解你的目标、调用工具并持续推进创作。" : section === "images" ? "配置由交流模型按需调用的图片模型；它不会直接参与对话。" : `分别调整界面层级与阅读正文的字号；${VISIBLE_PRODUCT_NAME}统一使用 JetBrains Mono。`}</p></div>
+        <div><span className="dialog-eyebrow">{VISIBLE_PRODUCT_NAME}偏好</span><h1>{section === "models" ? "模型" : section === "images" ? "生图" : section === "video" ? "视频与转写" : "外观"}</h1><p>{section === "models" ? "管理交流模型。它负责理解你的目标、调用工具并持续推进创作。" : section === "images" ? "配置由交流模型按需调用的图片模型；它不会直接参与对话。" : section === "video" ? "把抖音链接交给交流模型分析时，用这里配置的服务转写语音。支持任何 OpenAI 兼容的转写接口，云端或局域网自建都可以。" : `分别调整界面层级与阅读正文的字号；${VISIBLE_PRODUCT_NAME}统一使用 JetBrains Mono。`}</p></div>
         <button title="关闭设置" onClick={onClose}><X size={17} /></button>
       </header>
       {section === "models" && <form className="wb-settings-form" onSubmit={(event) => void saveText(event)}>
         <div className="model-settings-section-heading"><div><MessageSquare size={16} /><span><strong>交流模型</strong><small>用于会话、推理和工具选择</small></span></div><button type="button" onClick={newProfile}><Plus size={13} />添加连接</button></div>
-        {settings?.textProfiles.length ? <label><span>已保存连接</span><select value={profileId} onChange={(event) => setProfileId(event.target.value)}><option value="">新连接</option>{settings.textProfiles.map((profile) => <option value={profile.id} key={profile.id}>{profile.name} · {profile.modelId}</option>)}</select></label> : undefined}
+        {settings?.textProfiles.length ? <label><span>已保存连接</span><select value={profileId} onChange={(event) => setProfileId(event.target.value)}><option value="">新连接</option>{settings.textProfiles.map((profile) => <option value={profile.id} key={profile.id}>{savedConnectionLabel(profile)}</option>)}</select></label> : undefined}
         <div className="model-settings-grid">
           <label><span>显示名称</span><input required value={name} onChange={(event) => setName(event.target.value)} placeholder="例如 DeepSeek Chat" /></label>
-          <label><span>API Provider</span><input required value={providerId} onChange={(event) => setProviderId(event.target.value)} placeholder="deepseek / openai-compatible" /></label>
+          <label><span>API Provider</span><select required value={providerId} onChange={(event) => setProviderId(event.target.value)}>
+            {!isKnownTextProviderId(providerId) && <option value={providerId}>{providerId}（无效，请更换）</option>}
+            {TEXT_PROVIDER_OPTIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
+          </select></label>
           <label className="is-wide"><span>Base URL <small>可选</small></span><input value={baseUrl} onChange={(event) => setBaseUrl(event.target.value)} placeholder="https://api.example.com/v1" /></label>
           <label><span>Model</span><input required value={modelId} onChange={(event) => setModelId(event.target.value)} placeholder="模型 ID" /></label>
           <label><span>API Key</span><input type="password" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder={selectedProfile?.apiKeyConfigured ? "已安全保存；留空保持不变" : "输入 API Key"} /></label>
@@ -1513,6 +1575,26 @@ function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, 
           <label><span>API Key</span><input type="password" value={imageApiKey} onChange={(event) => setImageApiKey(event.target.value)} placeholder={settings?.image.apiKeyConfigured ? "已安全保存；留空保持不变" : "输入 API Key"} /></label>
         </div>
         <div className="model-settings-actions"><span>{settings?.image.configured ? "生图工具已就绪" : "配置后由交流模型按需调用"}</span><button className="primary" disabled={savingImage}>{savingImage ? "保存中…" : "保存"}</button></div>
+      </form>}
+      {section === "video" && <form className="wb-settings-form" onSubmit={(event) => void saveVideo(event)}>
+        <div className="model-settings-section-heading"><div><Mic size={16} /><span><strong>语音转写</strong><small>抖音没有公开字幕时用它听懂视频</small></span></div></div>
+        <div className="model-settings-grid">
+          <label className="is-wide"><span>Base URL</span><input required value={transcriptionBaseUrl} onChange={(event) => setTranscriptionBaseUrl(event.target.value)} placeholder="https://api.siliconflow.cn/v1 或 http://192.168.1.50:8000/v1" /></label>
+          <label><span>模型</span><input required value={transcriptionModel} onChange={(event) => setTranscriptionModel(event.target.value)} placeholder="FunAudioLLM/SenseVoiceSmall" /></label>
+          <label><span>语言 <small>可选</small></span><input value={transcriptionLanguage} onChange={(event) => setTranscriptionLanguage(event.target.value)} placeholder="zh" /></label>
+          <label><span>API Key <small>局域网自建可留空</small></span><input type="password" value={transcriptionApiKey} onChange={(event) => setTranscriptionApiKey(event.target.value)} placeholder={settings?.transcription.apiKeyConfigured ? "已安全保存；留空保持不变" : "输入 API Key"} /></label>
+        </div>
+        <div className="model-settings-section-heading"><div><Clapperboard size={16} /><span><strong>抖音 Cookie</strong><small>抖音拒绝匿名读取，默认由诺文自己访问一次抖音取得反爬 Cookie，不需要登录，也不读取你的浏览器</small></span></div></div>
+        <div className="model-settings-grid">
+          <label className="is-wide"><span>Cookie 来源</span><select value={cookieSource} onChange={(event) => setCookieSource(event.target.value as SaveVideoSettingsCommand["cookieSource"])}>
+            <option value="noven">由诺文自动获取（默认，推荐）</option>
+            <option value="none">不使用（抖音多半会拒绝）</option>
+            <option value="edge">Edge（Windows 上常因 App-Bound 加密失败）</option>
+            <option value="firefox">Firefox</option>
+            <option value="chrome">Chrome（Windows 上常因 App-Bound 加密失败）</option>
+          </select></label>
+        </div>
+        <div className="model-settings-actions"><span>{settings?.transcription.configured ? "转写服务已就绪；音频只会发往上面这个地址" : "未配置转写服务时，视频分析取不到任何内容"}</span><button className="primary" disabled={savingVideo}>{savingVideo ? "保存中…" : "保存"}</button></div>
       </form>}
       {section === "appearance" && <section className="wb-settings-form wb-appearance-settings" aria-label="外观设置">
         <div className="model-settings-section-heading"><div><Palette size={16} /><span><strong>界面文字</strong><small>选择后立即生效并保存在本机</small></span></div></div>

@@ -1,0 +1,184 @@
+{
+  "status": "TAHILIYA WORLD PRO LIVE FAIL",
+  "error": "page.evaluate: Target page, context or browser has been closed",
+  "goalId": "goal_d183303a-9053-40e1-8f83-dd5c4b8fe772",
+  "projectRoot": "C:\\Users\\hawke\\Desktop\\CreatXProjects\\塔希里亚故事集",
+  "observedErrors": [
+    {
+      "at": "2026-08-10T22:27:05.433Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:27:19.728Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:29:46.941Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:32:15.482Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:32:36.907Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:35:28.424Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:35:30.831Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:35:46.703Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:38:21.623Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:39:11.913Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:41:27.389Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:41:44.500Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:45:59.838Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:46:13.899Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: attachment.anchor must be a non-empty string)\"}"
+    },
+    {
+      "at": "2026-08-10T22:48:29.895Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:48:53.760Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:51:31.906Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:51:41.807Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:57:52.316Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:58:07.071Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:00:58.125Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:04:42.574Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:04:42.928Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:04:57.167Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:07:20.766Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:07:26.398Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:10:13.991Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T23:10:50.908Z",
+      "source": "tool",
+      "toolName": "complete_world_materialization_object",
+      "detail": "{\"error\":\"growth_invalid: 正文对象回执无效。 (growth_invalid: lockedFactConflicts is invalid)\"}"
+    },
+    {
+      "at": "2026-08-10T23:13:21.255Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    }
+  ],
+  "progress": [],
+  "elapsedSeconds": 3132
+}

@@ -15,6 +15,8 @@ import type {
   ProjectSnapshot,
   SessionSummary,
   SaveImageModelSettingsCommand,
+  SaveTranscriptionModelSettingsCommand,
+  SaveVideoSettingsCommand,
   SaveTextModelProfileCommand,
   SaveProjectTextCommand,
   SetCreativeLibraryReactionCommand,
@@ -446,6 +448,28 @@ export function App() {
 
   async function saveImageModelSettings(command: SaveImageModelSettingsCommand) {
     const result = await window.creatx.saveImageModelSettings(command)
+    if (!result.ok) {
+      setError(result.error)
+      return false
+    }
+    setModelSettings(result.value)
+    setBootstrap((current) => current ? { ...current, modelSettings: result.value } : current)
+    return true
+  }
+
+  async function saveTranscriptionModelSettings(command: SaveTranscriptionModelSettingsCommand) {
+    const result = await window.creatx.saveTranscriptionModelSettings(command)
+    if (!result.ok) {
+      setError(result.error)
+      return false
+    }
+    setModelSettings(result.value)
+    setBootstrap((current) => current ? { ...current, modelSettings: result.value } : current)
+    return true
+  }
+
+  async function saveVideoSettings(command: SaveVideoSettingsCommand) {
+    const result = await window.creatx.saveVideoSettings(command)
     if (!result.ok) {
       setError(result.error)
       return false
@@ -895,6 +919,8 @@ export function App() {
     onSaveTextModelProfile={saveTextModelProfile}
     onSelectModel={selectModel}
     onSaveImageModelSettings={saveImageModelSettings}
+    onSaveTranscriptionModelSettings={saveTranscriptionModelSettings}
+    onSaveVideoSettings={saveVideoSettings}
     onSend={() => void sendMessage()}
     messageDeletionAcknowledged={messageVisibilityPreferences.deletionBoundaryAcknowledged}
     onAcknowledgeMessageDeletion={() => setMessageVisibilityPreferences((current) => acknowledgeDeletionBoundary(current))}

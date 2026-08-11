@@ -12,6 +12,7 @@
     "@creatx/live-archive-runtime": "workspace:*",
     "@creatx/project-files": "workspace:*",
     "@creatx/session-runtime": "workspace:*",
+    "@creatx/video-runtime": "workspace:*",
     "@creatx/workbench": "workspace:*"
   },
   "devDependencies": {

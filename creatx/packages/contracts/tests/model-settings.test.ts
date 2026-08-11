@@ -17,10 +17,18 @@ describe("model settings contract", () => {
         apiKeyConfigured: true,
         configured: true,
       },
+      transcription: {
+        baseUrl: "http://192.168.1.50:8000/v1",
+        model: "Systran/faster-whisper-large-v3",
+        apiKeyConfigured: false,
+        configured: true,
+      },
+      video: { cookieSource: "none" },
     }
 
     expect(JSON.stringify(snapshot)).not.toContain("apiKey\"")
     expect(snapshot.textProfiles[0]?.apiKeyConfigured).toBeTrue()
     expect(snapshot.image.apiKeyConfigured).toBeTrue()
+    expect(snapshot.transcription.configured).toBeTrue()
   })
 })

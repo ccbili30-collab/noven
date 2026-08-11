@@ -10,6 +10,7 @@ import {
   CREATX_DESKTOP_API,
   CREATX_DESKTOP_EVENT,
   classifyRuntimeError,
+  isKnownTextProviderId,
   type ControlImageTaskCommand,
   type CreatXError,
   type CreatXEvent,
@@ -28,6 +29,8 @@ import {
   type SendMessageCommand,
   type SetCreativeLibraryReactionCommand,
   type SessionSummary,
+  type SaveTranscriptionModelSettingsCommand,
+  type SaveVideoSettingsCommand,
 } from "@creatx/contracts"
 import { appendProjectRevisionContext, ProjectFileService } from "@creatx/project-files"
 import { resolvePreloadPath } from "./preload-path.ts"
@@ -40,6 +43,7 @@ import { WorldBlueprintService, WorldEntryRecoveryService, WorldMaterializationC
 import { IMAGE_CORE_GUIDANCE, ImageAttachmentService, ImageRuntime } from "@creatx/image-runtime"
 import { ImageTaskQueue, ImageTaskStore, promptUsesProjectVisualStyle } from "@creatx/image-runtime/queue"
 import { UserModelSettingsStore } from "@creatx/model-settings"
+import { createVideoTools, disposeVideoBinaries, resolveVideoBinaries, VIDEO_CORE_GUIDANCE, VideoAnalysisService } from "@creatx/video-runtime"
 import { AttachmentAuthorizationStore, type ResolvedAttachments } from "./attachments"
 import { isReplaceableLegacyWorldGoal, resolveGrowthWorldEntry } from "./growth-world-entry.ts"
 import { GrowthProjectionDispatcher } from "./growth-projection-dispatcher.ts"
@@ -55,6 +59,8 @@ import { captureWorkbenchRegion, type WorkbenchCaptureRect } from "./workbench-c
 import { ArtTurnSourceStore, withArtTurnSources } from "./art-turn-sources.ts"
 import { ArtLibraryAssetProtocol } from "./art-library-asset-protocol.ts"
 import { composeHeritageSkillRuntime, HERITAGE_SKILL_CORE_GUIDANCE, HeritageSkillService } from "./heritage-skill-service.ts"
+import { DouyinCookieProvider } from "./douyin-cookies.ts"
+import { DouyinPageExtractor } from "./douyin-page-extractor.ts"
 
 protocol.registerSchemesAsPrivileged([
   { scheme: "creatx-workbench", privileges: { standard: true, secure: true, supportFetchAPI: true } },
@@ -100,6 +106,9 @@ let growthScheduler: GrowthScheduler | undefined
 let growthLifecycle: GrowthLifecycleController | undefined
 let creativeLibraries: CreativeLibraryStore | undefined
 let heritageSkills: HeritageSkillService | undefined
+let videoAnalysis: VideoAnalysisService | undefined
+let douyinCookies: DouyinCookieProvider | undefined
+let douyinPages: DouyinPageExtractor | undefined
 let worldMaterialization: WorldMaterializationService | undefined
 const ownerGrowthExecutions = new OwnerGrowthExecutionCoordinator()
 const ownerConversationMutations = new OwnerConversationMutationCoordinator()
@@ -189,6 +198,9 @@ async function initializeRuntime() {
       ...(providerApiKey ? { apiKey: providerApiKey } : {}),
     })
   }
+  const providerRepair = modelSettings.repairLegacyTextProfiles()
+  for (const repair of providerRepair.repaired) console.info(`[model_settings_repair] profile ${repair.id} provider "${repair.from}" -> "${repair.to}"`)
+  for (const profile of providerRepair.unresolved) console.warn(`[model_settings_repair_needed] profile ${profile.id} "${profile.name}" has unknown API Provider "${profile.providerId}"; open 设置 → 模型 and pick a valid provider`)
   if (!modelSettings.snapshot().image.configured && process.env.CREATX_IMAGE_BASE_URL?.trim() && process.env.CREATX_IMAGE_API_KEY?.trim()) {
     modelSettings.saveImageSettings({
       baseUrl: process.env.CREATX_IMAGE_BASE_URL,
@@ -196,6 +208,34 @@ async function initializeRuntime() {
       defaultModel: "gpt-image-2-cheap",
     })
   }
+  if (!modelSettings.snapshot().transcription.configured && process.env.CREATX_TRANSCRIPTION_BASE_URL?.trim() && process.env.CREATX_TRANSCRIPTION_MODEL?.trim()) {
+    modelSettings.saveTranscriptionSettings({
+      baseUrl: process.env.CREATX_TRANSCRIPTION_BASE_URL,
+      model: process.env.CREATX_TRANSCRIPTION_MODEL,
+      ...(process.env.CREATX_TRANSCRIPTION_LANGUAGE?.trim() ? { language: process.env.CREATX_TRANSCRIPTION_LANGUAGE } : {}),
+      ...(process.env.CREATX_TRANSCRIPTION_API_KEY?.trim() ? { apiKey: process.env.CREATX_TRANSCRIPTION_API_KEY } : {}),
+    })
+  }
+  douyinCookies = new DouyinCookieProvider({ root: join(app.getPath("userData"), "creatx", "video") })
+  douyinPages = new DouyinPageExtractor({})
+  videoAnalysis = new VideoAnalysisService({
+    root: join(app.getPath("userData"), "creatx", "video", "v1"),
+    // Resolved lazily so a build without the vendored binaries still starts; the failure then
+    // surfaces as a named video_binary error the first time someone analyzes a video.
+    resolveBinaries: async () => await resolveVideoBinaries([
+      process.env.CREATX_VIDEO_BINARY_ROOT?.trim() || join(process.resourcesPath, "vendor", "win-x64"),
+      join(app.getAppPath(), "apps", "desktop", "vendor", "win-x64"),
+      join(process.cwd(), "apps", "desktop", "vendor", "win-x64"),
+    ]),
+    resolveTranscription: () => modelSettings?.resolveTranscriptionConnection(),
+    resolveCookieSource: () => modelSettings?.resolveVideoSettings().cookieSource ?? "noven",
+    resolveCookieFile: async (signal) => await douyinCookies!.cookieFile(signal).catch(() => undefined),
+    // yt-dlp can no longer extract 抖音 (its detail API needs an a_bogus signature computed by
+    // 抖音's own script), so the page itself is asked instead. Other hosts still go to yt-dlp.
+    resolveDirectSource: async (url, signal) => /(^|\.)(douyin|iesdouyin)\.com$/u.test(new URL(url).hostname)
+      ? await douyinPages!.extract(url, signal)
+      : undefined,
+  })
   const selectedTextConnection = modelSettings.resolveSelectedTextConnection()
   if (!selectedTextConnection) throw new Error("model_settings_persistence: no selected text model profile exists")
   artLibrary = new ArtLibraryService({ root: join(app.getPath("userData"), "creatx", "art-library"), onChanged: (revision) => sendEvent({ type: "art_library.changed", revision }) })
@@ -310,8 +350,8 @@ async function initializeRuntime() {
     permissionStorePath: join(app.getPath("userData"), "creatx", "session.sqlite"),
     defaultConnection: selectedTextConnection,
     connections: textConnections,
-    tools: [workbenches.tool(), workbenches.renameTool(), workbenches.setHomeTool(), workbenches.setVisibilityTool(), workbenches.showTool(), worldBlueprints.tool(), worldMaterialization.tool(), growthProgress.tool(), growthController(), growthIssueResolution.tool(), imageRuntime.tool(), imageRuntime.editTool(), imageQueue.tool(), imageQueue.managementTool(), imageAttachments.tool(), ...heritageSkills.tools(), ...createArtLibraryTools(artLibrary, { projectFiles: projectFiles.queries, turnImages: artTurnSources })],
-    systemGuidance: [WORKBENCH_CORE_GUIDANCE, IMAGE_CORE_GUIDANCE, ART_LIBRARY_CORE_GUIDANCE, HERITAGE_SKILL_CORE_GUIDANCE],
+    tools: [workbenches.tool(), workbenches.renameTool(), workbenches.setHomeTool(), workbenches.setVisibilityTool(), workbenches.showTool(), worldBlueprints.tool(), worldMaterialization.tool(), growthProgress.tool(), growthController(), growthIssueResolution.tool(), imageRuntime.tool(), imageRuntime.editTool(), imageQueue.tool(), imageQueue.managementTool(), imageAttachments.tool(), ...heritageSkills.tools(), ...createVideoTools(videoAnalysis, { onSourceAnalyzed: (sessionId, sourceUrl) => heritageSkills?.recordSourceRead(sessionId, sourceUrl) }), ...createArtLibraryTools(artLibrary, { projectFiles: projectFiles.queries, turnImages: artTurnSources })],
+    systemGuidance: [WORKBENCH_CORE_GUIDANCE, IMAGE_CORE_GUIDANCE, ART_LIBRARY_CORE_GUIDANCE, HERITAGE_SKILL_CORE_GUIDANCE, VIDEO_CORE_GUIDANCE],
     skillDirectories: runtimeSkills.skillDirectories,
     skills: runtimeSkills.skills,
     workerSkills: creativeSkills.workerSkills,
@@ -866,6 +906,8 @@ async function handleCommand(command: string, ...args: unknown[]): Promise<Deskt
       return success(toSessionSummary(record))
     }
     if (command === "saveImageModelSettings") return success(modelSettings!.saveImageSettings(requireSaveImageModelSettingsCommand(args[0])))
+    if (command === "saveTranscriptionModelSettings") return success(modelSettings!.saveTranscriptionSettings(requireSaveTranscriptionModelSettingsCommand(args[0])))
+    if (command === "saveVideoSettings") return success(modelSettings!.saveVideoSettings(requireSaveVideoSettingsCommand(args[0])))
     if (command === "readImageTasks") return success(imageTasks!.listProject(requireProjectId(args[0])))
     if (command === "controlImageTask") {
       const input = requireControlImageTaskCommand(args[0])
@@ -1325,6 +1367,7 @@ function requireSaveTextModelProfileCommand(value: unknown): SaveTextModelProfil
   if (typeof input.name !== "string" || typeof input.providerId !== "string" || typeof input.modelId !== "string") {
     throw new Error("model_settings_invalid: name, providerId and modelId are required")
   }
+  if (!isKnownTextProviderId(input.providerId)) throw new Error(`model_settings_invalid: unknown API Provider "${input.providerId}"`)
   if (input.id !== undefined && typeof input.id !== "string") throw new Error("model_settings_invalid: id must be a string")
   if (input.baseUrl !== undefined && typeof input.baseUrl !== "string") throw new Error("model_settings_invalid: baseUrl must be a string")
   if (input.apiKey !== undefined && typeof input.apiKey !== "string") throw new Error("model_settings_invalid: apiKey must be a string")
@@ -1355,6 +1398,32 @@ function requireSaveImageModelSettingsCommand(value: unknown): SaveImageModelSet
   }
 }
 
+function requireSaveTranscriptionModelSettingsCommand(value: unknown): SaveTranscriptionModelSettingsCommand {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("model_settings_invalid: transcription command must be an object")
+  const input = value as Partial<SaveTranscriptionModelSettingsCommand>
+  if (typeof input.baseUrl !== "string") throw new Error("model_settings_invalid: transcription baseUrl is required")
+  if (typeof input.model !== "string") throw new Error("model_settings_invalid: transcription model is required")
+  if (input.language !== undefined && typeof input.language !== "string") throw new Error("model_settings_invalid: language must be a string")
+  if (input.apiKey !== undefined && typeof input.apiKey !== "string") throw new Error("model_settings_invalid: apiKey must be a string")
+  if (input.clearApiKey !== undefined && typeof input.clearApiKey !== "boolean") throw new Error("model_settings_invalid: clearApiKey must be boolean")
+  return {
+    baseUrl: input.baseUrl,
+    model: input.model,
+    ...(input.language !== undefined ? { language: input.language } : {}),
+    ...(input.apiKey !== undefined ? { apiKey: input.apiKey } : {}),
+    ...(input.clearApiKey !== undefined ? { clearApiKey: input.clearApiKey } : {}),
+  }
+}
+
+function requireSaveVideoSettingsCommand(value: unknown): SaveVideoSettingsCommand {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("model_settings_invalid: video command must be an object")
+  const input = value as Partial<SaveVideoSettingsCommand>
+  if (input.cookieSource !== "none" && input.cookieSource !== "noven" && input.cookieSource !== "edge" && input.cookieSource !== "firefox" && input.cookieSource !== "chrome") {
+    throw new Error("model_settings_invalid: unsupported cookie source")
+  }
+  return { cookieSource: input.cookieSource }
+}
+
 ipcMain.handle(CREATX_DESKTOP_API, (_event, command: string, ...args: unknown[]) => handleCommand(command, ...args))
 
 function parseCreativeLibraryImport(content: string): unknown {
@@ -1374,12 +1443,15 @@ app.on("before-quit", (event) => {
     ? requestAllOwnerExecutionCancellations("应用正在退出，Growth 已暂停。")
     : { executions: [], sessionIds: [] }
   const ownerAborts = ownerCancellation.sessionIds.map((sessionId) => adapter!.abortRun(sessionId, "应用正在退出，Growth 已暂停。"))
+  // Electron does not put spawned children into a Windows job object, so an in-flight yt-dlp and
+  // its ffmpeg child would survive the force-exit below and keep a handle on the job directory.
+  disposeVideoBinaries()
   void runBeforeDeadline(async () => {
     const growthResults = await Promise.allSettled([growthLifecycle?.shutdown(), ownerGrowthExecutions.shutdown("应用正在退出，Growth 已暂停。"), ...ownerAborts])
     for (const result of growthResults) if (result.status === "rejected") console.error("CreatX Growth shutdown failed", result.reason)
     const eventResults = await growthProjectionDispatcher.settle()
     for (const result of eventResults) if (result.status === "rejected") console.error("CreatX Growth projection shutdown failed", result.reason)
-    const results = await Promise.allSettled([imageQueue?.shutdown(), adapter!.dispose(), heritageSkills?.dispose()])
+    const results = await Promise.allSettled([imageQueue?.shutdown(), adapter!.dispose(), heritageSkills?.dispose(), douyinCookies?.dispose(), douyinPages?.dispose()])
     for (const result of results) if (result.status === "rejected") console.error("CreatX shutdown failed", result.reason)
   }, SHUTDOWN_DEADLINE_MS).then((result) => {
     if (result.timedOut) {
@@ -1391,6 +1463,8 @@ app.on("before-quit", (event) => {
     imageTasks = undefined
     imageQueue = undefined
     heritageSkills = undefined
+    videoAnalysis = undefined
+    douyinCookies = undefined
     growthGoals?.close()
     growthGoals = undefined
     growthScheduler = undefined

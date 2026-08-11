@@ -1,0 +1,5 @@
+{"at":"2026-08-10T21:54:15.765Z","source":"tool","toolName":"write_world_blueprint","detail":"{\"error\":\"blueprint_invalid: 世界蓝图输入或持久状态无效。 (blueprint_invalid: direction.worldPremise must be a non-empty string)\"}"}
+{"at":"2026-08-10T22:01:14.129Z","source":"tool","toolName":"write_world_blueprint","detail":"{\"error\":\"blueprint_invalid: 世界蓝图输入或持久状态无效。 (blueprint_invalid: 宇宙、自然与地理 至少需要 8 个正文条目，当前为 7)\"}"}
+{"at":"2026-08-10T22:01:42.628Z","source":"tool","toolName":"write_world_blueprint","detail":"{\"error\":\"blueprint_invalid: 世界蓝图输入或持久状态无效。 (blueprint_invalid: reconcile blueprint still has 1 unmapped entry objects)\"}"}
+{"at":"2026-08-10T22:05:12.743Z","source":"tool","toolName":"submit_image_generation","detail":"{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"}
+{"at":"2026-08-10T22:05:46.323Z","source":"tool","toolName":"submit_image_generation","detail":"{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"}

@@ -13,6 +13,20 @@ asar: true
 asarUnpack:
   - "node_modules/**/*.node"
 
+# yt-dlp.exe and ffmpeg.exe must stay outside app.asar — an executable inside the archive
+# cannot be spawned. This lands them at resources/vendor/win-x64, which is the first candidate
+# resolveVideoBinaries checks (process.resourcesPath).
+extraResources:
+  - from: apps/desktop/vendor/win-x64
+    to: vendor/win-x64
+    filter:
+      - "**/*.exe"
+      - "VENDOR.json"
+      # Redistributing an LGPL ffmpeg build obliges us to ship its license text alongside it.
+      - "LICENSE.ffmpeg.txt"
+      - "LICENSE*"
+      - "*.txt"
+
 npmRebuild: false
 
 win:

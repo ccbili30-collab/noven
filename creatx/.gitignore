@@ -3,3 +3,8 @@ out/
 release/
 release-heritage/
 *.tsbuildinfo
+
+# ffmpeg.exe alone is ~110 MB, past GitHub's 100 MB per-file limit. VENDOR.json is committed and
+# carries the SHA-256 pin; `bun run fetch:video-binaries` reproduces the exact bytes from it.
+apps/desktop/vendor/win-x64/*.exe
+apps/desktop/vendor/win-x64/*.txt

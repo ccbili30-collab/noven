@@ -1,11 +1,16 @@
 import { randomUUID } from "node:crypto"
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs"
+import { isIP } from "node:net"
 import { dirname } from "node:path"
+import { isKnownTextProviderId, isPublicAddress } from "@creatx/contracts"
 import type {
   ImageGenerationModel,
   ModelSettingsSnapshot,
   SaveImageModelSettingsCommand,
   SaveTextModelProfileCommand,
+  SaveTranscriptionModelSettingsCommand,
+  SaveVideoSettingsCommand,
+  VideoCookieSourceSetting,
 } from "@creatx/contracts"
 
 export interface SecretCodec {
@@ -28,6 +33,18 @@ export interface ImageModelConnection {
   defaultModel: ImageGenerationModel
 }
 
+export interface TranscriptionModelConnection {
+  baseUrl: string
+  model: string
+  apiKey?: string
+  language?: string
+}
+
+export interface TextProfileRepairReport {
+  repaired: Array<{ id: string; name: string; from: string; to: string }>
+  unresolved: Array<{ id: string; name: string; providerId: string }>
+}
+
 interface StoredTextProfile {
   id: string
   name: string
@@ -43,17 +60,34 @@ interface StoredImageSettings {
   encryptedApiKey?: string
 }
 
+interface StoredTranscriptionSettings {
+  baseUrl?: string
+  model?: string
+  language?: string
+  encryptedApiKey?: string
+}
+
+interface StoredVideoSettings {
+  cookieSource: VideoCookieSourceSetting
+}
+
+// transcription and video are optional and default-filled rather than schemaVersion 2, because
+// readSettings fails closed on anything unexpected and every existing models.json predates them.
 interface StoredModelSettings {
   schemaVersion: 1
   selectedTextProfileId?: string
   textProfiles: StoredTextProfile[]
   image: StoredImageSettings
+  transcription: StoredTranscriptionSettings
+  video: StoredVideoSettings
 }
 
 const emptySettings = (): StoredModelSettings => ({
   schemaVersion: 1,
   textProfiles: [],
   image: { defaultModel: "gpt-image-2-cheap" },
+  transcription: {},
+  video: { cookieSource: "noven" },
 })
 
 export class UserModelSettingsStore {
@@ -84,6 +118,15 @@ export class UserModelSettingsStore {
         apiKeyConfigured: Boolean(this.settings.image.encryptedApiKey),
         configured: Boolean(this.settings.image.baseUrl && this.settings.image.encryptedApiKey),
       },
+      transcription: {
+        ...(this.settings.transcription.baseUrl ? { baseUrl: this.settings.transcription.baseUrl } : {}),
+        ...(this.settings.transcription.model ? { model: this.settings.transcription.model } : {}),
+        ...(this.settings.transcription.language ? { language: this.settings.transcription.language } : {}),
+        apiKeyConfigured: Boolean(this.settings.transcription.encryptedApiKey),
+        // A LAN inference box needs no key, so "configured" turns on base URL plus model alone.
+        configured: Boolean(this.settings.transcription.baseUrl && this.settings.transcription.model),
+      },
+      video: { cookieSource: this.settings.video.cookieSource },
     }
   }
 
@@ -95,7 +138,7 @@ export class UserModelSettingsStore {
     const profile: StoredTextProfile = {
       id,
       name: requireText(command.name, "name"),
-      providerId: requireText(command.providerId, "providerId"),
+      providerId: requireKnownProviderId(command.providerId),
       modelId: requireText(command.modelId, "modelId"),
       ...(baseUrl ? { baseUrl } : {}),
       ...(encryptedApiKey ? { encryptedApiKey } : {}),
@@ -136,6 +179,43 @@ export class UserModelSettingsStore {
     return this.snapshot()
   }
 
+  saveTranscriptionSettings(command: SaveTranscriptionModelSettingsCommand) {
+    const encryptedApiKey = updatedSecret(this.settings.transcription.encryptedApiKey, command.apiKey, command.clearApiKey, this.codec)
+    const language = command.language?.trim()
+    this.settings = {
+      ...this.settings,
+      transcription: {
+        baseUrl: requireTranscriptionBaseUrl(command.baseUrl),
+        model: requireText(command.model, "transcription.model"),
+        ...(language ? { language } : {}),
+        ...(encryptedApiKey ? { encryptedApiKey } : {}),
+      },
+    }
+    this.persist()
+    return this.snapshot()
+  }
+
+  saveVideoSettings(command: SaveVideoSettingsCommand) {
+    this.settings = { ...this.settings, video: { cookieSource: requireCookieSource(command.cookieSource) } }
+    this.persist()
+    return this.snapshot()
+  }
+
+  resolveTranscriptionConnection(): TranscriptionModelConnection | undefined {
+    const transcription = this.settings.transcription
+    if (!transcription.baseUrl || !transcription.model) return undefined
+    return {
+      baseUrl: transcription.baseUrl,
+      model: transcription.model,
+      ...(transcription.encryptedApiKey ? { apiKey: decryptSecret(transcription.encryptedApiKey, this.codec) } : {}),
+      ...(transcription.language ? { language: transcription.language } : {}),
+    }
+  }
+
+  resolveVideoSettings() {
+    return { cookieSource: this.settings.video.cookieSource }
+  }
+
   resolveTextConnection(profileId: string): TextModelConnection | undefined {
     const profile = this.settings.textProfiles.find((candidate) => candidate.id === profileId)
     if (!profile) return undefined
@@ -156,6 +236,39 @@ export class UserModelSettingsStore {
   resolveConnection(providerId: string, modelId: string) {
     const profile = this.settings.textProfiles.find((candidate) => candidate.providerId === providerId && candidate.modelId === modelId)
     return profile ? this.resolveTextConnection(profile.id) : undefined
+  }
+
+  // Bounded startup migration for profiles saved before provider validation existed: a profile
+  // whose provider slot holds its own model id is repaired in place — keeping its id, so sessions
+  // bound to the profile recover without touching the session database — but only when exactly one
+  // sibling profile with the same model and Base URL names a legal provider. Anything else is
+  // reported instead of guessed.
+  repairLegacyTextProfiles(): TextProfileRepairReport {
+    const repaired: TextProfileRepairReport["repaired"] = []
+    const unresolved: TextProfileRepairReport["unresolved"] = []
+    const textProfiles = this.settings.textProfiles.map((profile) => {
+      if (isKnownTextProviderId(profile.providerId)) return profile
+      const donorProviderIds = profile.providerId === profile.modelId
+        ? new Set(this.settings.textProfiles
+          .filter((candidate) => candidate.id !== profile.id
+            && isKnownTextProviderId(candidate.providerId)
+            && candidate.modelId === profile.modelId
+            && (candidate.baseUrl ?? "") === (profile.baseUrl ?? ""))
+          .map((candidate) => candidate.providerId))
+        : new Set<string>()
+      if (donorProviderIds.size !== 1) {
+        unresolved.push({ id: profile.id, name: profile.name, providerId: profile.providerId })
+        return profile
+      }
+      const providerId = [...donorProviderIds][0]!
+      repaired.push({ id: profile.id, name: profile.name, from: profile.providerId, to: providerId })
+      return { ...profile, providerId }
+    })
+    if (repaired.length) {
+      this.settings = { ...this.settings, textProfiles }
+      this.persist()
+    }
+    return { repaired, unresolved }
   }
 
   resolveImageConnection(): ImageModelConnection | undefined {
@@ -205,7 +318,25 @@ function readSettings(path: string): StoredModelSettings {
       defaultModel: requireImageModel(value.image.defaultModel),
       ...(value.image.encryptedApiKey === undefined ? {} : { encryptedApiKey: requireText(value.image.encryptedApiKey, "image.encryptedApiKey") }),
     },
+    transcription: readTranscription(value.transcription),
+    video: { cookieSource: value.video === undefined ? "noven" : requireCookieSource(isRecord(value.video) ? value.video.cookieSource : undefined) },
   }
+}
+
+function readTranscription(value: unknown): StoredTranscriptionSettings {
+  if (value === undefined) return {}
+  if (!isRecord(value)) throw new Error("model_settings_persistence: malformed transcription settings")
+  return {
+    ...(value.baseUrl === undefined ? {} : { baseUrl: requireTranscriptionBaseUrl(value.baseUrl) }),
+    ...(value.model === undefined ? {} : { model: requireText(value.model, "transcription.model") }),
+    ...(value.language === undefined ? {} : { language: requireText(value.language, "transcription.language") }),
+    ...(value.encryptedApiKey === undefined ? {} : { encryptedApiKey: requireText(value.encryptedApiKey, "transcription.encryptedApiKey") }),
+  }
+}
+
+function requireCookieSource(value: unknown): VideoCookieSourceSetting {
+  if (value === "none" || value === "noven" || value === "edge" || value === "firefox" || value === "chrome") return value
+  throw new Error("model_settings_invalid: unsupported cookie source")
 }
 
 function readTextProfile(value: unknown): StoredTextProfile {
@@ -218,6 +349,12 @@ function readTextProfile(value: unknown): StoredTextProfile {
     ...(value.baseUrl === undefined ? {} : { baseUrl: requireBaseUrl(value.baseUrl) }),
     ...(value.encryptedApiKey === undefined ? {} : { encryptedApiKey: requireText(value.encryptedApiKey, "textProfile.encryptedApiKey") }),
   }
+}
+
+function requireKnownProviderId(value: unknown) {
+  const text = requireText(value, "providerId")
+  if (!isKnownTextProviderId(text)) throw new Error(`model_settings_invalid: unknown API Provider "${text}"`)
+  return text
 }
 
 function updatedSecret(existing: string | undefined, value: string | undefined, clear: boolean | undefined, codec: SecretCodec) {
@@ -252,6 +389,31 @@ function requireBaseUrl(value: unknown) {
     throw new Error("model_settings_invalid: baseUrl must use HTTPS, except localhost")
   }
   return url.toString().replace(/\/$/, "")
+}
+
+// Deliberately separate from requireBaseUrl: text and image providers must stay HTTPS-or-loopback.
+// A self-hosted inference box on the LAN has no public certificate, so plain HTTP is allowed —
+// but only to a LITERAL loopback or private-range IP. A hostname over plain HTTP is refused
+// because the name could later resolve to a public address, which would ship the user's audio
+// somewhere they never configured.
+function requireTranscriptionBaseUrl(value: unknown) {
+  const text = requireText(value, "transcription.baseUrl").replace(/\/$/, "")
+  let url: URL
+  try {
+    url = new URL(text)
+  } catch (error) {
+    throw new Error("model_settings_invalid: transcription baseUrl must be a valid URL", { cause: error })
+  }
+  if (url.username || url.password) throw new Error("model_settings_invalid: transcription baseUrl must not embed credentials")
+  if (url.protocol === "https:") return url.toString().replace(/\/$/, "")
+  if (url.protocol === "http:" && isTrustedLocalHost(url.hostname)) return url.toString().replace(/\/$/, "")
+  throw new Error("model_settings_invalid: transcription baseUrl must use HTTPS, or HTTP with a loopback or private-network IP address")
+}
+
+function isTrustedLocalHost(hostname: string) {
+  const host = hostname.startsWith("[") && hostname.endsWith("]") ? hostname.slice(1, -1) : hostname
+  if (host === "localhost") return true
+  return isIP(host) !== 0 && !isPublicAddress(host)
 }
 
 function requireImageModel(value: unknown): ImageGenerationModel {

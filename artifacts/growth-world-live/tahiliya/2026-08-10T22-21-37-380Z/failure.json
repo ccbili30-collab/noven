@@ -1,0 +1,9 @@
+{
+  "status": "TAHILIYA WORLD PRO LIVE FAIL",
+  "error": "Paused Goal has no usable resume control: {\"goalId\":\"goal_d183303a-9053-40e1-8f83-dd5c4b8fe772\",\"projectId\":\"8b3602731f978df55d19\",\"sessionId\":\"1786398783518_s1384\",\"instruction\":\"Growth World Pro 专用目标：以维基百科条目《塔希里亚故事集》 https://zh.wikipedia.org/wiki/%E5%A1%94%E5%B8%8C%E9%87%8C%E4%BA%9E%E6%95%85%E4%BA%8B%E9%9B%86 为种子与考据起点。\\n先阅读该条目，理解吴淼笔下塔希里亚世界的设定、美学与叙事气质（黑白剪影、克制的魔法、命运与选择的主题），再以其精神与框架为源头独立创作一个完整、自洽、可长期扩展的世界作品；不要照抄或复述原作情节。\\n让地理、生态、生产、社会、国家、历史、地点、冲突、人物与传说逐层相互支撑。正文应像真正的地理志、史书、博物志、制度说明或人物记述，不得暴露制作过程、自询问、提示词、检索与索引术语。\",\"status\":\"paused\",\"statusReason\":\"应用正在退出，Growth 已暂停。\",\"workRootPath\":\"暮痕纪事\",\"worldEntryMode\":\"reconcile\",\"worldEntryStage\":\"blueprint-create\",\"requiredImageTaskIds\":[],\"createdAt\":\"2026-08-10T21:53:08.846Z\",\"updatedAt\":\"2026-08-10T22:15:01.377Z\",\"version\":10,\"progress\":{\"phase\":\"核心规则与边界\",\"total\":97,\"completed\":2,\"active\":0,\"retryable\":1,\"blocked\":0,\"unknown\":0,\"currentObjects\":[{\"title\":\"可见之魂与遗忘之魂\",\"layer\":\"核心规则与边界\",\"status\":\"retryable\"}],\"errorCategory\":\"worker-failure\"},\"issues\":[{\"issueId\":\"issue_ff720794cf0912a89f0c2a5c\",\"goalId\":\"goal_d183303a-9053-40e1-8f83-dd5c4b8fe772\",\"workItemId\":\"wbo_7dccf140f7f3559c0ce7\",\"errorCode\":\"materialization_worker_failure\",\"impact\":\"repairable\",\"status\":\"repairing\",\"summary\":\"正在依据原始错误进行有界修复。\",\"detail\":\"aborted\",\"affectedObjectIds\":[\"wbo_7dccf140f7f3559c0ce7\"],\"attemptCount\":1,\"createdAt\":\"2026-08-10T22:15:02.314Z\",\"updatedAt\":\"2026-08-10T22:15:02.324Z\",\"version\":2}]}",
+  "goalId": "goal_d183303a-9053-40e1-8f83-dd5c4b8fe772",
+  "projectRoot": "C:\\Users\\hawke\\Desktop\\CreatXProjects\\塔希里亚故事集",
+  "observedErrors": [],
+  "progress": [],
+  "elapsedSeconds": 49
+}
