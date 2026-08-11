@@ -4,7 +4,7 @@
 
 2026-08-11 已把 GitHub PR #1 的抖音视频分析与 Provider（模型服务）标识修复合入 `main`，并与 `0.1.22` 后的“恢复诺文”和非阻塞错误恢复提示整合为 `release-023`。版本元数据为 `0.1.23`；视频 Runtime（运行时）通过应用 Chromium/CDP（浏览器调试协议）取得抖音平台签名详情，默认生成时间戳语音文案、关键帧按需提取，Windows 包外置并校验 `yt-dlp 2026.07.04` 与固定 LGPL FFmpeg。未知文本 Provider 在保存与 Main 边界失败关闭；旧档案只在同模型、同 Base URL 存在唯一合法对应时原位修复。
 
-集成定向 61/61（213 次断言）、全量 653/653（4,698 次断言，88 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）、Production Build（生产构建）、供应商二进制校验、Windows NSIS/Portable、7-Zip 完整性和 `app.asar` 内容边界通过。Setup 为 174,755,370 字节，SHA-256 `970908C6DEC3E23419C88B752F00C66B400D0B51FCF4B220135944D6664EB6CF`；Portable 为 174,531,651 字节，SHA-256 `A4F3C6D625029FD39343679352E654574A7666D2D38983406E29FDB4CB54A2DE`。Setup 已安装到隔离目录，安装版品牌烟测通过；解包 EXE 的十步教程与应用重启通过，重启无 Provider 自动重放。产物未签名。
+集成定向 61/61（213 次断言）、全量 653/653（4,698 次断言，88 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）、Production Build（生产构建）、供应商二进制校验、Windows NSIS/Portable、7-Zip 完整性和 `app.asar` 内容边界通过。Setup 为 174,755,370 字节，SHA-256 `970908C6DEC3E23419C88B752F00C66B400D0B51FCF4B220135944D6664EB6CF`；Portable 为 174,531,651 字节，SHA-256 `A4F3C6D625029FD39343679352E654574A7666D2D38983406E29FDB4CB54A2DE`。Setup 已安装到隔离目录，安装版品牌烟测通过；解包 EXE 的十步教程与应用重启通过，重启无 Provider 自动重放。发布提交为 `d45bd1c`，产物未签名。
 
 当前环境没有外部文本或转写 Provider 配置，PR 也未保留真实测试视频 URL，因此没有完成打包 EXE 从 UI 粘贴/拖入链接到模型回答的 Live（真实运行）验收，不能把 PR 的 Runtime 端到端证据等同于该 UI 链。ASR 仍可能误听专名、把歌唱识别为乱码，且可能为 11.4 MiB 音频下载约 295 MB 视频。完整边界见 `docs/baseline/creatx-windows-0.1.23-2026-08-11.md`。
 
