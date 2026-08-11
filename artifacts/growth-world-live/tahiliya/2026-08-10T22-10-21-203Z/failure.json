@@ -1,0 +1,22 @@
+{
+  "status": "TAHILIYA WORLD PRO LIVE FAIL",
+  "error": "Growth resume failed: cancelled: cancelled: 用户暂停了 Growth。",
+  "goalId": "goal_d183303a-9053-40e1-8f83-dd5c4b8fe772",
+  "projectRoot": "C:\\Users\\hawke\\Desktop\\CreatXProjects\\塔希里亚故事集",
+  "observedErrors": [
+    {
+      "at": "2026-08-10T22:10:34.007Z",
+      "source": "tool",
+      "toolName": "run_growth",
+      "detail": "{\"error\":\"growth_conflict: Growth 目标已发生变化，请刷新后重试。 (growth_conflict: Owner controller result does not match the claimed activation)\"}"
+    },
+    {
+      "at": "2026-08-10T22:10:34.037Z",
+      "source": "runtime",
+      "code": "growth_conflict",
+      "detail": "1 tool call(s) failed: [run_growth] {\"error\":\"growth_conflict: Growth 目标已发生变化，请刷新后重试。 (growth_conflict: Owner controller result does not match the claimed activation)\"}"
+    }
+  ],
+  "progress": [],
+  "elapsedSeconds": 14
+}

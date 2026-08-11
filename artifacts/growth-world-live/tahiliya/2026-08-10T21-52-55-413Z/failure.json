@@ -1,0 +1,101 @@
+{
+  "status": "TAHILIYA WORLD PRO LIVE FAIL",
+  "error": "page.waitForTimeout: Target page, context or browser has been closed",
+  "goalId": "goal_d183303a-9053-40e1-8f83-dd5c4b8fe772",
+  "projectRoot": "C:\\Users\\hawke\\Desktop\\CreatXProjects\\塔希里亚故事集",
+  "observedErrors": [
+    {
+      "at": "2026-08-10T21:54:15.765Z",
+      "source": "tool",
+      "toolName": "write_world_blueprint",
+      "detail": "{\"error\":\"blueprint_invalid: 世界蓝图输入或持久状态无效。 (blueprint_invalid: direction.worldPremise must be a non-empty string)\"}"
+    },
+    {
+      "at": "2026-08-10T22:01:14.129Z",
+      "source": "tool",
+      "toolName": "write_world_blueprint",
+      "detail": "{\"error\":\"blueprint_invalid: 世界蓝图输入或持久状态无效。 (blueprint_invalid: 宇宙、自然与地理 至少需要 8 个正文条目，当前为 7)\"}"
+    },
+    {
+      "at": "2026-08-10T22:01:42.628Z",
+      "source": "tool",
+      "toolName": "write_world_blueprint",
+      "detail": "{\"error\":\"blueprint_invalid: 世界蓝图输入或持久状态无效。 (blueprint_invalid: reconcile blueprint still has 1 unmapped entry objects)\"}"
+    },
+    {
+      "at": "2026-08-10T22:05:12.743Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    },
+    {
+      "at": "2026-08-10T22:05:46.323Z",
+      "source": "tool",
+      "toolName": "submit_image_generation",
+      "detail": "{\"error\":\"image_queue_invalid: 图片任务请求无效。 (image_queue_invalid: end attachment does not accept anchor)\"}"
+    }
+  ],
+  "progress": [
+    {
+      "at": "2026-08-10T21:53:09.018Z",
+      "version": 1,
+      "status": "active",
+      "errors": 0
+    },
+    {
+      "at": "2026-08-10T21:54:17.499Z",
+      "version": 1,
+      "status": "active",
+      "errors": 1
+    },
+    {
+      "at": "2026-08-10T21:54:59.786Z",
+      "version": 2,
+      "status": "active",
+      "errors": 1
+    },
+    {
+      "at": "2026-08-10T21:55:34.075Z",
+      "version": 3,
+      "status": "active",
+      "errors": 1
+    },
+    {
+      "at": "2026-08-10T22:01:14.643Z",
+      "version": 3,
+      "status": "active",
+      "errors": 2
+    },
+    {
+      "at": "2026-08-10T22:01:42.845Z",
+      "version": 3,
+      "status": "active",
+      "errors": 3
+    },
+    {
+      "at": "2026-08-10T22:02:33.237Z",
+      "version": 4,
+      "status": "active",
+      "errors": 3
+    },
+    {
+      "at": "2026-08-10T22:03:15.496Z",
+      "version": 5,
+      "status": "active",
+      "errors": 3
+    },
+    {
+      "at": "2026-08-10T22:05:13.345Z",
+      "version": 5,
+      "status": "active",
+      "errors": 4
+    },
+    {
+      "at": "2026-08-10T22:05:48.022Z",
+      "version": 5,
+      "status": "active",
+      "errors": 5
+    }
+  ],
+  "elapsedSeconds": 811
+}

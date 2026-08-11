@@ -146,6 +146,45 @@ describe("HeritageSkillService", () => {
     expect(await pending).toMatchObject({ ok: false, error: { code: "heritage_skill_network" } })
     await cancelled.dispose()
   })
+
+  test("installs a 抖音-derived Skill only after a real analysis minted a receipt for that exact source", async () => {
+    const root = await testRoot()
+    const service = new HeritageSkillService({ root, fetch: async () => new Response("", { status: 404 }) })
+    const tool = service.tools().find((item) => item.name === "install_heritage_skill")!
+    const douyinSource = "https://www.douyin.com/video/7412345678901234567"
+    const douyinSkill = validSkill.replace(`Source: ${sourceUrl}`, `Source: ${douyinSource}`)
+    const input = { name: "build-consistent-worlds", description: "Build a fictional world with consistent physical and social rules. Use when creating or checking a setting for fiction.", sourceUrl: douyinSource, skillMarkdown: douyinSkill }
+
+    // Knowing the URL is not enough — without a receipt the install must still be refused.
+    expect(await tool.execute(input, { sessionId: "douyin-1" })).toMatchObject({ ok: false, error: { code: "heritage_skill_invalid" } })
+
+    // A receipt for a different video must not unlock this one.
+    service.recordSourceRead("douyin-1", "https://www.douyin.com/video/7000000000000000001")
+    expect(await tool.execute(input, { sessionId: "douyin-1" })).toMatchObject({ ok: false, error: { code: "heritage_skill_invalid" } })
+
+    service.recordSourceRead("douyin-1", douyinSource)
+    expect(await tool.execute(input, { sessionId: "douyin-1" })).toMatchObject({ ok: true, value: { status: "installed", restartRequired: true } })
+    expect(await readFile(join(root, "build-consistent-worlds", "SKILL.md"), "utf8")).toContain(`Source: ${douyinSource}`)
+
+    // The receipt is single-use, exactly as it already was for TED.
+    expect(await tool.execute(input, { sessionId: "douyin-1" })).toMatchObject({ ok: false, error: { code: "heritage_skill_invalid" } })
+    await service.dispose()
+  })
+
+  test("rejects source URLs outside the two canonical shapes", async () => {
+    const service = new HeritageSkillService({ root: await testRoot(), fetch: async () => new Response("", { status: 404 }) })
+    const tool = service.tools().find((item) => item.name === "install_heritage_skill")!
+    const attempt = async (url: string) => {
+      service.recordSourceRead("s", sourceUrl)
+      return await tool.execute({ name: "x-skill", description: "A description long enough to pass the twenty character minimum check.", sourceUrl: url, skillMarkdown: validSkill }, { sessionId: "s" })
+    }
+
+    expect(() => service.recordSourceRead("s", "https://www.bilibili.com/video/BV1xx")).toThrow("heritage_skill_invalid")
+    expect(() => service.recordSourceRead("s", "https://www.douyin.com/video/7412345678901234567?from=share")).toThrow("heritage_skill_invalid")
+    expect(() => service.recordSourceRead("s", "http://www.douyin.com/video/7412345678901234567")).toThrow("heritage_skill_invalid")
+    expect(await attempt("https://evil.example.com/video/7412345678901234567")).toMatchObject({ ok: false, error: { code: "heritage_skill_invalid" } })
+    await service.dispose()
+  })
 })
 
 async function testRoot() {

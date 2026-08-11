@@ -3,6 +3,8 @@ export const CREATX_DESKTOP_EVENT = "creatx:event"
 export const CHAT_IMAGE_ATTACHMENT_MAX_BYTES = 10 * 1024 * 1024
 export const CHAT_IMAGE_ATTACHMENTS_MAX_BYTES = 20 * 1024 * 1024
 
+export { isPublicAddress } from "./network-address.ts"
+
 export type {
   ProjectPackageCaseExportCommand,
   ProjectPackageCaseProjection,
@@ -428,10 +430,29 @@ export interface ImageModelSettingsProjection {
   configured: boolean
 }
 
+export interface TranscriptionModelSettingsProjection {
+  baseUrl?: string
+  model?: string
+  language?: string
+  apiKeyConfigured: boolean
+  configured: boolean
+}
+
+// "noven" means the app acquires 抖音's anti-bot cookies itself through a Chromium session of
+// its own. It is the default because anonymous extraction is refused outright and Chromium
+// App-Bound Encryption makes reading an external browser profile unreliable on Windows.
+export type VideoCookieSourceSetting = "none" | "noven" | "edge" | "firefox" | "chrome"
+
+export interface VideoSettingsProjection {
+  cookieSource: VideoCookieSourceSetting
+}
+
 export interface ModelSettingsSnapshot {
   textProfiles: TextModelProfileProjection[]
   selectedTextProfileId?: string
   image: ImageModelSettingsProjection
+  transcription: TranscriptionModelSettingsProjection
+  video: VideoSettingsProjection
 }
 
 export interface SaveTextModelProfileCommand {
@@ -444,11 +465,47 @@ export interface SaveTextModelProfileCommand {
   clearApiKey?: boolean
 }
 
+export interface TextProviderOption {
+  id: string
+  label: string
+}
+
+// The bounded set of API Providers a text profile may use. The settings UI renders exactly these
+// choices and both the main process and the settings store refuse anything else, so a model name
+// can never end up in the provider slot again (Cline rejects unknown provider ids at run time).
+export const TEXT_PROVIDER_OPTIONS: readonly TextProviderOption[] = [
+  { id: "openai-compatible", label: "OpenAI 兼容接口" },
+  { id: "openai-native", label: "OpenAI 官方接口" },
+  { id: "deepseek", label: "DeepSeek" },
+  { id: "ollama", label: "Ollama" },
+  { id: "lmstudio", label: "LM Studio" },
+]
+
+export function isKnownTextProviderId(providerId: string): boolean {
+  return TEXT_PROVIDER_OPTIONS.some((option) => option.id === providerId)
+}
+
+export function textProviderLabel(providerId: string): string {
+  return TEXT_PROVIDER_OPTIONS.find((option) => option.id === providerId)?.label ?? providerId
+}
+
 export interface SaveImageModelSettingsCommand {
   baseUrl: string
   defaultModel: ImageGenerationModel
   apiKey?: string
   clearApiKey?: boolean
+}
+
+export interface SaveTranscriptionModelSettingsCommand {
+  baseUrl: string
+  model: string
+  language?: string
+  apiKey?: string
+  clearApiKey?: boolean
+}
+
+export interface SaveVideoSettingsCommand {
+  cookieSource: VideoCookieSourceSetting
 }
 
 export interface SubmitImageTaskCommand {
@@ -720,6 +777,12 @@ export type CreatXErrorCode =
   | "heritage_skill_network"
   | "heritage_skill_conflict"
   | "heritage_skill_persistence"
+  | "video_invalid"
+  | "video_auth"
+  | "video_network"
+  | "video_binary"
+  | "video_transcription"
+  | "video_persistence"
   | "compatibility"
   | "runtime"
 
@@ -839,6 +902,8 @@ export interface CreatXDesktopApi {
   saveTextModelProfile(command: SaveTextModelProfileCommand): Promise<DesktopResult<ModelSettingsSnapshot>>
   selectSessionModel(sessionId: string, profileId: string): Promise<DesktopResult<SessionSummary>>
   saveImageModelSettings(command: SaveImageModelSettingsCommand): Promise<DesktopResult<ModelSettingsSnapshot>>
+  saveTranscriptionModelSettings(command: SaveTranscriptionModelSettingsCommand): Promise<DesktopResult<ModelSettingsSnapshot>>
+  saveVideoSettings(command: SaveVideoSettingsCommand): Promise<DesktopResult<ModelSettingsSnapshot>>
   readImageTasks(projectId: string): Promise<DesktopResult<ImageTaskProjection[]>>
   controlImageTask(command: ControlImageTaskCommand): Promise<DesktopResult<ImageTaskProjection>>
   chooseProject(): Promise<DesktopResult<ProjectSnapshot | undefined>>
@@ -894,6 +959,27 @@ export function classifyRuntimeError(error: unknown): CreatXError {
   }
   if (message.startsWith("runtime_unavailable")) {
     return { code: "runtime", message: "AI 运行进程当前不可用。", detail }
+  }
+  // Video codes are matched by prefix before the generic includes() rules below, otherwise
+  // "video_network: request timed out" would be claimed by provider_network and reported as
+  // a model outage instead of a download failure.
+  if (message.startsWith("video_auth")) {
+    return { code: "video_auth", message: "这条视频需要登录态才能读取。", detail }
+  }
+  if (message.startsWith("video_binary")) {
+    return { code: "video_binary", message: "视频处理组件不可用。", detail }
+  }
+  if (message.startsWith("video_transcription")) {
+    return { code: "video_transcription", message: "语音转写服务无法完成这次转写。", detail }
+  }
+  if (message.startsWith("video_network")) {
+    return { code: "video_network", message: "无法安全取得这条视频。", detail }
+  }
+  if (message.startsWith("video_persistence")) {
+    return { code: "video_persistence", message: "视频分析结果无法安全保存。", detail }
+  }
+  if (message.startsWith("video_invalid")) {
+    return { code: "video_invalid", message: "这条视频链接或分析请求无效。", detail }
   }
   if (message.includes("401") || message.includes("403") || message.includes("unauthorized") || message.includes("authentication") || message.includes("invalid api key") || message.includes("api key is invalid")) {
     return { code: "provider_unauthorized", message: "模型凭据未通过验证。", detail }

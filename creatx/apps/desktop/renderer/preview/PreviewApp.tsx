@@ -12,6 +12,8 @@ import type {
   ProjectSnapshot,
   SaveImageModelSettingsCommand,
   SaveProjectTextCommand,
+  SaveTranscriptionModelSettingsCommand,
+  SaveVideoSettingsCommand,
   SaveTextModelProfileCommand,
   SessionSummary,
   WorkbenchEntry,
@@ -231,6 +233,8 @@ const initialSettings: ModelSettingsSnapshot = {
   ],
   selectedTextProfileId: "deepseek",
   image: { baseUrl: "https://example.invalid/v1", defaultModel: "gpt-image-2-cheap", apiKeyConfigured: true, configured: true },
+  transcription: { baseUrl: "https://example.invalid/v1", model: "sense-voice", apiKeyConfigured: true, configured: true },
+  video: { cookieSource: "none" },
 }
 
 type PreviewVariant = "chat-studio" | "reference-studio" | "workbench-core" | "workbench-balanced" | "chat-focus"
@@ -325,6 +329,14 @@ export function PreviewApp() {
   }
   const saveImage = async (command: SaveImageModelSettingsCommand) => {
     setSettings((current) => ({ ...current, image: { baseUrl: command.baseUrl, defaultModel: command.defaultModel, apiKeyConfigured: Boolean(command.apiKey) || current.image.apiKeyConfigured, configured: true } }))
+    return true
+  }
+  const saveTranscription = async (command: SaveTranscriptionModelSettingsCommand) => {
+    setSettings((current) => ({ ...current, transcription: { baseUrl: command.baseUrl, model: command.model, ...(command.language ? { language: command.language } : {}), apiKeyConfigured: Boolean(command.apiKey) || current.transcription.apiKeyConfigured, configured: true } }))
+    return true
+  }
+  const saveVideo = async (command: SaveVideoSettingsCommand) => {
+    setSettings((current) => ({ ...current, video: { cookieSource: command.cookieSource } }))
     return true
   }
   const saveProjectText = async (command: SaveProjectTextCommand) => {
@@ -427,6 +439,8 @@ export function PreviewApp() {
         return true
       }}
       onSaveImageModelSettings={saveImage}
+      onSaveTranscriptionModelSettings={saveTranscription}
+      onSaveVideoSettings={saveVideo}
       onSend={send}
       messageDeletionAcknowledged
       onAcknowledgeMessageDeletion={() => undefined}

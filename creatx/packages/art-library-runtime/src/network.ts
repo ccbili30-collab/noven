@@ -1,5 +1,8 @@
 import { isIP } from "node:net"
 import { lookup } from "node:dns/promises"
+import { isPublicAddress } from "@creatx/contracts"
+
+export { isPublicAddress }
 
 const redirectStatuses = new Set([301, 302, 303, 307, 308])
 
@@ -102,25 +105,6 @@ export function requirePublicHttpUrl(input: string) {
   if ((url.protocol !== "https:" && url.protocol !== "http:") || url.username || url.password) throw new Error("art_network_invalid_url: only credential-free HTTP(S) URLs are allowed")
   if (url.port && url.port !== "80" && url.port !== "443") throw new Error("art_network_invalid_url: nonstandard ports are not allowed")
   return url
-}
-
-export function isPublicAddress(input: string): boolean {
-  const address = input.toLowerCase().split("%", 1)[0] ?? ""
-  if (address.includes(":")) {
-    if (address === "::" || address === "::1" || address.startsWith("fc") || address.startsWith("fd") || /^fe[89ab]/u.test(address) || address.startsWith("fec") || address.startsWith("fed") || address.startsWith("fee") || address.startsWith("fef") || address.startsWith("ff") || address.startsWith("2001:db8:")) return false
-    const mapped = address.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/u)?.[1]
-    return mapped ? isPublicAddress(mapped) : true
-  }
-  const parts = address.split(".").map(Number)
-  if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) return false
-  if (parts[0]! === 0 || parts[0]! === 10 || parts[0]! === 127 || parts[0]! >= 224) return false
-  if (parts[0]! === 169 && parts[1]! === 254) return false
-  if (parts[0]! === 172 && parts[1]! >= 16 && parts[1]! <= 31) return false
-  if (parts[0]! === 192 && parts[1]! === 168) return false
-  if (parts[0]! === 100 && parts[1]! >= 64 && parts[1]! <= 127) return false
-  if (parts[0]! === 192 && parts[1]! === 0) return false
-  if (parts[0]! === 198 && (parts[1]! === 18 || parts[1]! === 19 || parts[1]! === 51 && parts[2]! === 100)) return false
-  return !(parts[0]! === 192 && parts[1]! === 0 && parts[2]! === 2) && !(parts[0]! === 203 && parts[1]! === 0 && parts[2]! === 113)
 }
 
 async function readLimitedBody(response: Response, maxBytes: number, signal?: AbortSignal) {

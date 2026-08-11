@@ -17,6 +17,7 @@
       "@creatx/project-files": ["packages/project-files/src/index.ts"],
       "@creatx/session-runtime": ["packages/session-runtime/src/index.ts"],
       "@creatx/workbench": ["packages/workbench/src/index.ts"],
+      "@creatx/video-runtime": ["packages/video-runtime/src/index.ts"],
       "@creatx/world-blueprint": ["packages/world-blueprint/src/index.ts"],
       "@creatx/cline-adapter": ["packages/cline-adapter/src/index.ts"]
     }

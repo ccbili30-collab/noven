@@ -15,6 +15,7 @@ const internalPackages = [
   "@creatx/model-settings",
   "@creatx/project-files",
   "@creatx/session-runtime",
+  "@creatx/video-runtime",
   "@creatx/workbench",
   "@creatx/world-blueprint",
 ]
@@ -27,6 +28,7 @@ export default defineConfig({
         input: {
           main: resolve("apps/desktop/src/main.ts"),
           "cline-runtime": resolve("apps/desktop/src/cline-runtime.ts"),
+          "douyin-bridge": resolve("apps/desktop/src/douyin-bridge.ts"),
         },
       },
     },

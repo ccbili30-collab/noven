@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "platform": "win32-x64",
+  "binaries": {
+    "yt-dlp.exe": {
+      "sha256": "52fe3c26dcf71fbdc85b528589020bb0b8e383155cfa81b64dd447bbe35e24b8",
+      "bytes": 18226085,
+      "sourceUrl": "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp.exe",
+      "version": "2026.07.04",
+      "license": "Unlicense"
+    },
+    "ffmpeg.exe": {
+      "sha256": "a8a5274d0c5db42be41fe5d78ba27a346f65c4dbd83cf2cc322b1a4b794afa59",
+      "bytes": 115123712,
+      "sourceUrl": "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-lgpl.zip",
+      "version": "ffmpeg version N-126039-g6bbc22dc09-20260810 Copyright (c) 2000-2026 the FFmpeg developers",
+      "license": "LGPL-2.1-or-later"
+    }
+  }
+}

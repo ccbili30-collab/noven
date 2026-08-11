@@ -15,6 +15,7 @@
         "@creatx/model-settings": "workspace:*",
         "@creatx/project-files": "workspace:*",
         "@creatx/session-runtime": "workspace:*",
+        "@creatx/video-runtime": "workspace:*",
         "@creatx/workbench": "workspace:*",
         "@creatx/world-blueprint": "workspace:*",
         "lucide-react": "0.468.0",
@@ -53,6 +54,7 @@
         "@creatx/live-archive-runtime": "workspace:*",
         "@creatx/project-files": "workspace:*",
         "@creatx/session-runtime": "workspace:*",
+        "@creatx/video-runtime": "workspace:*",
         "@creatx/workbench": "workspace:*",
       },
       "devDependencies": {
@@ -129,6 +131,13 @@
       "name": "@creatx/session-runtime",
       "dependencies": {
         "@creatx/contracts": "workspace:*",
+      },
+    },
+    "packages/video-runtime": {
+      "name": "@creatx/video-runtime",
+      "dependencies": {
+        "@creatx/contracts": "workspace:*",
+        "undici": "7.29.0",
       },
     },
     "packages/workbench": {
@@ -279,6 +288,8 @@
     "@creatx/project-package-runtime": ["@creatx/project-package-runtime@workspace:packages/project-package-runtime"],
 
     "@creatx/session-runtime": ["@creatx/session-runtime@workspace:packages/session-runtime"],
+
+    "@creatx/video-runtime": ["@creatx/video-runtime@workspace:packages/video-runtime"],
 
     "@creatx/workbench": ["@creatx/workbench@workspace:packages/workbench"],
 
