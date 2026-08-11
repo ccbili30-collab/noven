@@ -1,5 +1,9 @@
 # CreatX Baseline
 
+## Windows 0.1.23 视频分析与恢复能力集成候选
+
+2026-08-11 已把 PR #1 的抖音视频分析、Provider 标识修复与既有 `0.1.22` 后应用重启/软错误提示整合为 Windows `0.1.23`。当前冻结证据为定向 61/61、全量 653/653（4,698 次断言，88 个文件）、Typecheck、两项 Import Boundary、Production Build、供应商二进制摘要、Windows NSIS/Portable、7-Zip、`app.asar`、Setup 隔离安装、安装版品牌烟测、解包 EXE 教程与重启验收通过。外部转写 Provider 和真实视频 UI 回答链未运行；三条 ASR/下载限制保留。证据见 `docs/baseline/creatx-windows-0.1.23-2026-08-11.md`。
+
 ## Windows 0.1.22 艺术库与生产新手教程发布
 
 2026-08-11 已将源代码头 `9b2e2ee` 发布为 Windows `0.1.22` Setup、Blockmap 和 Portable x64。隔离发布树补齐两个既有 `ProjectInternalStatePort.deleteFile` 测试装配字段后，冻结安装、Typecheck（类型检查）、两项 Import Boundary（导入边界）、604/604 全量测试（4,526 次断言，83 个文件）、Production Build（生产构建）、Windows 打包、7-Zip 完整性、`app.asar` 内容边界和解包 EXE 十步教程烟测通过；Provider 请求 0、项目写入 0、残留进程 0。安装包包含艺术库 63 件正式藏品恢复、生产十步教程和工作台注销，不包含另一工作树尚未提交的抖音读取或实验内容。未安装 Setup、未直接启动 Portable、未调用外部 Provider，产物未签名。证据见 `docs/baseline/creatx-windows-0.1.22-2026-08-11.md`。

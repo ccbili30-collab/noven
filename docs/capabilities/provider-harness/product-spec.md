@@ -127,3 +127,7 @@ Adapter 必须把已由 Main 授权并验证的 PNG/JPEG Data URL 作为 Cline `
 Cline `read_files` 读取的项目图片仍作为正式 Tool Result 持久保存，供当前历史和用户检查；Adapter 不得改写或迁移既有 Cline 会话。后续 Provider 请求不得重复携带旧回合项目图片，只可在当前回合按时间倒序保留有界代表图；直接用户 `userImages` 不受该投影规则改写。
 
 单个 Run 通过 `read_files` 累计读取的项目图片 Base64 必须有独立硬上限，超限在继续读取和 Provider 调用前失败关闭。Provider 投影预算与单 Run 读取预算是防止新历史继续膨胀的保护，不得把它们描述成已经消除 Cline Session 自身的内存成本；窗口稳定性由 `PHS-009` 的进程隔离保证。
+
+## PHS-026 Provider 标识校验与有界修复
+
+文本连接的 `providerId` 必须来自 CreatX 与 Cline 当前共同支持的稳定清单，Renderer 使用同一清单生成选择控件，Model Settings（模型设置）和 Main Process（主进程）分别验证，未知值在 Provider 请求前失败关闭。旧档案只有同时满足“Provider 槽等于模型 ID、该值不在清单、且存在同模型与同 Base URL 的唯一合法档案”时才可原位修复并保留 Profile ID；不唯一或不满足形状时只报告，不猜测、不修改会话库。

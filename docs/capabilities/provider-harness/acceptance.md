@@ -43,6 +43,9 @@ source_of_truth: docs/capabilities/provider-harness/product-spec.md
 | ACC-PHS-032 | PHS-023 | Windows 长路径项目从空依赖目录执行 `bun install --frozen-lockfile` | 固定 Bun 与 Lockfile 使用仓库声明的布局一次安装成功；Cline、SAP AI SDK、Vite 与 Windows Shim 全部完整；不修改系统设置或手工复制包 |
 | ACC-PHS-033 | PHS-024 | 发送真实 PNG/JPEG 与文本附件，并重读 Cline 历史；另提交非法 Data URL 与超限批次 | 图片只进入 `userImages` image block，文本只进入 `userFiles`；历史图片可按消息身份解析；非法或超限输入在 Provider 前失败关闭；无二进制 UTF-8 读取错误 |
 | ACC-PHS-034 | PHS-009 / PHS-025 | 用至少 19 MB、包含多轮 `read_files` 图片结果的真实历史副本重开并发送新回合 | Provider 请求不含旧回合项目图且保持在 512 KiB 内；Main 不随 Cline 历史增长超过 128 MiB；重型内存归属 Utility Process；正式历史不被改写；退出无残留 |
+| ACC-PHS-035 | PHS-026 | 保存未知 Provider；启动含可唯一修复、不可唯一判断和普通自定义错误档案的旧设置 | 新保存失败关闭；仅唯一匹配项原位修复且 Profile ID、密钥与会话引用不变；其他项只报告并保持原字节语义 |
+
+`ACC-PHS-035` 已由 Model Settings 10/10 定向测试及 653/653 集成全量覆盖。自动化证明未知 Provider 新保存失败；唯一同模型、同 Base URL 档案原位修复且 Profile ID 与密钥保留；无唯一对应和不满足旧错误形状的档案只报告不改写。没有使用正式 Profile 或外部 Provider。
 
 ## 当前证据
 

@@ -48,7 +48,8 @@ try {
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.waitForSelector(".workspace-shell", { timeout: 30_000 })
   if (await page.title() !== "诺文") throw new Error(`Unexpected window title: ${await page.title()}`)
-  await page.getByLabel("诺文").waitFor()
+  await page.getByLabel("诺文", { exact: true }).waitFor()
+  if (await page.locator(".wb-onboarding-layer").count()) await page.getByRole("button", { name: "跳过" }).click()
   await page.getByText("灵感库", { exact: true }).waitFor()
   if (await page.getByText("点子库", { exact: true }).count()) throw new Error("Legacy visible library name remains")
 

@@ -143,7 +143,7 @@ async function waitFor(condition: () => Promise<boolean>, timeoutMs: number) {
 
 async function stopProfileProcesses(profile: string) {
   const escaped = profile.replaceAll("'", "''")
-  const script = `Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'electron.exe' -and $_.CommandLine -like '*${escaped}*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }`
+  const script = `Get-CimInstance Win32_Process | Where-Object { $_.Name -in @('electron.exe', '诺文.exe') -and $_.CommandLine -like '*${escaped}*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }`
   spawnSync("powershell.exe", ["-NoProfile", "-Command", script], { windowsHide: true, stdio: "ignore" })
 }
 
