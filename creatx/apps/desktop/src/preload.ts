@@ -3,7 +3,8 @@ import { CREATX_DESKTOP_API, CREATX_DESKTOP_EVENT, type CreatXDesktopApi, type C
 import { droppedAttachmentPaths } from "./dropped-attachments"
 
 const api: CreatXDesktopApi = {
-  bootstrap: () => ipcRenderer.invoke(CREATX_DESKTOP_API, "bootstrap"),
+  bootstrap: (selection) => ipcRenderer.invoke(CREATX_DESKTOP_API, "bootstrap", selection),
+  restartApplication: (command) => ipcRenderer.invoke(CREATX_DESKTOP_API, "restartApplication", command),
   readModelSettings: () => ipcRenderer.invoke(CREATX_DESKTOP_API, "readModelSettings"),
   saveTextModelProfile: (command) => ipcRenderer.invoke(CREATX_DESKTOP_API, "saveTextModelProfile", command),
   selectSessionModel: (sessionId, profileId) => ipcRenderer.invoke(CREATX_DESKTOP_API, "selectSessionModel", sessionId, profileId),

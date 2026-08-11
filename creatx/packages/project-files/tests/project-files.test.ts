@@ -287,6 +287,15 @@ describe("project file projection", () => {
       expect.objectContaining({ kind: "file", relativePath: "goals/goal-1/world/current.json" }),
     ])
 
+    const removable = await service.internal.writeFile({ projectId: project.id, namespace: "workbenches", key: "record.json", content: "first", expectedModifiedAt: null })
+    const changed = await service.internal.writeFile({ projectId: project.id, namespace: "workbenches", key: "record.json", content: "second", expectedModifiedAt: removable.modifiedAt })
+    await expect(service.internal.deleteFile({ projectId: project.id, namespace: "workbenches", key: "record.json", expectedModifiedAt: removable.modifiedAt })).rejects.toThrow("file_conflict")
+    expect(new TextDecoder().decode((await service.internal.readFile(project.id, "workbenches", "record.json"))!.bytes)).toBe("second")
+    await service.internal.deleteFile({ projectId: project.id, namespace: "workbenches", key: "record.json", expectedModifiedAt: changed.modifiedAt })
+    expect(await service.internal.readFile(project.id, "workbenches", "record.json")).toBeUndefined()
+    await expect(service.internal.deleteFile({ projectId: project.id, namespace: "workbenches", key: "record.json", expectedModifiedAt: changed.modifiedAt })).rejects.toThrow("file_conflict")
+    expect(await readFile(join(root, "世界", "世界蓝图", "state.json"), "utf8")).toBe("legacy")
+
     const hash = createHash("sha256").update("legacy").digest("hex")
     await service.internal.moveContentFileToBackup(project.id, "世界/世界蓝图/state.json", "growth", "goals/goal-1/world/backup/state.json", hash)
     expect(await Bun.file(join(root, "世界", "世界蓝图", "state.json")).exists()).toBe(false)
@@ -295,6 +304,8 @@ describe("project file projection", () => {
 
     await expect(service.internal.writeFile({ projectId: project.id, namespace: "../escape", key: "state.json", content: "x" })).rejects.toThrow("namespace")
     await expect(service.internal.writeFile({ projectId: project.id, namespace: "growth", key: "../escape.json", content: "x" })).rejects.toThrow("key")
+    await expect(service.internal.deleteFile({ projectId: project.id, namespace: "../escape", key: "state.json", expectedModifiedAt: created.modifiedAt })).rejects.toThrow("namespace")
+    await expect(service.internal.deleteFile({ projectId: project.id, namespace: "growth", key: "../escape.json", expectedModifiedAt: created.modifiedAt })).rejects.toThrow("key")
     await expect(service.internal.moveContentFileToBackup(project.id, "世界/世界蓝图/state.json", "growth", "goals/goal-1/world/backup/state.json", "0".repeat(64))).rejects.toThrow("hash differs")
   })
 

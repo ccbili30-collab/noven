@@ -1,5 +1,45 @@
 # CreatX Current Context
 
+## 当前非阻塞错误恢复提示前沿
+
+2026-08-11 已实现 `WUI-056 / ACC-WUI-078`：Renderer（渲染层）只对用户可见摘要精确为“图片任务请求无效。”或“运行时发生错误。”的两类高频提示应用固定展示流程，先以橙色显示 6 秒，再替换为绿色“已恢复！”并在 2 秒后隐藏；同一错误不再重复显示全局红色横幅。余额不足、密钥、权限、持久化、项目冲突及其他错误继续沿用既有红色与阻塞逻辑。
+
+定向 3/3（14 次断言）、全量 617/617（4,559 次断言，86 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）和 Production Build（生产构建）通过。没有执行 Electron（桌面运行壳）视觉计时 Live（真实运行），也没有调用外部 Provider（模型服务）。该流程不检查任务是否实际恢复，不修改 Runtime（运行时）错误事实、Timeline（时间线）持久数据或任务状态；绿色文案仅是按产品要求生成的短暂展示。完整边界见 `docs/baseline/creatx-soft-error-recovery-presentation-2026-08-11.md`。
+
+## 当前应用内重启恢复前沿
+
+2026-08-11 已实现 `DRT-003..006 / ACC-DRT-001..005`：展开和折叠项目导航均提供“恢复诺文”，空闲时安全重启整个 Electron 应用；普通会话/工具、Owner Growth、活动 Growth Goal 或图片生成中会先明确确认。确认后复用既有 Growth 暂停/取消、图片队列关闭、Cline Utility Process（工具子进程）释放和 Store（存储）关闭链，只安排一次 Relaunch（重新启动）。下一次 Bootstrap（启动装载）只采用仍然有效且项目匹配的一次性项目/会话选择，不自动重发消息、Provider（模型服务）请求或工具调用。
+
+定向 11/11、Owner 协调器 14/14、图片队列 38/38、全量 615/615（4,547 次断言，85 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）和 Production Build（生产构建）通过。隔离 Electron 完成空闲重启、项目/会话恢复、活动回复确认取消与确认重启；本地挂起 Provider 请求总数保持 1，证明没有自动重放，未使用外部 Provider 或正式 Profile。本批没有修复 `EMFILE` 或艺术库联网错误根因，也不承诺后台继续、活动 Run 精确续接或严格一次副作用恢复。完整边界见 `docs/baseline/creatx-application-restart-recovery-2026-08-11.md`。
+
+## 当前诺文 Windows 0.1.22 发布前沿
+
+2026-08-11 已将源代码头 `9b2e2ee` 打包为 Windows `0.1.22`，包含艺术库 `0.1.19` 视觉与 63 件正式藏品恢复、生产十步新手教程以及既有工作台注销。Setup 为 121,561,653 字节，SHA-256 `A457F3990C8A959043A08ECC5C6F04398BFADA51A5A4C89E973E5F85F8DD19D9`；Portable 为 121,337,832 字节，SHA-256 `C013D977E2FC47E7309FCA6A733B0337DE1C18E970CE82F18B6EF5F7F06DD938`。PE 版本与 ProductName（产品名）为 `0.1.22 / 诺文`，产物未签名。
+
+隔离发布树先发现并补齐两个既有 `ProjectInternalStatePort.deleteFile` 测试装配字段，随后冻结安装、Typecheck（类型检查）、两项 Import Boundary（导入边界）、604/604 全量测试（4,526 次断言，83 个文件）、Production Build（生产构建）、Windows NSIS/Portable、7-Zip 完整性、`app.asar` 内容检查和解包 EXE 十步教程烟测通过；Provider 请求 0、项目写入 0、残留进程 0。发布提交为活动历史 `29324b2`、GitHub 发布镜像 `c22472f`，文件 Tree 哈希一致。没有安装 Setup、直接启动 Portable、调用外部 Provider、使用正式 Profile 或以打包 EXE 重跑完整艺术库纵向验收；另一工作树尚未提交的抖音读取及实验内容未进入本发布。完整边界见 `docs/baseline/creatx-windows-0.1.22-2026-08-11.md`。
+
+## 当前生产新手引导前沿
+
+2026-08-11 已实现 `WUI-055 / ACC-WUI-077`：生产 `WorkspaceShell` 首次 Profile 自动播放十步 Spotlight（聚光灯）教程，明确跳过、Escape 或完成后才记录，未完成退出下次仍出现；展开与折叠项目导航均有永久重播入口。设置、项目、Composer（输入区）、工作台、艺术库、灵感库和传承库使用真实生产锚点，第九步展示九类能力和九项当前正式 Skill（技能），不加载 Prototype（原型）或 Fixture（测试夹具），不自动填写、发送、调用 Provider（模型服务）或修改项目。
+
+定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）、Production Build（生产构建）和 1600×1000 隔离 Electron（桌面运行壳）通过。实机覆盖未完成退出恢复、完成后重启、展开/折叠入口、十步真实锚点、减弱动效与完整 Skill 工具箱；本地 Provider 请求 0、隔离项目目录写入 0、退出残留进程 0。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；未执行 Windows 打包、正式 Profile 或外部 Provider Live（真实运行）。完整边界见 `docs/baseline/creatx-production-onboarding-2026-08-11.md`。
+
+## 当前艺术库 0.1.19 恢复前沿
+
+2026-08-11 已在当前工作树恢复艺术库产品语义：63 张预批准基础藏品真实物化为巨构艺术41、暖色风格18、纪念碑谷4，后续新增图片继续走 `incoming → approval → libraries`；新 Profile、错误 reset Profile 和旧 57+6 Profile 可按稳定 ID、snapshot 与 SHA-256 安全恢复，用户艺术数据不被改写。生产图鉴、展览、详情、CSS 和动效直接复用 `0.1.19` 提交 `285c018`，七个核心视觉文件与旧提交 Git blob 哈希逐项一致；三个展示桥只接受当前 Runtime（运行时）投影，静态 JSON、iframe 内默认值和 `localStorage` 不拥有事实。
+
+定向 32/32（181 次断言）、全量 601/601（4,516 次断言，82 个文件）、Typecheck（类型检查）、两项 Import Boundary（导入边界）和 Production Build（生产构建）通过。隔离 Electron 在 1600×1000 完成 63 件圆环、详情返回、41/18/4 展览、新增审批、关键词导出、重启恢复、减弱动效、受限图片负向路径与零残留；正式 Profile 的 136 文件摘要前后不变。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；没有外部 Provider（模型服务）、正式 Profile 迁移或 Windows 打包。完整边界见 `docs/baseline/creatx-art-library-019-restoration-2026-08-11.md`。
+
+## 当前诺文 Windows 0.1.21 发布前沿
+
+2026-08-11 已将工作台注销功能头 `7a773ae` 打包为 Windows `0.1.21`。Setup 为 132,231,893 字节，SHA-256 `E133B95418660862C6E2F4FFA0AAFB1E2445298D79F94069D16A2DDF58E67CEC`；Portable 为 132,008,057 字节，SHA-256 `CAEA6AC76680C32F343657817C1584D1CCED079A7A61EA040035D3BF11AB028F`。PE 版本与 ProductName（产品名）为 `0.1.21 / 诺文`，产物未签名。
+
+功能冻结的全量为 598/598（4,495 次断言）；版本批次的 Typecheck（类型检查）、两项 Import Boundary（导入边界）、Production Build（生产构建）、Windows NSIS/Portable、7-Zip 完整性、`app.asar` 版本与边界检查和解包 EXE 隔离品牌烟测通过，退出后残留进程为 0。`app.asar` 包含 `unregister_workbench`，不包含新手引导 Prototype（原型）脚本或 `@creatx/project-package-runtime`。没有外部 Provider（模型服务）、工作台注销原生审批 Live（真实运行）、Setup 安装或 Portable 外壳启动证据；完整边界见 `docs/baseline/creatx-windows-0.1.21-2026-08-11.md`。
+
+## 当前工作台注销入口前沿
+
+2026-08-11 已实现 `WBR-020..021 / ACC-WBR-032..035`：普通项目会话可通过需要原生审批的 `unregister_workbench` 只移除一个工作台视图记录，真实目录与内容不变；合法 `missing` 入口同样可清理，内置、未知、损坏、重复冲突和并发变化目标失败关闭。当前入口消失后 Renderer 回退 `builtin:files` 并清除临时交互展示。联合定向 180/180（1,300 次断言）、全量 598/598（4,495 次断言）、Typecheck、Import Boundary 和 Production Build 通过。没有外部 Provider 自主调用或 Electron 审批/重启 Live；证据与恢复入口见 `docs/baseline/creatx-workbench-unregister-2026-08-11.md`。
+
 ## 当前 Causality 因果图 Skill 前沿
 
 2026-08-10 已实现实验性内置 `creatx-causality`：普通项目会话或 Growth 可通过同一 `/causality` Skill 读取当前世界已经明确登记的 `type: "causes"` 关系，保留原方向与原因，生成项目内无网络依赖的搜索、拖动、缩放因果 Viewer（查看器）。引用、采纳、归属、位置、相似与共同出现不会被提升为因果；没有明确因果、多世界未选择、损坏 Goal、项目外真实路径、Junction（目录联接）输出和非本 Skill 产物覆盖均失败关闭。完整物化关系优先，冻结蓝图只作为明确标记的降级来源。
@@ -34,9 +74,9 @@ Task 6 已实现标准 ZIP `.np` 的流式导出：固定写入三个逻辑根�
 
 Task 7 已实现安全导入 Runtime：在解压前拒绝伪扩展、加密/ZIP64/链接、重复或 Windows 不安全路径、条目/大小/压缩比超限、Checksum/身份错误和截断中央目录；通过后分块写入目标旁带标记暂存，逐项复核真实字节，再原子提交新目录。导入案例以受控只读 JSON 保存而不进入 Cline，工作台语义损坏降级并保留文件兜底；同包幂等，同血统异内容要求显式独立副本。提交前取消只清理本批暂存；目录提交后元数据或 Catalog 失败保留文件并记录 `committed-unregistered` 可恢复状态。
 
-Task 8 曾把 `.np` Runtime 接入独立项目包 Contracts（合同）、Preload（预加载桥）和 Desktop 单 Job（任务）协调器；该实现与测试源码保留为 `0.1.21` 恢复材料，但 2026-08-10 发布冻结发现它作为隐藏启动依赖会让普通 Electron 在窗口创建前因 Node ESM 导入边界失效。按产品决定，Windows `0.1.20` 已从生产 Main、Preload、Desktop API 和应用依赖图移除整个项目包入口，不提供或宣传隐藏 `.np` 能力。
+Task 8 曾把 `.np` Runtime 接入独立项目包 Contracts（合同）、Preload（预加载桥）和 Desktop 单 Job（任务）协调器；该实现与测试源码保留为后续恢复材料，但 2026-08-10 发布冻结发现它作为隐藏启动依赖会让普通 Electron 在窗口创建前因 Node ESM 导入边界失效。按产品决定，Windows `0.1.20` 已从生产 Main、Preload、Desktop API 和应用依赖图移除整个项目包入口，不提供或宣传隐藏 `.np` 能力。
 
-`.np` Task 1–7 的 Runtime、Schema、真实 ZIP 导入导出与失败关闭测试继续保留；Task 8 的 Desktop 协调器当前不在生产启动链，Task 9–11 与重新接线统一延期至 `0.1.21`。恢复时必须先完成 Renderer UI、D 盘默认选择器、项目首页、继续创作、Electron 新 Profile 重启和打包纵向验收，不能仅恢复旧 Preload 方法。共享项目包协议位于 `packages/contracts/src/project-package.ts`，恢复入口为 `docs/plans/2026-08-10-portable-noven-project-package.md` Task 9。
+`.np` Task 1–7 的 Runtime、Schema、真实 ZIP 导入导出与失败关闭测试继续保留；Task 8 的 Desktop 协调器当前不在生产启动链，Windows `0.1.21` 仍未接回该能力。Task 9–11 与重新接线继续冻结；恢复时必须先完成 Renderer UI、D 盘默认选择器、项目首页、继续创作、Electron 新 Profile 重启和打包纵向验收，不能仅恢复旧 Preload 方法。共享项目包协议位于 `packages/contracts/src/project-package.ts`，恢复入口为 `docs/plans/2026-08-10-portable-noven-project-package.md` Task 9。
 
 ## 当前传承库视频学习与 Skill 安装前沿
 

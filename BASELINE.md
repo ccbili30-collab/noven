@@ -1,5 +1,25 @@
 # CreatX Baseline
 
+## Windows 0.1.22 艺术库与生产新手教程发布
+
+2026-08-11 已将源代码头 `9b2e2ee` 发布为 Windows `0.1.22` Setup、Blockmap 和 Portable x64。隔离发布树补齐两个既有 `ProjectInternalStatePort.deleteFile` 测试装配字段后，冻结安装、Typecheck（类型检查）、两项 Import Boundary（导入边界）、604/604 全量测试（4,526 次断言，83 个文件）、Production Build（生产构建）、Windows 打包、7-Zip 完整性、`app.asar` 内容边界和解包 EXE 十步教程烟测通过；Provider 请求 0、项目写入 0、残留进程 0。安装包包含艺术库 63 件正式藏品恢复、生产十步教程和工作台注销，不包含另一工作树尚未提交的抖音读取或实验内容。未安装 Setup、未直接启动 Portable、未调用外部 Provider，产物未签名。证据见 `docs/baseline/creatx-windows-0.1.22-2026-08-11.md`。
+
+## 生产新手引导
+
+2026-08-11 当前工作树已把十步 Spotlight（聚光灯）教程接入生产 `WorkspaceShell`：首次 Profile 自动出现，明确退出后记忆，未完成退出后恢复，展开与折叠导航均可重播；设置、项目、Composer、工作台与三类资料库均使用真实生产锚点，第九步完整展示九项正式 Skill（技能）。定向 3/3（11 次断言）、全量 604/604（4,527 次断言，83 个文件）、Typecheck、两项 Import Boundary、Production Build 和隔离 Electron 通过；Provider 请求 0、项目目录写入 0、退出残留进程 0。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；未执行 Windows 打包、正式 Profile 或外部 Provider Live。证据见 `docs/baseline/creatx-production-onboarding-2026-08-11.md`。
+
+## 艺术库 0.1.19 视觉与 63 张正式藏品恢复
+
+2026-08-11 当前工作树已把 63 张预批准基础藏品真实物化为巨构艺术41、暖色风格18、纪念碑谷4，并保留后续新增图片的唯一审批状态机。图鉴、展览、详情、CSS 和动效直接复用 `0.1.19` 提交 `285c018`；展示 iframe 只接受父级 Runtime（运行时）投影，不拥有静态事实。定向 32/32（181 次断言）、全量 601/601（4,516 次断言）、Typecheck、Import Boundary、Production Build 和 1600×1000 隔离 Electron 通过；正式 Profile 摘要不变。功能提交为活动历史 `c564192`、GitHub 发布镜像 `3e9ce95`；未调用外部 Provider、未迁移正式 Profile 或打包。证据见 `docs/baseline/creatx-art-library-019-restoration-2026-08-11.md`。
+
+## Windows 0.1.21 工作台注销发布
+
+2026-08-11 已将功能头 `7a773ae` 发布为 Windows `0.1.21` Setup、Blockmap 和 Portable x64。功能冻结全量 598/598（4,495 次断言）；版本批次的 Typecheck、Import Boundary、Production Build、Windows 打包、7-Zip、`app.asar` 边界和解包 EXE 隔离品牌烟测通过，退出后残留进程为 0。安装包包含 `unregister_workbench`，不包含新手引导原型或 `.np` 生产接线；未安装 Setup、未直接启动 Portable、未调用外部 Provider，也未执行注销审批 Live。证据见 `docs/baseline/creatx-windows-0.1.21-2026-08-11.md`。
+
+## 工作台注销入口
+
+2026-08-11 已接通 `unregister_workbench` 的受控元数据删除、原生审批策略、正式 Desktop 工具聚合和当前入口消失后的 `builtin:files` 回退。真实项目内容不会被注销操作删除或修改，`missing` 入口可清理，冲突与过期状态失败关闭。联合定向 180/180（1,300 次断言）、全量 598/598（4,495 次断言）、Typecheck、Import Boundary 和 Production Build 通过；未执行外部 Provider 或 Electron Live。证据见 `docs/baseline/creatx-workbench-unregister-2026-08-11.md`。
+
 ## 传承库与工作台项目引用修复
 
 2026-08-09 已实现 `WUI-046..048 / ACC-WUI-068..070`：内置传承库迁移为四类各五条的版本化 JSON，个人导入分类继续可达；最右工作台导航分隔线恢复指针与键盘调整；对话项目图片、相对文件链接和 Markdown 标题锚点复用真实工作台打开链，非法引用失败关闭。定向 17/17、Renderer 104/104、Typecheck、Production Build 和专用隔离 Electron 通过；全量 476/477 的唯一范围外超时隔离通过，完整 Desktop 在既有布局断言处提前停止。没有外部 Provider、正式 Profile、Windows 打包或迁移。证据见 `docs/baseline/creatx-heritage-workbench-links-2026-08-09.md`。

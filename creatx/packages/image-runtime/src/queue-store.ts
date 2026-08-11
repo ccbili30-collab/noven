@@ -255,6 +255,10 @@ export class ImageTaskStore {
     return this.read(() => Boolean(this.database.prepare("SELECT 1 FROM image_task WHERE status = 'queued' LIMIT 1").get()))
   }
 
+  hasGenerating() {
+    return this.read(() => Boolean(this.database.prepare("SELECT 1 FROM image_task WHERE status = 'generating' LIMIT 1").get()))
+  }
+
   listRunnableProjects(limit: number) {
     if (!Number.isSafeInteger(limit) || limit < 1) throw new Error("image_queue_invalid: runnable project limit must be a positive integer")
     return this.read(() => (this.database.prepare(`

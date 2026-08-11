@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { clampWorkspaceSplitRatio, conversationContentMaxWidth, defaultAuxiliaryPanelWidth, defaultWorkspaceMode, scalePanelWidthForViewport, settleProjectNavigationResize, transitionWorkspaceMode, workspaceColumnOrder, workspaceLayoutProjection } from "../src/workspace-layout"
-import { workspaceSeparatorDisabled } from "../src/WorkspaceShell"
+import { reconcileWorkbenchSurface, workspaceSeparatorDisabled } from "../src/WorkspaceShell"
 
 describe("workspace layout", () => {
   test("starts each conversation in Chat mode with the canvas collapsed", () => {
@@ -62,5 +62,13 @@ describe("workspace layout", () => {
     expect(workspaceSeparatorDisabled("workbench-canvas", true, true)).toBe(false)
     expect(workspaceSeparatorDisabled("workbench-canvas", true, false)).toBe(true)
     expect(workspaceSeparatorDisabled("project-conversation", false, true)).toBe(true)
+  })
+
+  test("falls back to builtin files only when a loaded snapshot proves the selected workbench disappeared", () => {
+    const snapshot = { projectId: "project-1", workbenches: [{ id: "builtin:files" }, { id: "wb-ready" }], diagnostics: [], refreshedAt: "2026-08-11T00:00:00.000Z" }
+    expect(reconcileWorkbenchSurface({ workbenchId: "wb-ready" }, snapshot)).toEqual({ workbenchId: "wb-ready" })
+    expect(reconcileWorkbenchSurface({ workbenchId: "wb-removed" }, snapshot)).toEqual({ workbenchId: "builtin:files" })
+    expect(reconcileWorkbenchSurface({ workbenchId: "wb-removed" }, undefined)).toEqual({ workbenchId: "wb-removed" })
+    expect(reconcileWorkbenchSurface("preview", snapshot)).toBe("preview")
   })
 })

@@ -90,6 +90,18 @@ export interface RenameWorkbenchRequest {
   title: string
 }
 
+export interface UnregisterWorkbenchRequest {
+  projectId: string
+  folder: string
+}
+
+export interface UnregisterWorkbenchResult {
+  projectId: string
+  workbenchId: string
+  folder: string
+  title: string
+}
+
 export interface SetWorkbenchHomeRequest {
   projectId: string
   folder: string
@@ -132,6 +144,7 @@ export interface WorkbenchQueryPort {
 export interface WorkbenchCommandPort {
   register(request: RegisterWorkbenchRequest): Promise<WorkbenchProjection>
   rename(request: RenameWorkbenchRequest): Promise<WorkbenchProjection>
+  unregister(request: UnregisterWorkbenchRequest): Promise<UnregisterWorkbenchResult>
   setHome(request: SetWorkbenchHomeRequest): Promise<WorkbenchProjection>
   setVisibility(request: SetWorkbenchVisibilityRequest): Promise<WorkbenchProjection>
   show(request: ShowInWorkbenchRequest): Promise<ResolvedWorkbenchPresentation>
@@ -153,6 +166,7 @@ export class WorkbenchRegistryService {
   readonly commands: WorkbenchCommandPort = {
     register: (request) => this.serialize(request.projectId, () => this.register(request)),
     rename: (request) => this.serialize(request.projectId, () => this.rename(request)),
+    unregister: (request) => this.serialize(request.projectId, () => this.unregister(request)),
     setHome: (request) => this.serialize(request.projectId, () => this.setHome(request)),
     setVisibility: (request) => this.serialize(request.projectId, () => this.setVisibility(request)),
     show: (request) => this.show(request),
@@ -213,6 +227,32 @@ export class WorkbenchRegistryService {
         try {
           const parsed = requireRenameToolInput(input)
           return { ok: true, value: await this.commands.rename({ projectId: context.projectId, ...parsed }) }
+        } catch (error) {
+          return { ok: false, error: workbenchError(error) }
+        }
+      },
+    }
+  }
+
+  unregisterTool(): CreatXToolContribution {
+    return {
+      name: "unregister_workbench",
+      audiences: ["ordinary"],
+      description: "Remove one registered CreatX workbench entrance while preserving its real project directory and every content file. This deletes only the matching .creatx workbench view record; it does not delete, move, rename, or modify project content. Missing registered folders may also be unregistered. Never edit .creatx JSON directly.",
+      inputSchema: {
+        type: "object",
+        additionalProperties: false,
+        required: ["folder"],
+        properties: {
+          folder: { type: "string", minLength: 1, description: "Registered project-relative workbench folder using forward slashes." },
+        },
+      },
+      scope: "project",
+      approval: "required",
+      execute: async (input, context) => {
+        if (!context.projectId) return { ok: false, error: workbenchError("project_invalid: project identity is required") }
+        try {
+          return { ok: true, value: await this.commands.unregister({ projectId: context.projectId, folder: requireFolderToolInput(input) }) }
         } catch (error) {
           return { ok: false, error: workbenchError(error) }
         }
@@ -457,6 +497,33 @@ export class WorkbenchRegistryService {
     if (!renamed || renamed.title !== title) throw new Error("workbench_invalid: renamed record could not be reloaded")
     this.options.onChanged?.(request.projectId)
     return renamed
+  }
+
+  private async unregister(request: UnregisterWorkbenchRequest): Promise<UnregisterWorkbenchResult> {
+    const folder = normalizeFolder(request.folder)
+    const current = await this.snapshot(request.projectId)
+    const conflict = current.diagnostics.find((diagnostic) => diagnostic.code === "workbench_record_conflict"
+      && diagnostic.message.toLocaleLowerCase("en-US").includes(folder.toLocaleLowerCase("en-US")))
+    if (conflict) throw new Error(`workbench_conflict: ${conflict.message}`)
+    const existing = current.workbenches.find((workbench) => workbench.source === "registered"
+      && normalizeFolderIdentity(workbench.folder) === normalizeFolderIdentity(folder))
+    if (!existing) throw new Error("workbench_invalid: registered workbench does not exist")
+
+    const directory = await this.internalState.listDirectory(request.projectId, recordsNamespace, ".")
+    const entry = directory?.entries.find((item) => item.kind === "file" && item.name === `${existing.id}.json`)
+    if (!entry?.modifiedAt) throw new Error("workbench_invalid: registration record does not exist")
+    const stored = await this.internalState.readFile(request.projectId, recordsNamespace, entry.relativePath)
+    if (!stored) throw new Error("workbench_invalid: registration record does not exist")
+    const record = decodeRecord(new TextDecoder().decode(stored.bytes))
+    if (record.id !== existing.id || normalizeFolderIdentity(record.folder) !== normalizeFolderIdentity(existing.folder)) {
+      throw new Error("workbench_conflict: registration identity changed")
+    }
+    await this.internalState.deleteFile({ projectId: request.projectId, namespace: recordsNamespace, key: entry.relativePath, expectedModifiedAt: entry.modifiedAt })
+    if ((await this.snapshot(request.projectId)).workbenches.some((workbench) => workbench.id === existing.id)) {
+      throw new Error("workbench_invalid: unregistered record could still be reloaded")
+    }
+    this.options.onChanged?.(request.projectId)
+    return { projectId: request.projectId, workbenchId: existing.id, folder: existing.folder, title: existing.title }
   }
 
   private async setHome(request: SetWorkbenchHomeRequest) {
@@ -732,6 +799,13 @@ function requireToolInput(input: unknown) {
   const value = input as Record<string, unknown>
   if (Object.keys(value).some((key) => key !== "folder" && key !== "title")) throw new Error("workbench_invalid: tool input contains unknown fields")
   return { folder: requireString(value.folder, "folder"), ...(value.title === undefined ? {} : { title: requireString(value.title, "title") }) }
+}
+
+function requireFolderToolInput(input: unknown) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("workbench_invalid: tool input must be an object")
+  const value = input as Record<string, unknown>
+  if (Object.keys(value).some((key) => key !== "folder")) throw new Error("workbench_invalid: tool input contains unknown fields")
+  return requireString(value.folder, "folder")
 }
 
 function requireRenameToolInput(input: unknown) {

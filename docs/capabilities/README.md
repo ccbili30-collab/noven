@@ -3,7 +3,7 @@ title: CreatX 能力线索引
 doc_type: capability-registry
 owner: integration
 status: integrated-head-current
-last_verified: 2026-08-06
+last_verified: 2026-08-11
 source_of_truth: docs/capabilities/README.md
 ---
 
@@ -51,7 +51,7 @@ Live 证据与当前状态
 | `workbench-annotation` | 当前工作台可见画面的非破坏性蒙版、精确截图和待发送视觉附件 | Implementation Started（已开始实现） | `workbench-annotation/README.md` |
 | `image-runtime` | 图片 Provider、Prompt、校验、项目隔离队列、真实项目落盘和文章挂接 | Single Image Live; Growth Source And Paths Verified（单图已真实接通；Growth 来源与路径已验证） | `image-runtime/README.md` |
 | `art-library` | 全局个人艺术库、联网图片采集、候审、分类审批和风格词导出 | Runtime Implemented; Visual Live Pending（运行时已实现；视觉真实验收待完成） | `art-library/README.md` |
-| `desktop-runtime` | Electron 前台启动；未来可选的后台继续、进程监督、安装和更新 | Foreground Skeleton Live（前台骨架已接通） | `../discussions/2026-07-26-first-version-priority-correction.md` |
+| `desktop-runtime` | Electron 前台启动、单实例、干净退出与用户主动整应用重启；未来可选的后台继续、自动恢复、安装和更新 | User Restart Electron Live（用户主动重启已通过桌面实测） | `desktop-runtime/README.md` |
 | `import-export` | 完整 Live 档案晋升；`.np` 便携项目包、案例对话、完整性校验和导入隔离 | Live Archive Live; Portable Project Accepted（真实运行档案已迁移；便携项目设计已接受） | `import-export/README.md` |
 
 不要为了补齐表格创建空目录。只有一条能力拥有足够稳定的产品语义，或即将进入设计与实现时，才建立它的权威文档。

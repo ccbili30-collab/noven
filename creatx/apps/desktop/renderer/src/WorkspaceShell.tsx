@@ -57,6 +57,7 @@ import type {
   ModelSettingsSnapshot,
   ProjectFile,
   ProjectSnapshot,
+  RestartApplicationResult,
   RunState,
   SessionSummary,
   SaveImageModelSettingsCommand,
@@ -94,9 +95,17 @@ import type { SkillSequenceSlot } from "./skill-sequence-preferences"
 import { DesktopDialog } from "./DesktopDialog"
 import { WorkbenchResourceTree } from "./WorkbenchResourceTree"
 import { WorkbenchAnnotationOverlay } from "./WorkbenchAnnotationOverlay"
+import { markOnboardingSeen, OnboardingTour, readOnboardingSeen } from "./OnboardingTour"
 import { VISIBLE_PRODUCT_NAME } from "../../src/product-brand"
+import { isTransientRecoveringError, transientErrorHiddenMs, transientErrorRecoveringMs } from "./transient-error-presentation"
 
 export type RightSurface = "files" | "preview" | { workbenchId: string } | undefined
+
+export function reconcileWorkbenchSurface(surface: RightSurface, workbenches: { workbenches: readonly { id: string }[] } | undefined): RightSurface {
+  if (!workbenches || typeof surface !== "object") return surface
+  if (workbenches.workbenches.some((workbench) => workbench.id === surface.workbenchId)) return surface
+  return { workbenchId: "builtin:files" }
+}
 
 type WorkspacePanel = "project" | "conversation" | "workbench" | "inspector"
 type WorkspaceSeparator = "project-conversation" | "conversation-workbench" | "workbench-canvas" | "canvas-inspector"
@@ -192,6 +201,7 @@ interface WorkspaceShellProps {
   onResolveHtmlPresentation: (projectId: string, fileId: string) => Promise<WorkbenchPresentationProjection | undefined>
   onSaveTextFile: (command: SaveProjectTextCommand) => Promise<FilePreview | undefined>
   onRefresh: () => void
+  onRestartApplication: (confirmed: boolean) => Promise<RestartApplicationResult | undefined>
   onApprovalDecision: (approved: boolean) => void
   onDismissError: () => void
   navigationContent?: "sessions" | "workbenches"
@@ -208,6 +218,7 @@ export function WorkspaceShell(props: WorkspaceShellProps) {
   const [artLibraryRoute, setArtLibraryRoute] = useState<ArtLibraryRoute>("atlas")
   const [ideaLibraryOpen, setIdeaLibraryOpen] = useState(false)
   const [heritageLibraryOpen, setHeritageLibraryOpen] = useState(false)
+  const [onboardingOpen, setOnboardingOpen] = useState(() => !readOnboardingSeen(window.localStorage))
   const [appearance, setAppearance] = useState(() => parseAppearancePreferences(window.localStorage.getItem(appearanceStorageKey)))
   const [query, setQuery] = useState("")
   const [panelWidths, setPanelWidths] = useState(readPanelWidths)
@@ -238,6 +249,14 @@ export function WorkspaceShell(props: WorkspaceShellProps) {
     if (!normalized) return entries
     return entries.filter((entry) => entry.name.toLocaleLowerCase("zh-CN").includes(normalized) || entry.relativePath.toLocaleLowerCase("zh-CN").includes(normalized))
   }, [activeWorkbench, props.project, query])
+
+  useEffect(() => {
+    const reconciled = reconcileWorkbenchSurface(props.rightSurface, props.workbenches)
+    if (typeof reconciled !== "object" || reconciled.workbenchId === activeWorkbenchId) return
+    setInteractivePresentation(undefined)
+    setWorkbenchHeadingTarget(undefined)
+    props.setRightSurface(reconciled)
+  }, [activeWorkbenchId, props.workbenches?.refreshedAt])
 
   useEffect(() => {
     const preview = props.preview
@@ -287,6 +306,18 @@ export function WorkspaceShell(props: WorkspaceShellProps) {
     setIdeaLibraryOpen(false)
     setHeritageLibraryOpen(false)
     action()
+  }
+
+  const showOnboardingSurface = (surface: "workspace" | "settings" | "art" | "idea" | "heritage") => {
+    props.setLeftOpen(true)
+    void afterSave(() => afterAnnotation(() => {
+      setSettingsOpen(surface === "settings")
+      setArtLibraryOpen(surface === "art")
+      setArtChatOpen(false)
+      setIdeaLibraryOpen(surface === "idea")
+      setHeritageLibraryOpen(surface === "heritage")
+      if (surface === "art") setArtLibraryRoute("atlas")
+    }))
   }
 
   const openWorkbenchFile = async (file: ProjectFile, heading?: string) => {
@@ -504,6 +535,10 @@ export function WorkspaceShell(props: WorkspaceShellProps) {
       selectedFileId={props.selectedFileId}
       onSelectWorkbench={(workbenchId) => void selectWorkbench(workbenchId)}
       onOpenWorkbenchFile={(file) => void openWorkbenchFile(file)}
+      onOpenOnboarding={() => {
+        props.setLeftOpen(true)
+        setOnboardingOpen(true)
+      }}
       artLibraryActive={artLibraryOpen || artChatOpen}
       {...(props.artLibraryEnabled ? { onOpenArtLibrary: () => void afterSave(() => afterAnnotation(() => { setSettingsOpen(false); setIdeaLibraryOpen(false); setHeritageLibraryOpen(false); setArtChatOpen(false); setArtLibraryRoute("atlas"); setArtLibraryOpen(true) })) } : {})}
       ideaLibraryActive={ideaLibraryOpen}
@@ -618,6 +653,14 @@ export function WorkspaceShell(props: WorkspaceShellProps) {
       {workbenchCanvasOpen && detailsOpen && <Inspector {...props} workbench={activeWorkbench} onClose={() => setDetailsOpen(false)} />}
     </>}
     {props.approval && <ApprovalDialog approval={props.approval} onDecision={props.onApprovalDecision} />}
+    {onboardingOpen && <OnboardingTour
+      onDismiss={() => {
+        markOnboardingSeen(window.localStorage)
+        setOnboardingOpen(false)
+        returnToWorkspace(() => undefined)
+      }}
+      onSurface={showOnboardingSurface}
+    />}
   </main>
 }
 
@@ -900,7 +943,7 @@ function ConversationPanel(props: WorkspaceShellProps & { onOpenModelSettings: (
           onClick={() => selectSlashCommand(index)}
         ><Sparkles size={15} /><span><strong>{command.command}</strong><small>{command.description}</small></span>{command.activation === "growth" && <em>长期运行</em>}</button>)}
       </div>}
-      <textarea value={props.draft} onChange={(event) => { props.setDraft(event.target.value); setSlashMenuDismissed(false); setSlashSelection(0) }} onPaste={(event) => {
+      <textarea data-onboarding="composer" value={props.draft} onChange={(event) => { props.setDraft(event.target.value); setSlashMenuDismissed(false); setSlashSelection(0) }} onPaste={(event) => {
         // 抖音's share button copies a whole sentence around the link. Only an empty composer is
         // replaced with a clean prompt; anything already typed keeps the ordinary paste.
         if (props.draft.trim()) return
@@ -1067,7 +1110,7 @@ function WorkbenchTree(props: {
     />}
     <section className="wb-workspace-file-pane" aria-label="工作台文件树">
     <div className={`wb-workbench-menu-region ${props.menuOpen ? "is-pinned" : ""}`}>
-      <header className="wb-panel-heading wb-workbench-heading"><button className="wb-workbench-switcher" title="切换工作台" aria-expanded={props.menuOpen} onClick={props.onToggleMenu}><Map size={16} /><strong>{props.activeWorkbench?.title ?? "工作台"}</strong><ChevronDown className={props.menuOpen ? "is-open" : ""} size={14} /></button><button className={`wb-workbench-search-toggle ${props.searchOpen ? "is-active" : ""}`} title="搜索工作台内容" onClick={props.onToggleSearch}><Search size={15} /></button><button className={`wb-workbench-details-toggle ${props.detailsOpen ? "is-active" : ""}`} title={props.detailsOpen ? "关闭工作台目录详情" : "查看工作台目录详情"} aria-pressed={props.detailsOpen} onClick={props.onToggleDetails}><Info size={15} /></button>{!props.canvasOpen && <button className="wb-expand-workbench" title="展开工作台" onClick={props.onToggleCanvas}><PanelRightOpen size={16} /></button>}<button title="向右收起工作台导航" onClick={props.onToggleNavigation}><ChevronRight size={16} /></button></header>
+      <header className="wb-panel-heading wb-workbench-heading" data-onboarding="workbench"><button className="wb-workbench-switcher" title="切换工作台" aria-expanded={props.menuOpen} onClick={props.onToggleMenu}><Map size={16} /><strong>{props.activeWorkbench?.title ?? "工作台"}</strong><ChevronDown className={props.menuOpen ? "is-open" : ""} size={14} /></button><button className={`wb-workbench-search-toggle ${props.searchOpen ? "is-active" : ""}`} title="搜索工作台内容" onClick={props.onToggleSearch}><Search size={15} /></button><button className={`wb-workbench-details-toggle ${props.detailsOpen ? "is-active" : ""}`} title={props.detailsOpen ? "关闭工作台目录详情" : "查看工作台目录详情"} aria-pressed={props.detailsOpen} onClick={props.onToggleDetails}><Info size={15} /></button>{!props.canvasOpen && <button className="wb-expand-workbench" title="展开工作台" onClick={props.onToggleCanvas}><PanelRightOpen size={16} /></button>}<button title="向右收起工作台导航" onClick={props.onToggleNavigation}><ChevronRight size={16} /></button></header>
       {props.searchOpen && <label className="wb-filter wb-filter-revealed"><input autoFocus value={props.query} onChange={(event) => props.onQuery(event.target.value)} placeholder="筛选工作台内容……" aria-label="筛选工作台内容" /></label>}
       {props.menuOpen && <div className="wb-workbench-menu is-pinned" role="menu" aria-label="注册工作台">{props.workbenches?.workbenches.map((workbench) => <button role="menuitem" key={workbench.id} className={`workbench-button ${props.activeWorkbenchId === workbench.id ? "is-active active" : ""}`} onClick={() => props.onSelectWorkbench(workbench.id)}><BookOpen size={15} /><span>{workbench.title}</span>{props.activeWorkbenchId === workbench.id && <Check size={14} />}</button>)}{!props.workbenches?.workbenches.length && <span className="wb-tree-empty">还没有注册工作台</span>}</div>}
     </div>
@@ -1292,7 +1335,7 @@ function TimelineRow({ item, sessionId, project, onOpenAttachment, onOpenProject
     return <details className="wb-context-reasoning"><summary>{item.state === "streaming" ? <LoaderCircle className="spin" size={13} /> : <Check size={13} />}思考过程</summary>{item.text && <MessageMarkdown text={item.text} project={project} onOpenProjectFile={onOpenProjectFile} />}</details>
   }
   if (item.kind === "notice") {
-    return <div className={`wb-context-notice ${item.state}`} role="status"><Info size={14} /><span>{item.text}</span></div>
+    return <TimelineNotice item={item} />
   }
   const role = item.presentation === "user" ? "user" : item.presentation === "assistant" ? "assistant" : "system"
   const attachments = item.attachments ?? []
@@ -1316,6 +1359,25 @@ function TimelineRow({ item, sessionId, project, onOpenAttachment, onOpenProject
       <button type="button" title="只从你的界面删除" aria-label="只从你的界面删除" onClick={(event) => onDelete(item, event.currentTarget)}><Trash2 size={13} /><span>删除</span></button>
     </div>}
   </article>
+}
+
+function TimelineNotice({ item }: { item: TimelineItem }) {
+  const transient = isTransientRecoveringError(item.text)
+  const [phase, setPhase] = useState<"recovering" | "recovered" | "hidden">("recovering")
+
+  useEffect(() => {
+    if (!transient) return
+    setPhase("recovering")
+    const recovered = window.setTimeout(() => setPhase("recovered"), transientErrorRecoveringMs)
+    const hidden = window.setTimeout(() => setPhase("hidden"), transientErrorHiddenMs)
+    return () => {
+      window.clearTimeout(recovered)
+      window.clearTimeout(hidden)
+    }
+  }, [item.itemId, transient])
+
+  if (transient && phase === "hidden") return null
+  return <div className={`wb-context-notice ${transient ? `soft-${phase}` : item.state}`} role="status"><Info size={14} /><span>{transient && phase === "recovered" ? "已恢复！" : item.text}</span></div>
 }
 
 function AttachmentImage({ name, url, compact = false }: { name: string; url: string; compact?: boolean }) {
@@ -1552,7 +1614,7 @@ function SettingsPage({ settings, appearance, onClose, onSaveText, onSaveImage, 
         <div><span className="dialog-eyebrow">{VISIBLE_PRODUCT_NAME}偏好</span><h1>{section === "models" ? "模型" : section === "images" ? "生图" : section === "video" ? "视频与转写" : "外观"}</h1><p>{section === "models" ? "管理交流模型。它负责理解你的目标、调用工具并持续推进创作。" : section === "images" ? "配置由交流模型按需调用的图片模型；它不会直接参与对话。" : section === "video" ? "把抖音链接交给交流模型分析时，用这里配置的服务转写语音。支持任何 OpenAI 兼容的转写接口，云端或局域网自建都可以。" : `分别调整界面层级与阅读正文的字号；${VISIBLE_PRODUCT_NAME}统一使用 JetBrains Mono。`}</p></div>
         <button title="关闭设置" onClick={onClose}><X size={17} /></button>
       </header>
-      {section === "models" && <form className="wb-settings-form" onSubmit={(event) => void saveText(event)}>
+      {section === "models" && <form className="wb-settings-form" data-onboarding="api" onSubmit={(event) => void saveText(event)}>
         <div className="model-settings-section-heading"><div><MessageSquare size={16} /><span><strong>交流模型</strong><small>用于会话、推理和工具选择</small></span></div><button type="button" onClick={newProfile}><Plus size={13} />添加连接</button></div>
         {settings?.textProfiles.length ? <label><span>已保存连接</span><select value={profileId} onChange={(event) => setProfileId(event.target.value)}><option value="">新连接</option>{settings.textProfiles.map((profile) => <option value={profile.id} key={profile.id}>{savedConnectionLabel(profile)}</option>)}</select></label> : undefined}
         <div className="model-settings-grid">
@@ -1620,7 +1682,7 @@ function projectEntries(project: ProjectSnapshot | undefined): WorkbenchEntry[] 
 }
 
 function toolLabel(name: string) {
-  const labels: Record<string, string> = { editor: "编辑文件", run_commands: "运行命令", apply_patch: "应用补丁", read_files: "读取文件", search_codebase: "搜索项目", register_workbench: "注册工作台", rename_workbench: "修改工作台标题", generate_image: "生成图片", edit_image: "编辑图片" }
+  const labels: Record<string, string> = { editor: "编辑文件", run_commands: "运行命令", apply_patch: "应用补丁", read_files: "读取文件", search_codebase: "搜索项目", register_workbench: "注册工作台", rename_workbench: "修改工作台标题", unregister_workbench: "移除工作台入口", generate_image: "生成图片", edit_image: "编辑图片" }
   return labels[name] ?? name
 }
 

@@ -2,8 +2,8 @@
 title: Workbench Registry 验收矩阵
 doc_type: capability-acceptance
 owner: workbench-registry
-status: v3-visible-scope-runtime-verified-provider-live-open
-last_verified: 2026-08-10
+status: unregister-runtime-verified-provider-electron-open
+last_verified: 2026-08-11
 source_of_truth: docs/capabilities/workbench-registry/product-spec.md
 ---
 
@@ -42,10 +42,16 @@ source_of_truth: docs/capabilities/workbench-registry/product-spec.md
 | ACC-WBR-029 | WBR-017, WBR-019 | 输入绝对路径、`.`、`..`、空段、非法 `**` 或超限规则 | 工具失败关闭，注册记录和真实文件不变 |
 | ACC-WBR-030 | WBR-018, WBR-019 | V1/V2 设置范围，随后改名、设置主页或重复设置 | 首次原子升级 V3；ID、文件夹、标题、主页和范围按操作保留；相同有效状态不产生多余写入 |
 | ACC-WBR-031 | WBR-019 | 新规则会隐藏已有主页，或为已隐藏 HTML 设置/临时展示主页 | 修改或展示失败关闭，不写注册记录，不旁路可见范围 |
+| ACC-WBR-032 | WBR-020 | 用户批准注销一个目录仍存在的注册工作台 | 只删除对应注册 JSON；真实目录、文件内容和其他工作台不变；投影立即不再包含该 ID |
+| ACC-WBR-033 | WBR-020 | 注销文件夹已经缺失的合法工作台 | `missing` 注册记录被删除；不要求重建目录，也不修改其他项目状态 |
+| ACC-WBR-034 | WBR-020 | 拒绝审批，或目标为内置、未知、损坏、重复冲突、并发变化记录 | 不删除任何元数据或真实内容，工具返回准确失败 |
+| ACC-WBR-035 | WBR-021 | 当前打开的注册工作台被成功注销 | 投影刷新后切换到 `builtin:files`，旧主页和临时展示清空，项目与会话继续可用 |
 
-`ACC-WBR-004` 保留为 Schema 接受前的历史门禁，不复用其编号。父子工作台、模板、布局、封面、手动注册、重新定位、删除和迁移属于后续验收。
+`ACC-WBR-004` 保留为 Schema 接受前的历史门禁，不复用其编号。父子工作台、模板、布局、封面、手动注册、重新定位、批量注销、真实内容删除和迁移属于后续验收。
 
 ## 当前证据
+
+2026-08-11 注销入口批次实现 `WBR-020..021 / ACC-WBR-032..035`：真实 Windows 临时项目验证 `ready` 与 `missing` 注册记录删除、项目内容保留、未知/冲突/过期目标失败关闭和当前入口纯状态回退；正式 Desktop Runtime 已聚合 `unregister_workbench`。联合定向 180/180（1,300 次断言）、全量 598/598（4,495 次断言）、Typecheck、Import Boundary 和 Production Build 通过。没有外部 Provider 自主调用、Electron 原生审批或注销视觉链，因此工具纵向 Live 尚未完成。证据见 `../../baseline/creatx-workbench-unregister-2026-08-11.md`。
 
 2026-08-10 的便携交换批次复用现有 V1/V2/V3 权威解析和内部原子写入，在同项目串行门禁内导出/导入注册工作台显示元数据。真实 Windows 临时项目定向 27/27（120 次断言）验证主页、冻结可见文件、中文排序、内置“文件”重新生成、损坏/未知/重复/越界记录隔离、目标现有记录不覆盖、单项写失败继续和非规范路径失败关闭。该证据服务 `ACC-IEX-109` 的工作台层，不新增工作台产品语义；尚无真实 `.np`、导入目录提交、Electron 或重启验收。
 
@@ -64,5 +70,6 @@ source_of_truth: docs/capabilities/workbench-registry/product-spec.md
 | 部分通过 | `ACC-WBR-010` | Runtime 和 Renderer 已实现 `missing`；尚未在真实 Electron 运行中外部删除目录后截图 |
 | 部分通过 | `ACC-WBR-014` | 真实注册审批拒绝无 JSON 和标签；取消与磁盘写入故障尚未对注册工具单独注入 |
 | 部分通过 | `ACC-WBR-018` | 未知和非法改名、修改时间冲突已由单元测试覆盖；损坏/重复记录与真实并发外部修改尚未完成 Electron Live |
+| Runtime 通过，Provider / Electron Live 未完成 | `ACC-WBR-032` 至 `035` | 真实临时目录、元数据和 Renderer 状态规则自动化通过；未执行外部 Provider、原生审批、Electron 刷新与重启 |
 
-完整真实链路见 `../../baseline/creatx-register-workbench-live-2026-07-27.md`。模板、布局、封面、手动注册、重新定位、删除和迁移仍不在此完成声明内。
+完整注册链路见 `../../baseline/creatx-register-workbench-live-2026-07-27.md`。模板、布局、封面、手动注册、重新定位、批量注销、真实内容删除和迁移仍不在此完成声明内。

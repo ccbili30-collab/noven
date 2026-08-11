@@ -13,6 +13,7 @@ import type {
   ModelSettingsSnapshot,
   ProjectFile,
   ProjectSnapshot,
+  RestartApplicationResult,
   SessionSummary,
   SaveImageModelSettingsCommand,
   SaveTranscriptionModelSettingsCommand,
@@ -35,10 +36,13 @@ import { acknowledgeDeletionBoundary, hideUserMessage, messageVisibilityStorageK
 import type { RightSurface } from "./WorkspaceShell"
 import { VISIBLE_PRODUCT_NAME } from "../../src/product-brand"
 import { SessionSwitchCoordinator, type SessionSelection } from "./session-switch-coordinator"
+import { clearApplicationRestartSelection, readApplicationRestartSelection, resolveApplicationRestartSession, saveApplicationRestartSelection } from "./application-restart-recovery"
+import { isTransientRecoveringError } from "./transient-error-presentation"
 
 let localMessageId = 0
 
 export function App() {
+  const restartSelection = useRef(readApplicationRestartSelection(window.localStorage))
   const [bootstrap, setBootstrap] = useState<DesktopBootstrap>()
   const [modelSettings, setModelSettings] = useState<ModelSettingsSnapshot>()
   const [error, setError] = useState<CreatXError>()
@@ -129,19 +133,22 @@ export function App() {
 
   async function loadBootstrap() {
     setLoading(true)
-    const result = await window.creatx.bootstrap()
+    const result = await window.creatx.bootstrap(restartSelection.current)
     setLoading(false)
     if (!result.ok) {
       setError(result.error)
       return
     }
     setBootstrap(result.value)
+    clearApplicationRestartSelection(window.localStorage)
     setModelSettings(result.value.modelSettings)
     setSessions(result.value.sessions)
     setSessionRunStates(initializeSessionRunStates(result.value.sessions))
     setGrowth(result.value.growth)
     projectRef.current = result.value.project
-    const initialSessionId = result.value.sessions.find((session) => session.projectId === result.value.project?.id)?.id
+    const initialSessionId = resolveApplicationRestartSession(restartSelection.current, result.value.sessions)?.id
+      ?? result.value.sessions.find((session) => session.projectId === result.value.project?.id)?.id
+    restartSelection.current = undefined
     activateSession(initialSessionId)
     void recoverPendingOwnerCommands(result.value.sessions)
     const library = await window.creatx.readCreativeLibrary()
@@ -156,6 +163,22 @@ export function App() {
     const workbenchResult = await window.creatx.readWorkbenches(result.value.project.id)
     projectionController.open(result.value.project, workbenchResult.ok ? workbenchResult.value : undefined)
     if (!workbenchResult.ok) setError(workbenchResult.error)
+  }
+
+  async function restartApplication(confirmed: boolean): Promise<RestartApplicationResult | undefined> {
+    const selection = {
+      ...(project?.id ? { projectId: project.id } : {}),
+      ...(sessionId ? { sessionId } : {}),
+    }
+    if (selection.projectId || selection.sessionId) saveApplicationRestartSelection(window.localStorage, selection)
+    const result = await window.creatx.restartApplication({ confirmed })
+    if (!result.ok) {
+      clearApplicationRestartSelection(window.localStorage)
+      setError(result.error)
+      return undefined
+    }
+    if (result.value.state === "confirmation_required") clearApplicationRestartSelection(window.localStorage)
+    return result.value
   }
 
   function handleEvent(event: CreatXEvent) {
@@ -940,6 +963,7 @@ export function App() {
     onResolveHtmlPresentation={resolveHtmlPresentation}
     onSaveTextFile={saveTextFile}
     onRefresh={() => void refreshFiles()}
+    onRestartApplication={restartApplication}
     onApprovalDecision={(approved) => void respondApproval(approved)}
     onDismissError={() => setError(undefined)}
     navigationContent="sessions"
@@ -953,7 +977,7 @@ function sameSurface(left: RightSurface, right: Exclude<RightSurface, undefined>
 }
 
 export function visibleAppError(error: CreatXError | undefined) {
-  return error?.code === "cancelled" ? undefined : error
+  return error?.code === "cancelled" || isTransientRecoveringError(error?.message) ? undefined : error
 }
 
 function localId() {

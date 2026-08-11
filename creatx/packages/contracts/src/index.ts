@@ -859,6 +859,26 @@ export interface DesktopBootstrap {
   growth?: GrowthGoalProjection
 }
 
+export interface DesktopBootstrapSelection {
+  projectId?: string
+  sessionId?: string
+}
+
+export interface RestartApplicationCommand {
+  confirmed: boolean
+}
+
+export interface RestartApplicationActivity {
+  conversation: boolean
+  growth: boolean
+  imageGeneration: boolean
+}
+
+export interface RestartApplicationResult {
+  state: "confirmation_required" | "restarting"
+  activity: RestartApplicationActivity
+}
+
 export type CreatXResult<T> = { ok: true; value: T } | { ok: false; error: CreatXError }
 export type DesktopResult<T> = CreatXResult<T>
 
@@ -897,7 +917,8 @@ export interface CreatXToolContribution {
 }
 
 export interface CreatXDesktopApi {
-  bootstrap(): Promise<DesktopResult<DesktopBootstrap>>
+  bootstrap(selection?: DesktopBootstrapSelection): Promise<DesktopResult<DesktopBootstrap>>
+  restartApplication(command: RestartApplicationCommand): Promise<DesktopResult<RestartApplicationResult>>
   readModelSettings(): Promise<DesktopResult<ModelSettingsSnapshot>>
   saveTextModelProfile(command: SaveTextModelProfileCommand): Promise<DesktopResult<ModelSettingsSnapshot>>
   selectSessionModel(sessionId: string, profileId: string): Promise<DesktopResult<SessionSummary>>

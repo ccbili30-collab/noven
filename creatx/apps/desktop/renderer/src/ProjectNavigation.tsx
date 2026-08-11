@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import type { Dispatch, MouseEvent, SetStateAction } from "react"
-import { BookOpenText, ChevronDown, ChevronRight, Folder, FolderOpen, Lightbulb, MoreHorizontal, Palette, PanelLeftClose, PanelLeftOpen, Pin, Plus, RefreshCw, Settings, SquarePen, Trash2, X } from "lucide-react"
-import type { ProjectFile, ProjectSnapshot, SessionSummary, WorkbenchProjection } from "@creatx/contracts"
+import { BookOpenText, ChevronDown, ChevronRight, CircleHelp, Folder, FolderOpen, Lightbulb, MoreHorizontal, Palette, PanelLeftClose, PanelLeftOpen, Pin, Plus, Power, RefreshCw, Settings, SquarePen, Trash2, X } from "lucide-react"
+import type { ProjectFile, ProjectSnapshot, RestartApplicationActivity, RestartApplicationResult, SessionSummary, WorkbenchProjection } from "@creatx/contracts"
 import birdWingLogo from "./assets/bird-wing-logo-clean.svg"
 import { DesktopDialog } from "./DesktopDialog"
 import { WorkbenchResourceTree } from "./WorkbenchResourceTree"
@@ -40,6 +40,8 @@ interface ProjectNavigationProps {
   onDeleteProjectSessions: (projectId: string) => Promise<boolean>
   onRemoveProject: (projectId: string) => void
   onRefresh: () => void
+  onRestartApplication: (confirmed: boolean) => Promise<RestartApplicationResult | undefined>
+  onOpenOnboarding: () => void
   onOpenSettings: () => void
   onOpenArtLibrary?: () => void
   artLibraryActive: boolean
@@ -71,8 +73,27 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
   const [editingSessionId, setEditingSessionId] = useState<string>()
   const [editingSessionValue, setEditingSessionValue] = useState("")
   const [confirmation, setConfirmation] = useState<{ kind: "session" | "project-sessions"; id: string; title: string }>()
+  const [restartConfirmation, setRestartConfirmation] = useState<RestartApplicationActivity>()
+  const [restartState, setRestartState] = useState<"idle" | "checking" | "restarting">("idle")
   const projectMenuRef = useRef<HTMLDivElement>(null)
   const projectMenuTrigger = useRef<HTMLButtonElement>(null)
+  const restartTrigger = useRef<HTMLButtonElement>(null)
+
+  const requestRestart = async (confirmed: boolean) => {
+    setRestartState("checking")
+    const result = await props.onRestartApplication(confirmed)
+    if (!result) {
+      setRestartState("idle")
+      return
+    }
+    if (result.state === "confirmation_required") {
+      setRestartConfirmation(result.activity)
+      setRestartState("idle")
+      return
+    }
+    setRestartConfirmation(undefined)
+    setRestartState("restarting")
+  }
 
   const projects = useMemo(() => navigationProjects(props.project, props.sessions, preferences), [preferences, props.project, props.sessions])
   const pinnedSessions = preferences.pinnedSessionIds.flatMap((id) => props.sessions.find((session) => session.id === id) ?? [])
@@ -124,6 +145,8 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
         <button className={props.artLibraryActive ? "is-active" : ""} title={props.onOpenArtLibrary ? "打开艺术库" : "艺术库未配置"} disabled={!props.onOpenArtLibrary} onClick={props.onOpenArtLibrary}><Palette size={16} /></button>
         <button className={props.ideaLibraryActive ? "is-active" : ""} title="打开灵感库" onClick={props.onOpenIdeaLibrary}><Lightbulb size={16} /></button>
         {props.onOpenHeritageLibrary && <button className={props.heritageLibraryActive ? "is-active" : ""} title="打开传承库" onClick={props.onOpenHeritageLibrary}><BookOpenText size={16} /></button>}
+        <button ref={restartTrigger} title="恢复诺文" disabled={restartState !== "idle"} onClick={() => void requestRestart(false)}><Power size={16} /></button>
+        <button className="wb-rail-onboarding" title="新手教程" onClick={props.onOpenOnboarding}><CircleHelp size={16} /></button>
         <button className="wb-rail-settings" title="设置" onClick={props.onOpenSettings}><Settings size={16} /></button>
       </div>
     </aside>
@@ -228,7 +251,7 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
           <button className="wb-project-group-toggle" aria-expanded={projectsOpen} onClick={() => setProjectsOpen((open) => !open)}><span>项目</span>{projectsOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</button>
           <div className="wb-project-heading-actions">
             {showSessions && <button aria-label="新会话" title="新会话" disabled={!props.project} onClick={props.onCreateSession}><SquarePen size={15} /></button>}
-            <button aria-label="打开项目" title="打开项目" onClick={props.onOpenProject}><FolderOpen size={15} /></button>
+            <button data-onboarding="open-project" aria-label="打开项目" title="打开项目" onClick={props.onOpenProject}><FolderOpen size={15} /></button>
           </div>
         </div>
         {projectsOpen && <div className="wb-project-list">
@@ -322,7 +345,7 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
         </div>}
       </section>
     </nav>
-    <div className="wb-secondary-nav"><button onClick={props.onRefresh} disabled={!props.project}><RefreshCw size={15} /><span>刷新项目</span></button><button title="设置" onClick={props.onOpenSettings}><Settings size={15} /><span>设置</span></button></div>
+    <div className="wb-secondary-nav"><button onClick={props.onRefresh} disabled={!props.project}><RefreshCw size={15} /><span>刷新项目</span></button><button ref={restartTrigger} title="安全重启整个应用" disabled={restartState !== "idle"} onClick={() => void requestRestart(false)}><Power size={15} /><span>{restartState === "restarting" ? "正在恢复诺文…" : "恢复诺文"}</span></button><button title="新手教程" onClick={props.onOpenOnboarding}><CircleHelp size={15} /><span>新手教程</span></button><button title="设置" onClick={props.onOpenSettings}><Settings size={15} /><span>设置</span></button></div>
     {previewedSession && !projectMenu && <div className="wb-session-preview" style={{ top: previewedSession.top }} role="tooltip">
       <div><strong>{previewedSession.session.title}</strong><time>{relativeSessionAge(previewedSession.session.updatedAt)}</time></div>
       <span><Folder size={16} />{projects.find((project) => project.id === previewedSession.session.projectId)?.name ?? "当前项目"}</span>
@@ -353,6 +376,13 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
         <div><button type="button" onClick={() => setRenameProject(undefined)}>取消</button><button className="is-primary" type="submit">保存</button></div>
       </form>
     </DesktopDialog>}
+    {restartConfirmation && <DesktopDialog className="wb-navigation-dialog wb-restart-dialog" backdropClassName="wb-navigation-dialog-backdrop" labelId="wb-restart-title" kind="alertdialog" returnFocus={restartTrigger.current} onClose={() => setRestartConfirmation(undefined)}>
+      <>
+        <strong id="wb-restart-title">恢复诺文并中断当前工作？</strong>
+        <p>{restartActivityMessage(restartConfirmation)}重启后会回到当前项目和会话，但不会自动重发消息、模型请求或工具调用。</p>
+        <div><button data-dialog-initial-focus disabled={restartState !== "idle"} onClick={() => setRestartConfirmation(undefined)}>取消</button><button className="is-primary" disabled={restartState !== "idle"} onClick={() => void requestRestart(true)}>{restartState === "checking" ? "正在准备…" : "确认恢复"}</button></div>
+      </>
+    </DesktopDialog>}
     {confirmation && <DesktopDialog className="wb-navigation-dialog" backdropClassName="wb-navigation-dialog-backdrop" labelId="wb-delete-title" kind="alertdialog" returnFocus={projectMenuTrigger.current} onClose={() => setConfirmation(undefined)}>
       <>
         <strong id="wb-delete-title">{confirmation.kind === "session" ? "删除这个会话？" : `删除 ${confirmation.title} 的全部聊天？`}</strong>
@@ -361,6 +391,15 @@ export function ProjectNavigation(props: ProjectNavigationProps) {
       </>
     </DesktopDialog>}
   </aside>
+}
+
+function restartActivityMessage(activity: RestartApplicationActivity) {
+  const effects = [
+    activity.conversation ? "当前回复或工具会被中断" : undefined,
+    activity.growth ? "持续创作任务会暂停" : undefined,
+    activity.imageGeneration ? "正在生成的图片会标记为中断" : undefined,
+  ].filter((effect): effect is string => Boolean(effect))
+  return `${effects.join("；")}。`
 }
 
 function CreatXBirdMark() {

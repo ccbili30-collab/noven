@@ -2,8 +2,8 @@
 title: Art Library 能力线入口
 doc_type: capability-entry
 owner: art-library
-status: visual-curation-bounded-electron-verified
-last_verified: 2026-08-10
+status: atlas-restoration-runtime-electron-verified
+last_verified: 2026-08-11
 source_of_truth: docs/capabilities/art-library/product-spec.md
 ---
 
@@ -19,6 +19,8 @@ source_of_truth: docs/capabilities/art-library/product-spec.md
 
 同日视觉整理质量升级 `ART-023..029 / ACC-ART-025..032` 已进入 Runtime、工具合同、Renderer 和63条种子安全重置：单图整理分别产出作品解读、三组标签和四层反推 Prompt；分类比较获得关键词频率和代表摘要；完整人工修订可持久化；分类及个人整体风格按当前关键词由普通会话按需提取。当前最强证据仍是本地真实文件与受控 Electron，不是外部视觉 Provider Live。由于没有可用的视觉文本模型与图片 Provider 配置，`ACC-ART-025/026/029/030/032` 的模型理解与纯文字换剧情视觉保持尚未验证，能力继续标记为 Bounded（有界）而非完整 Live。
 
+2026-08-11 用户明确纠正上述“63条种子安全重置”的产品语义：63 张均是预批准基础藏品，应真实位于巨构艺术41、暖色风格18、纪念碑谷4；审批只服务以后新增图片。`ART-030..034 / ACC-ART-033..037` 已取代 `ART-016/017 / ACC-ART-012` 的旧 reset 目标。生产界面直接复用 `0.1.19` 提交 `285c018` 的图鉴、圆环、展览、详情、CSS 和动效，通过受控展示 iframe 接收真实 Runtime 与受限图片协议提供的事实；Runtime、全量自动测试和隔离 Electron 已验收，外部视觉 Provider、正式 Profile 迁移与 Windows 打包未验证。证据见 `../../baseline/creatx-art-library-019-restoration-2026-08-11.md`。
+
 当前证据与准确边界见 `../../baseline/creatx-art-library-visual-curation-2026-08-10.md`。Web Preview 中的艺术库数据明确是只读 Fixture（测试夹具），不得作为真实审批证据。
 
 相邻合同：
@@ -29,4 +31,4 @@ source_of_truth: docs/capabilities/art-library/product-spec.md
 - `image-runtime`：拥有生成图片，不拥有互联网参考图采集。
 - `project-files`：拥有普通创作项目文件并通过可信查询口提供收藏源字节；个人艺术库使用独立的应用数据根，不写入当前项目。
 
-阅读顺序：`product-spec.md` → `acceptance.md` → `plan.md` → `../../plans/2026-08-08-art-library-tools.md`。
+阅读顺序：`product-spec.md` → `acceptance.md` → `../../discussions/2026-08-11-art-library-restoration.md` → `../../plans/2026-08-11-art-library-restoration-design.md` → `../../plans/2026-08-11-art-library-restoration.md`。

@@ -5,7 +5,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { creatXToolsForWorkerProfile, sessionToolPolicies } from "@creatx/cline-adapter"
 import { ProjectFileService, type ProjectFileQueryPort } from "@creatx/project-files"
-import { ART_ATLAS_RESET_SNAPSHOT, ArtLibraryService, createArtLibraryTools, decodeArtCandidate, decodeArtItemMetadata, inspectArtImage, isPublicAddress, readBundledArtAtlasSeedManifest, requireArtItemMetadata, requireReviewArtApprovalCommand, resetBundledArtAtlasSeed, safeArtDirectoryName, type ArtCandidateRecord, type ArtItemMetadataV1 } from "../src"
+import { ART_ATLAS_CURATED_SNAPSHOT, ArtLibraryService, createArtLibraryTools, decodeArtCandidate, decodeArtItemMetadata, inspectArtImage, isPublicAddress, materializeBundledArtAtlasSeed, readBundledArtAtlasSeedManifest, requireArtItemMetadata, requireReviewArtApprovalCommand, safeArtDirectoryName, type ArtCandidateRecord, type ArtItemMetadataV1 } from "../src"
 
 function png(width = 512, height = 384) {
   const bytes = new Uint8Array(24)
@@ -469,8 +469,28 @@ describe("art library runtime foundations", () => {
     expect(`${read.description}\n${submit.description}`).toContain("不得自动批准")
   })
 
-  test("resets only verified bundled seed curation into ordinary incoming candidates", async () => {
+  test("materializes all 63 bundled works into their pre-approved libraries", async () => {
     const root = await mkdtemp(join(tmpdir(), "CreatX 艺术库种子 "))
+    roots.push(root)
+    const sourceRoot = join(process.cwd(), "apps", "art-library", "public", "art-library")
+    const service = new ArtLibraryService({ root, now: () => new Date("2026-08-10T00:00:00.000Z") })
+    await service.initialize()
+
+    const manifest = await readBundledArtAtlasSeedManifest([sourceRoot])
+    expect(manifest.entries).toHaveLength(63)
+    expect(manifest.entries.reduce<Record<string, number>>((result, entry) => ({ ...result, [entry.library]: (result[entry.library] ?? 0) + 1 }), {})).toEqual({ 巨构艺术: 41, 暖色风格: 18, 纪念碑谷: 4 })
+    expect(await materializeBundledArtAtlasSeed(service, [sourceRoot])).toEqual({ status: "materialized", approved: 63, moved: 0 })
+
+    const projection = await service.projection()
+    expect(Object.fromEntries(projection.libraries.map((library) => [library.title, library.items.length]))).toEqual({ 巨构艺术: 41, 暖色风格: 18, 纪念碑谷: 4 })
+    expect((await service.snapshot()).approvalIds).toEqual([])
+    expect((await readdir(join(root, "incoming"))).length).toBe(0)
+    expect(await materializeBundledArtAtlasSeed(service, [sourceRoot])).toEqual({ status: "already-materialized", approved: 63, moved: 0 })
+    expect(await stat(join(root, ".state", "seeds", `${ART_ATLAS_CURATED_SNAPSHOT}.json`))).toBeDefined()
+  })
+
+  test("recovers reset seed candidates without changing user art and fails closed on ownership conflicts", async () => {
+    const root = await mkdtemp(join(tmpdir(), "CreatX 艺术库种子恢复 "))
     roots.push(root)
     const sourceRoot = join(process.cwd(), "apps", "art-library", "public", "art-library")
     const service = new ArtLibraryService({ root, now: () => new Date("2026-08-10T00:00:00.000Z") })
@@ -485,61 +505,58 @@ describe("art library runtime foundations", () => {
     const userImageBefore = await readFile(join(userRoot, "original.png"))
 
     const manifest = await readBundledArtAtlasSeedManifest([sourceRoot])
-    expect(manifest.entries).toHaveLength(63)
+    for (let offset = 0; offset < manifest.entries.length; offset += 20) {
+      const imported = await service.importImages({ query: "内置艺术原图重新整理", images: manifest.entries.slice(offset, offset + 20).map((entry) => ({ bytes: entry.bytes, source: entry.source })) })
+      expect(imported.failures).toEqual([])
+    }
+    expect(await materializeBundledArtAtlasSeed(service, [sourceRoot])).toEqual({ status: "materialized", approved: 63, moved: 63 })
+    expect(Object.fromEntries((await service.projection()).libraries.map((library) => [library.title, library.items.length]))).toEqual({ 巨构艺术: 41, 暖色风格: 18, 纪念碑谷: 4, 用户分类: 1 })
+    expect((await service.snapshot()).approvalIds).toEqual([])
+    expect(await readFile(join(userRoot, "metadata.json"))).toEqual(userMetadataBefore)
+    expect(await readFile(join(userRoot, "original.png"))).toEqual(userImageBefore)
+
+    const conflictRoot = await mkdtemp(join(tmpdir(), "CreatX 艺术库种子冲突 "))
+    roots.push(conflictRoot)
+    const conflictService = new ArtLibraryService({ root: conflictRoot })
+    await conflictService.initialize()
+    const first = manifest.entries[0]!
+    await conflictService.importImages({ query: "用户同字节作品", images: [{ bytes: first.bytes, source: { pageUrl: "https://user.example/collision", imageUrl: "https://user.example/collision.jpg", kind: "web" } }] })
+    expect(materializeBundledArtAtlasSeed(conflictService, [sourceRoot])).rejects.toThrow("ownership")
+    expect((await readdir(join(conflictRoot, ".state", "seeds")).catch(() => [])).some((name) => name === `${ART_ATLAS_CURATED_SNAPSHOT}.json`)).toBeFalse()
+
+    const hashRoot = await mkdtemp(join(tmpdir(), "CreatX 艺术库种子哈希冲突 "))
+    roots.push(hashRoot)
+    const hashService = new ArtLibraryService({ root: hashRoot })
+    await hashService.initialize()
+    await hashService.importImages({ query: "错误重置中断", images: [{ bytes: first.bytes, source: first.source }] })
+    const batch = (await readdir(join(hashRoot, "incoming"), { withFileTypes: true })).find((entry) => entry.isDirectory())!
+    const candidateRoot = join(hashRoot, "incoming", batch.name, first.id)
+    await writeFile(join(candidateRoot, first.image.fileName), png(777, 777))
+    expect(materializeBundledArtAtlasSeed(hashService, [sourceRoot])).rejects.toThrow("hash")
+    expect((await readdir(join(hashRoot, ".state", "seeds")).catch(() => [])).some((name) => name === `${ART_ATLAS_CURATED_SNAPSHOT}.json`)).toBeFalse()
+  })
+
+  test("moves verified legacy approved and approval seed directories into the accepted libraries", async () => {
+    const root = await mkdtemp(join(tmpdir(), "CreatX 艺术库旧种子 "))
+    roots.push(root)
+    const sourceRoot = join(process.cwd(), "apps", "art-library", "public", "art-library")
+    const service = new ArtLibraryService({ root })
+    await service.initialize()
+    const manifest = await readBundledArtAtlasSeedManifest([sourceRoot])
+
     for (const [index, entry] of manifest.entries.entries()) {
-      const metadata: ArtItemMetadataV1 = {
-        schemaVersion: 1,
-        id: entry.id,
-        title: `旧种子-${index}`,
-        artist: "旧作者",
-        collectedAt: manifest.generatedAt,
-        styleAnalysis: "应被删除的旧解读",
-        palette: ["#000000"],
-        patternTags: ["旧标签"],
-        compositionTags: ["旧构图"],
-        moodTags: ["旧情绪"],
-        promptDraft: "old branded prompt",
-        negativeTags: ["old negative"],
-        suggestedLibrary: { title: "旧种子分类", confidence: 1 },
-        source: entry.source,
-        image: entry.image,
-        seed: { source: "art-atlas-static", snapshot: manifest.snapshot },
-      }
       const target = entry.legacyState === "approval" ? join(root, "approval", entry.id) : join(root, "libraries", "旧种子分类", "items", `${index}-${entry.id}`)
       await mkdir(target, { recursive: true })
       await writeFile(join(target, entry.image.fileName), entry.bytes)
-      await writeFile(join(target, "metadata.json"), `${JSON.stringify(metadata, undefined, 2)}\n`)
+      await writeFile(join(target, "metadata.json"), `${JSON.stringify({ ...entry.metadata, id: entry.id, image: entry.image }, undefined, 2)}\n`)
       await writeFile(join(target, "source.json"), `${JSON.stringify(entry.source, undefined, 2)}\n`)
     }
     await mkdir(join(root, ".state", "seeds"), { recursive: true })
     await writeFile(join(root, ".state", "seeds", `${manifest.snapshot}.json`), "{}\n")
 
-    const first = manifest.entries[0]!
-    const firstRoot = first.legacyState === "approval" ? join(root, "approval", first.id) : join(root, "libraries", "旧种子分类", "items", `0-${first.id}`)
-    const firstMetadata = JSON.parse(await readFile(join(firstRoot, "metadata.json"), "utf8")) as ArtItemMetadataV1
-    await writeFile(join(firstRoot, "metadata.json"), `${JSON.stringify({ ...firstMetadata, seed: undefined }, undefined, 2)}\n`)
-    expect(resetBundledArtAtlasSeed(service, [sourceRoot])).rejects.toThrow("ownership")
-    expect(await stat(firstRoot)).toBeDefined()
-    await writeFile(join(firstRoot, "metadata.json"), `${JSON.stringify(firstMetadata, undefined, 2)}\n`)
-    await writeFile(join(firstRoot, first.image.fileName), png(777, 777))
-    expect(resetBundledArtAtlasSeed(service, [sourceRoot])).rejects.toThrow("hash")
-    await writeFile(join(firstRoot, first.image.fileName), first.bytes)
-    await rm(firstRoot, { recursive: true })
-    expect(resetBundledArtAtlasSeed(service, [sourceRoot])).rejects.toThrow("found 62")
-    const progressMarker = join(root, ".state", "seeds", `${ART_ATLAS_RESET_SNAPSHOT}.progress.json`)
-    await writeFile(progressMarker, `${JSON.stringify({ schemaVersion: 1, snapshot: ART_ATLAS_RESET_SNAPSHOT, expectedIds: manifest.entries.map((entry) => entry.id) }, undefined, 2)}\n`)
-
-    expect(await resetBundledArtAtlasSeed(service, [sourceRoot])).toEqual({ status: "reset", candidates: 63, removed: 62 })
-    expect((await service.projection()).libraries.map((library) => library.title)).toEqual(["用户分类"])
+    expect(await materializeBundledArtAtlasSeed(service, [sourceRoot])).toEqual({ status: "materialized", approved: 63, moved: 63 })
+    expect(Object.fromEntries((await service.projection()).libraries.map((library) => [library.title, library.itemCount]))).toEqual({ 巨构艺术: 41, 暖色风格: 18, 纪念碑谷: 4 })
     expect((await service.snapshot()).approvalIds).toEqual([])
-    const incoming = await readdir(join(root, "incoming"), { withFileTypes: true })
-    const candidateRoots = (await Promise.all(incoming.filter((batch) => batch.isDirectory()).map(async (batch) => (await readdir(join(root, "incoming", batch.name), { withFileTypes: true })).filter((entry) => entry.isDirectory() && !entry.name.startsWith(".partial-")).map((entry) => join(root, "incoming", batch.name, entry.name))))).flat()
-    expect(candidateRoots).toHaveLength(63)
-    const candidateJson = await readFile(join(candidateRoots[0]!, "candidate.json"), "utf8")
-    expect(candidateJson).not.toContain("styleAnalysis")
-    expect(candidateJson).not.toContain("promptDraft")
-    expect(await readFile(join(userRoot, "metadata.json"))).toEqual(userMetadataBefore)
-    expect(await readFile(join(userRoot, "original.png"))).toEqual(userImageBefore)
-    expect(await resetBundledArtAtlasSeed(service, [sourceRoot])).toEqual({ status: "already-reset", candidates: 63, removed: 0 })
+    expect(await readdir(join(root, "libraries", "旧种子分类")).catch(() => [])).toEqual([])
   })
 })

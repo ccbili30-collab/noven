@@ -17,6 +17,10 @@ export class OwnerGrowthExecutionCoordinator {
   private readonly executions = new Map<string, { promise: Promise<unknown>; controller: AbortController }>()
   private shutdownReason: string | undefined
 
+  get activeExecutionCount() {
+    return this.executions.size
+  }
+
   find(activationId: string) {
     return this.executions.get(activationId)?.promise
   }
@@ -51,6 +55,10 @@ export class OwnerGrowthExecutionCoordinator {
 export class OwnerConversationMutationCoordinator {
   private tail = Promise.resolve()
   private readonly activeTurns = new Map<string, Promise<unknown>>()
+
+  get activeTurnCount() {
+    return this.activeTurns.size
+  }
 
   run<T>(execute: () => T | Promise<T>): Promise<T> {
     const current = this.tail.then(execute)
